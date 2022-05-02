@@ -1,0 +1,10 @@
+digraph "External_Comms"
+{
+ // INTERACTIVE_SVG=YES
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="External_Comms",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="used for external communication"];
+  Node2 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" real_received_message" ,fontname="Helvetica"];
+  Node2 [label="message_OSC",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmessage___o_s_c.html",tooltip="Osc wrapper class to OscP5's OscMessage."];
+}

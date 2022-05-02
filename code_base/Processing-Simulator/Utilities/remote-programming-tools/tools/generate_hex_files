@@ -1,0 +1,112 @@
+#/bin/bash
+#
+#
+# Code to generate appropriate hex files for an installation
+#
+# 1. find the current device locator filename <DL> (in RPi_World/data/device_locator_select)
+# 2. for each line in RPi_World/data/<DL>.hexlist
+# 	a. extract the first 2 characters <G> (Group e.g., TG,RG,...)   ... (but skip grideyes)
+#	b. cp "DeviceLocator_<G>.h" to "DeviceLocator.h" (in Node_World)
+#	c. compile Node_World.ino (in Node_World)
+#	d. cp "Node_World.ino.hex" to <G>.hex (in Hex_Files)
+#
+# RG Nov 27 2019 - creation & testing
+# MG Dec 7 - add skip grideyes
+
+# set file path variables
+#
+GitDir=`git rev-parse --show-toplevel`			# get the Git working directory
+PiWorldPath="$GitDir/RPi_World"
+NodeWorldPath="$GitDir/Node_World"
+NodeWorldDLPath="$GitDir/Node_World_DLs"
+HexFilePath="$GitDir/Hex_Files"
+
+# set Arduino path variables
+#
+packages_dir="$HOME/Library/Arduino15/packages"
+libraries_dir="$HOME/Documents/Arduino/libraries"
+build_dir="$GitDir/tmp_build"
+cache_dir="$GitDir/tmp_cache"
+
+# 0. Prep the temp directories
+mkdir $build_dir
+mkdir $cache_dir
+
+# 1. find the current device locator filename <DL> (in RPi_World/data/device_locator_select)
+DLS=`cat "$PiWorldPath/data/device_locator_select"`
+IFS=" " read -r DL SPLIT <<< "$DLS"                          #  SPLIT tells us if it is a split .h file, so we will copy group sections before compiling.
+DL_hexlist="$PiWorldPath/data/$DL.hexlist"
+
+echo =====================
+echo Here\'s the list of groups from $DL_hexlist \(split? $SPLIT\)
+cat "$DL_hexlist"
+echo =====================
+
+# 2. for each line in RPi_World/data/<DL>.hexlist
+while IFS= read -r locator_filename; do
+
+# 	a. extract the first 2 characters <G> (Group e.g., TG,RG,...)
+group="${locator_filename:0:2}"
+
+if [ $group = GN ] 
+then
+    echo Skipping GN node ...
+    continue   #  skip GN nodes - special case for grideyes
+fi
+
+if [ $SPLIT = yes ]
+then
+#	b. cp "DeviceLocator_<G>.h" to "DeviceLocator.h" (in Node_World)
+ DL_name="DeviceLocator_$group.h"
+ cp "$NodeWorldDLPath/$DL_name" "$NodeWorldPath/DeviceLocator.h"
+
+fi
+
+#	c. compile Node_World.ino (in Node_World)
+ino_file="$NodeWorldPath/Node_World.ino"
+
+echo Compiling "$ino_file" 
+if [ $SPLIT = yes ] 
+then
+  echo using "$NodeWorldDLPath/$DL_name" \(as DeviceLocator.h\)  
+fi
+echo =====================
+
+# build
+/Applications/Arduino.app/Contents/Java/arduino-builder -dump-prefs -logger=machine -hardware /Applications/Arduino.app/Contents/Java/hardware -tools /Applications/Arduino.app/Contents/Java/tools-builder -tools /Applications/Arduino.app/Contents/Java/hardware/tools/avr -built-in-libraries /Applications/Arduino.app/Contents/Java/libraries -libraries $HOME/Documents/Arduino/libraries -fqbn=teensy:avr:teensy31:usb=serial,speed=96,opt=o2std,keys=en-us -ide-version=10805 -build-path $build_dir -warnings=none -build-cache $cache_dir $GitDir/Node_World/Node_World.ino
+# Rob's computer --> /Applications/Arduino.app/Contents/Java/arduino-builder -dump-prefs -logger=machine -hardware /Applications/Arduino.app/Contents/Java/hardware -tools /Applications/Arduino.app/Contents/Java/tools-builder -tools /Applications/Arduino.app/Contents/Java/hardware/tools/avr -tools $packages_dir -built-in-libraries /Applications/Arduino.app/Contents/Java/libraries -libraries $libraries_dir -fqbn=arduino:avr:uno -ide-version=10810 -build-path $build_dir -warnings=none -build-cache $cache_dir -prefs=build.warn_data_percentage=75 -prefs=runtime.tools.avrdude.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.avrdude-6.3.0-arduino17.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.arduinoOTA.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.arduinoOTA-1.3.0.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.avr-gcc.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.avr-gcc-7.3.0-atmel3.6.1-arduino5.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr "$ino_file"
+
+# compile
+/Applications/Arduino.app/Contents/Java/arduino-builder -compile -logger=machine -hardware /Applications/Arduino.app/Contents/Java/hardware -tools /Applications/Arduino.app/Contents/Java/tools-builder -tools /Applications/Arduino.app/Contents/Java/hardware/tools/avr -built-in-libraries /Applications/Arduino.app/Contents/Java/libraries -libraries $HOME/Documents/Arduino/libraries -fqbn=teensy:avr:teensy31:usb=serial,speed=96,opt=o2std,keys=en-us -ide-version=10805 -build-path $build_dir -warnings=none -build-cache $cache_dir $GitDir/Node_World/Node_World.ino
+# Rob's computer --> /Applications/Arduino.app/Contents/Java/arduino-builder -compile -logger=machine -hardware /Applications/Arduino.app/Contents/Java/hardware -tools /Applications/Arduino.app/Contents/Java/tools-builder -tools /Applications/Arduino.app/Contents/Java/hardware/tools/avr -tools $packages_dir -built-in-libraries /Applications/Arduino.app/Contents/Java/libraries -libraries $libraries_dir -fqbn=arduino:avr:uno -ide-version=10810 -build-path $build_dir -warnings=none -build-cache $cache_dir -prefs=build.warn_data_percentage=75 -prefs=runtime.tools.avrdude.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.avrdude-6.3.0-arduino17.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.arduinoOTA.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.arduinoOTA-1.3.0.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.avr-gcc.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.avr-gcc-7.3.0-atmel3.6.1-arduino5.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr "$ino_file"
+
+#	d. cp "Node_World.ino.hex" to <G>.hex (in Hex_Files)
+cp "$build_dir/Node_World.ino.hex" "$HexFilePath/$group.hex"
+
+echo Copied the .hex file back to "$HexFilePath/$group.hex"
+echo =====================
+
+done < "$DL_hexlist"
+
+# 4.  Clean up all the temp files
+echo Removing temp files...
+if [ $SPLIT = yes ]
+then
+ rm    $NodeWorldPath/DeviceLocator.h
+fi
+rm -r $build_dir
+rm -r $cache_dir
+echo DONE.
+echo =====================
+
+
+#
+####################################################################
+#copies of the exact compile commands invoked before trying to extract paths, for reference
+# /Applications/Arduino.app/Contents/Java/arduino-builder -dump-prefs -logger=machine -hardware /Applications/Arduino.app/Contents/Java/hardware -hardware /Users/rbgorbet/Library/Arduino15/packages -tools /Applications/Arduino.app/Contents/Java/tools-builder -tools /Applications/Arduino.app/Contents/Java/hardware/tools/avr -tools /Users/rbgorbet/Library/Arduino15/packages -built-in-libraries /Applications/Arduino.app/Contents/Java/libraries -libraries /Users/rbgorbet/Documents/Arduino/libraries -fqbn=arduino:avr:uno -ide-version=10810 -build-path /var/folders/jd/j4f7nyvn5mb0225g7j7xpn8m0000gp/T/arduino_build_252408 -warnings=none -build-cache /var/folders/jd/j4f7nyvn5mb0225g7j7xpn8m0000gp/T/arduino_cache_559130 -prefs=build.warn_data_percentage=75 -prefs=runtime.tools.avrdude.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.avrdude-6.3.0-arduino17.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.arduinoOTA.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.arduinoOTA-1.3.0.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.avr-gcc.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.avr-gcc-7.3.0-atmel3.6.1-arduino5.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -verbose /Users/rbgorbet/OneDrive - University of Waterloo/Research/GitHub/Processing-Simulator/Node_World/Node_World.ino
+# /Applications/Arduino.app/Contents/Java/arduino-builder -compile -logger=machine -hardware /Applications/Arduino.app/Contents/Java/hardware -hardware /Users/rbgorbet/Library/Arduino15/packages -tools /Applications/Arduino.app/Contents/Java/tools-builder -tools /Applications/Arduino.app/Contents/Java/hardware/tools/avr -tools /Users/rbgorbet/Library/Arduino15/packages -built-in-libraries /Applications/Arduino.app/Contents/Java/libraries -libraries /Users/rbgorbet/Documents/Arduino/libraries -fqbn=arduino:avr:uno -ide-version=10810 -build-path /var/folders/jd/j4f7nyvn5mb0225g7j7xpn8m0000gp/T/arduino_build_252408 -warnings=none -build-cache /var/folders/jd/j4f7nyvn5mb0225g7j7xpn8m0000gp/T/arduino_cache_559130 -prefs=build.warn_data_percentage=75 -prefs=runtime.tools.avrdude.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.avrdude-6.3.0-arduino17.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.arduinoOTA.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.arduinoOTA-1.3.0.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.avr-gcc.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -prefs=runtime.tools.avr-gcc-7.3.0-atmel3.6.1-arduino5.path=/Applications/Arduino.app/Contents/Java/hardware/tools/avr -verbose /Users/rbgorbet/OneDrive - University of Waterloo/Research/GitHub/Processing-Simulator/Node_World/Node_World.ino
+
+
+#/Applications/Arduino.app/Contents/Java/arduino-builder -dump-prefs -logger=machine -hardware /Applications/Arduino.app/Contents/Java/hardware -tools /Applications/Arduino.app/Contents/Java/tools-builder -tools /Applications/Arduino.app/Contents/Java/hardware/tools/avr -built-in-libraries /Applications/Arduino.app/Contents/Java/libraries -libraries $HOME/Documents/Arduino/libraries -fqbn=teensy:avr:teensy31:usb=serial,speed=96,opt=o2std,keys=en-us -ide-version=10805 -build-path /var/folders/mv/y8kp0cks66d50j1zbpx8c84h0000gn/T/arduino_build_766726 -warnings=none -build-cache /var/folders/mv/y8kp0cks66d50j1zbpx8c84h0000gn/T/arduino_cache_793867 -verbose $GitDir/Node_World/Node_World.ino
+#/Applications/Arduino.app/Contents/Java/arduino-builder -compile -logger=machine -hardware /Applications/Arduino.app/Contents/Java/hardware -tools /Applications/Arduino.app/Contents/Java/tools-builder -tools /Applications/Arduino.app/Contents/Java/hardware/tools/avr -built-in-libraries /Applications/Arduino.app/Contents/Java/libraries -libraries /Users/Snickersnack/Documents/Arduino/libraries -fqbn=teensy:avr:teensy31:usb=serial,speed=96,opt=o2std,keys=en-us -ide-version=10805 -build-path /var/folders/mv/y8kp0cks66d50j1zbpx8c84h0000gn/T/arduino_build_766726 -warnings=none -build-cache /var/folders/mv/y8kp0cks66d50j1zbpx8c84h0000gn/T/arduino_cache_793867 -verbose /Users/Snickersnack/Dropbox/PBAI/Code/Processing-Simulator/Node_World/Node_World.ino
+

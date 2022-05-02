@@ -1,0 +1,16 @@
+{
+  "currentPatchables": {
+  },
+  "currentConnectors": [
+  ],
+  "patcherUpdateFrequency": 50,
+  "patcherSyncFrequency": 1000,
+  "patcherScanFrequency": 5000,
+  "autoScanPatchables": false,
+  "showHidden": false,
+  "gridSize": 20,
+  "defaultSnap": true,
+  "zoom": 1.0,
+  "neverSave": false,
+  "behaviourName": "Patcher"
+}

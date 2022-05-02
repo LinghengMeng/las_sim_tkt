@@ -1,0 +1,18 @@
+#/bin/bash
+#
+# batch file to get the list of current PI IP addresses
+# 
+# RG Feb 17 2020 for Meander
+
+# set file path variables
+#
+GitDir=`git rev-parse --show-toplevel`                  # get the Git working directory
+PiWorldPath="$GitDir/RPi_World"
+DLS=`cat "$PiWorldPath/data/device_locator_select"`
+IFS=" " read -r DL SPLIT <<< "$DLS"
+DL_pilist="$PiWorldPath/data/$DL.pilist"
+
+# echo the name of the pilist file to STDOUT for other scripts to capture
+# format is pilist_file = $(./get_pi_list)
+
+echo $DL_pilist

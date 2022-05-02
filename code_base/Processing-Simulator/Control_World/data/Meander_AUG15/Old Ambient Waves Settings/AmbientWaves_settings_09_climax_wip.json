@@ -1,0 +1,16 @@
+{
+  "default_velocity": 0.1,
+  "default_amplitude": 0.25,
+  "default_period": 0.2,
+  "default_angle": 1.5707964,
+  "velocity": 0.1,
+  "amplitude": 0.25,
+  "period": 0.2,
+  "angle": 1.5707964,
+  "num_waves": 1,
+  "display": false,
+  "neverSave": false,
+  "behaviourName": "AmbientWaves",
+  "influenceActive": true,
+  "masterIntensity": 1.0
+}

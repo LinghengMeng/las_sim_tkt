@@ -1,0 +1,31 @@
+# batch file to reboot all the pis 
+# 
+# RG Apr 9 2018 for Amatria
+# RG Dec 4 2018 for testbed
+# RG Mar 1 2019 for symposium
+# NM Mar 29 2019 for futurium
+# NM April 2019 for futurium
+# MG Dec 7 2019 for Meander
+# RG Feb 16 2020 for Meander
+
+# set file path variables
+#
+GitDir=`git rev-parse --show-toplevel`                  # get the Git working directory
+PiWorldPath="$GitDir/RPi_World"
+DLS=`cat "$PiWorldPath/data/device_locator_select"`
+IFS=" " read -r DL SPLIT <<< "$DLS"
+DL_pilist="$PiWorldPath/data/$DL.pilist"
+
+echo =====================
+echo Here\'s the list of pis from $DL_pilist:
+cat "$DL_pilist"
+echo =====================
+
+# 2. for each line in RPi_World/data/<DL>.pilist
+while IFS="" read -r pi_addr;
+do
+
+  echo ======
+  echo rebooting $pi_addr
+  ssh -n -i ~/.ssh/id_ecdsa pi@$pi_addr 'sudo reboot'
+done < "$DL_pilist"

@@ -1,0 +1,20 @@
+{
+  "edgeRange": 1000,
+  "respawnRange": 500,
+  "particleCount": 20,
+  "ff_update_rate": 10,
+  "sculptmode": 2,
+  "flowInfluenceScalar": 5.0,
+  "maxSpeed": 2.0,
+  "threshold": 175.0,
+  "core_size": 0.5,
+  "perlinOffsetInc": 0.005,
+  "randomForceAmount": 0.8,
+  "masterIntensity": 1.0,
+  "display": true,
+  "displayVecs": false,
+  "displayBorders": false,
+  "showNearestVecLines": true,
+  "showParticleOrientation": true,
+  "use_grid_vectors": true
+}

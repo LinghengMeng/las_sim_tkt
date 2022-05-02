@@ -1,0 +1,17 @@
+# batch file to run a command remotely on the PIs
+#
+# assumes the remote command is located in /home/pi
+#
+# RG Mar 2 2019 for symposium
+#
+
+read id_list < settings/nodelist
+
+for addr in $id_list
+do
+ echo running $1 on PI $addr...
+
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr /home/pi/$1 &
+
+done
+

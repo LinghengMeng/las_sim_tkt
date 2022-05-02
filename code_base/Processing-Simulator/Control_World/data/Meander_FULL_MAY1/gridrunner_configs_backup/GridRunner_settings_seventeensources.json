@@ -1,0 +1,893 @@
+{
+  "legacySteering": true,
+  "totalParticles": 2000,
+  "nParticles": 635,
+  "lifespan": 6750,
+  "linked": true,
+"burstFreq": 4290,
+  "burstFreqRandom" : 0.0,
+  "burstQty": 7,
+  "sourceRotation": 2,
+  "totalActiveSources": 13,
+  "influenceSize": 785,
+  "maxspeed": 5.55,
+  "randomspeed": 0.8,
+  "yvelocity": 0.1,
+  "gravity": 0.0,
+  "burstLength": 0.4,
+  "coreSize": 0.24,
+  "influenceIntensity": 0.09,
+  "gridScale": 3.0,
+  "gridWaveX": 0.0,
+  "gridWaveZ": 0.0,
+  "spread": 4.12,
+  "heading": 1.55,
+  "onGridFriction": 1.1,
+  "onGridSteering": 1.0,
+  "offGridFriction": 1.001,
+  "offGridSteering": 0.81,
+  "partScale": 1.7,
+  "randomScale": 0.0,
+  "sourceCadence": 500.0,
+  "debugOpacity": 0.07,
+  "vertexOpacity": 0.28,
+  "segradius": 2,
+  "lookahead": 70,
+  "mouseSource": false,
+  "sourceStep": false,
+  "allSources": true,
+  "debug": false,
+  "displayModel": false,
+  "displaySegments": false,
+  "displayParticles": false,
+  "displayVertices": false,
+  "displaySources": true,
+  "displayCore": false,
+  "modelName": "meander_for_GridRunner.obj",
+  "particleSourceVars": [
+    {
+     "active": true, 
+     "sourceName": "Source_278",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": 1277.3757,
+      "position_y": -3781.7522,
+      "position_z": 2494.1282,
+      "behaviourName": "Source_278",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1267906,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_278",
+      "displayName": "Source_278",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_PS",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": -6042.3506,
+      "position_y": 1198.61,
+      "position_z": 2249.7273,
+      "behaviourName": "Source_PS",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1268114,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [],
+      "realName": "Source_PS",
+      "displayName": "Source_PS",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_274",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": -1712.5011,
+      "position_y": -6102.053,
+      "position_z": 1081.7548,
+      "behaviourName": "Source_274",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1268301,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_274",
+      "displayName": "Source_274",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_437",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": 884.5952,
+      "position_y": -5202.053,
+      "position_z": 1081.7548,
+      "behaviourName": "Source_437",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1268477,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_437",
+      "displayName": "Source_437",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_439",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": -78.2489,
+      "position_y": -5203.7715,
+      "position_z": 1081.7548,
+      "behaviourName": "Source_439",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1268675,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_439",
+      "displayName": "Source_439",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_474",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": 362.206,
+      "position_y": -6101.8276,
+      "position_z": 1081.7548,
+      "behaviourName": "Source_474",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1268986,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_474",
+      "displayName": "Source_474",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_423",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": -674.2505,
+      "position_y": -6102.053,
+      "position_z": 1081.7548,
+      "behaviourName": "Source_423",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1269164,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_423",
+      "displayName": "Source_423",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_498",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": -2755.5735,
+      "position_y": -6101.7085,
+      "position_z": 1081.7548,
+      "behaviourName": "Source_498",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1269362,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_498",
+      "displayName": "Source_498",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_446",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": -3712.7815,
+      "position_y": -6104.401,
+      "position_z": 1081.7548,
+      "behaviourName": "Source_446",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1269557,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_446",
+      "displayName": "Source_446",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_279",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": -4308.495,
+      "position_y": -5202.053,
+      "position_z": 1081.7548,
+      "behaviourName": "Source_279",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1269746,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_279",
+      "displayName": "Source_279",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_159",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": -6090.452,
+      "position_y": -31.004578,
+      "position_z": 1663.2551,
+      "behaviourName": "Source_159",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1269947,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_159",
+      "displayName": "Source_159",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_414",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": -5350.7876,
+      "position_y": 797.7451,
+      "position_z": 1749.7274,
+      "behaviourName": "Source_414",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1270154,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_414",
+      "displayName": "Source_414",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_460",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": -4311.557,
+      "position_y": -1002.2549,
+      "position_z": 1749.7274,
+      "behaviourName": "Source_460",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1270343,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_460",
+      "displayName": "Source_460",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_424",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": -4831.1724,
+      "position_y": 1697.7451,
+      "position_z": 1749.7274,
+      "behaviourName": "Source_424",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1270537,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_424",
+      "displayName": "Source_424",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_492",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": -4311.557,
+      "position_y": 2597.745,
+      "position_z": 1749.7274,
+      "behaviourName": "Source_492",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1270773,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_492",
+      "displayName": "Source_492",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_331",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": 1988.4121,
+      "position_y": -4194.2373,
+      "position_z": 1682.447,
+      "behaviourName": "Source_331",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1270967,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_331",
+      "displayName": "Source_331",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_456",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": -3317.9792,
+      "position_y": -1846.4928,
+      "position_z": 2841.6455,
+      "behaviourName": "Source_456",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1271167,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_456",
+      "displayName": "Source_456",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    },
+    {
+     "active": true, 
+     "sourceName": "Source_349",
+      "sourceRotation": 2,
+      "linked": true,
+"burstFreq": 4290,
+      "burstFreqRandom" : 0.0,
+      "burstQty": 7,
+      "sourceCadence": 500.0,
+      "spread": 4.12,
+      "heading": 1.55,
+      "burstLength": 0.4,
+      "yvelocity": 0.1,
+      "position_x": -3923.6785,
+      "position_y": -2034.2434,
+      "position_z": 2378.2368,
+      "behaviourName": "Source_349",
+      "thread_update_rate": 10,
+      "last_behaviour_save": 1271375,
+      "influenceActive": true,
+      "needToSave": true,
+      "neverSave": true,
+      "presetchanged": false,
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_349",
+      "displayName": "Source_349",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0
+    }
+  ],
+  "behaviourName": "GridRunner",
+  "thread_update_rate": 10,
+  "last_behaviour_save": 1271602,
+  "influenceActive": true,
+  "needToSave": true,
+  "neverSave": false,
+  "presetchanged": false,
+  "dataPorts": [],
+  "realName": "GridRunner",
+  "displayName": "GridRunner",
+  "screenX": 0,
+  "screenY": 0,
+  "screenW": 0,
+  "screenH": 0
+}

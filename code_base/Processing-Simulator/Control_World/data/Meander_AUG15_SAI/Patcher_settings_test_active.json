@@ -1,0 +1,492 @@
+{
+  "currentPatchables": {
+    "Source_108": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.5,
+          "newDataPrecision": 1.0E-5
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "31",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "690",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.848",
+          "min": 0.1,
+          "max": 1.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5
+        }
+      ],
+      "realName": "Source_108",
+      "behaviour": "GridRunner",
+      "displayName": "Source_108",
+      "screenX": 660,
+      "screenY": 200,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:8:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0
+        }
+      ],
+      "realName": "NR:8:P1:1_IR1",
+      "displayName": "NR:8:P1:1_IR1",
+      "screenX": 40,
+      "screenY": 420,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:4:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0
+        }
+      ],
+      "realName": "SR:4:P1:1_IR1",
+      "displayName": "SR:4:P1:1_IR1",
+      "screenX": 100,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:7:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0
+        }
+      ],
+      "realName": "NR:7:P1:1_IR1",
+      "displayName": "NR:7:P1:1_IR1",
+      "screenX": 220,
+      "screenY": 420,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_94": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.5,
+          "newDataPrecision": 1.0E-5
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "61",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "690",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.1",
+          "min": 0.1,
+          "max": 1.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5
+        }
+      ],
+      "realName": "Source_94",
+      "behaviour": "GridRunner",
+      "displayName": "Source_94",
+      "screenX": 720,
+      "screenY": 320,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:4:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0
+        }
+      ],
+      "realName": "NR:4:P1:1_IR1",
+      "displayName": "NR:4:P1:1_IR1",
+      "screenX": 60,
+      "screenY": 500,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:1:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0
+        }
+      ],
+      "realName": "SR:1:P1:1_IR1",
+      "displayName": "SR:1:P1:1_IR1",
+      "screenX": 140,
+      "screenY": 20,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:5:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0
+        }
+      ],
+      "realName": "SR:5:P1:1_IR1",
+      "displayName": "SR:5:P1:1_IR1",
+      "screenX": 100,
+      "screenY": 100,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:6:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0
+        }
+      ],
+      "realName": "NR:6:P1:1_IR1",
+      "displayName": "NR:6:P1:1_IR1",
+      "screenX": 120,
+      "screenY": 660,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:3:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0
+        }
+      ],
+      "realName": "NR:3:P1:1_IR1",
+      "displayName": "NR:3:P1:1_IR1",
+      "screenX": 240,
+      "screenY": 200,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:2:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0
+        }
+      ],
+      "realName": "SR:2:P1:1_IR1",
+      "displayName": "SR:2:P1:1_IR1",
+      "screenX": 60,
+      "screenY": 180,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_112": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.5,
+          "newDataPrecision": 1.0E-5
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "31",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "690",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "1.0",
+          "min": 0.1,
+          "max": 1.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5
+        }
+      ],
+      "realName": "Source_112",
+      "behaviour": "GridRunner",
+      "displayName": "Source_112",
+      "screenX": 480,
+      "screenY": 280,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:1:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0
+        }
+      ],
+      "realName": "NR:1:P1:1_IR1",
+      "displayName": "NR:1:P1:1_IR1",
+      "screenX": 220,
+      "screenY": 300,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:2:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0
+        }
+      ],
+      "realName": "NR:2:P1:1_IR1",
+      "displayName": "NR:2:P1:1_IR1",
+      "screenX": 40,
+      "screenY": 260,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:5:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0
+        }
+      ],
+      "realName": "NR:5:P1:1_IR1",
+      "displayName": "NR:5:P1:1_IR1",
+      "screenX": 240,
+      "screenY": 520,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:3:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0
+        }
+      ],
+      "realName": "SR:3:P1:1_IR1",
+      "displayName": "SR:3:P1:1_IR1",
+      "screenX": 40,
+      "screenY": 340,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_184": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.5,
+          "newDataPrecision": 1.0E-5
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "31",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "690",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "1.0",
+          "min": 0.1,
+          "max": 1.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5
+        }
+      ],
+      "realName": "Source_184",
+      "behaviour": "GridRunner",
+      "displayName": "Source_184",
+      "screenX": 820,
+      "screenY": 100,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    }
+  },
+  "currentConnectors": [
+    {
+      "fromPatchable": "NR:3:P1:1_IR1",
+      "toPatchable": "Source_112",
+      "fromPort": "pct_value",
+      "toPort": "active"
+    }
+  ],
+  "patcherUpdateFrequency": 50,
+  "patcherSyncFrequency": 1000,
+  "patcherScanFrequency": 5000,
+  "autoScanPatchables": false,
+  "showHidden": false,
+  "gridSize": 20,
+  "defaultSnap": true,
+  "zoom": 1.0,
+  "behaviourName": "Patcher",
+  "influenceActive": true,
+  "neverSave": false
+}

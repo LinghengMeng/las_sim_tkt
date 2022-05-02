@@ -1,0 +1,42 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558 
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "test",
+            "path": "Utilities/remote-programming-tools/deviceLocator/",
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Sketch",
+            "type": "shell",
+            "group": {
+              "kind": "build",
+              "isDefault": true
+            },
+            "command": "${config:processing.path}",
+            "presentation": {
+              "echo": true,
+              "reveal": "always",
+              "focus": false,
+              "panel": "dedicated"
+            },
+            "args": [
+              "--force",
+              "--sketch=${workspaceRoot}/Control_World",
+              "--output=${workspaceRoot}/Control_World/out",
+              "--run"
+            ],
+            "windows": {
+              "args": [
+                "--force",
+                "--sketch=${workspaceRoot}",
+                "--output=${workspaceRoot}\\out",
+                "--run"
+              ]
+            }
+          }
+    ]
+}

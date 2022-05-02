@@ -1,0 +1,15 @@
+# Installs the processing libraries that are installed on this system onto the Pis
+# Written by Niel Mistry, inspired by Rob Gorbet
+
+# Assumes libraries are in ~/Documents/Processing
+tar -zvcf processinglibs.tar.gz -C ~/Documents/Processing libraries
+
+read id_list < settings/nodelist
+
+for addr in $id_list
+do
+  echo uploading to 172.23.0.$addr
+  scp -i ~/.ssh/id_ecdsa processinglibs.tar.gz pi@172.23.0.$addr:/home/pi
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'rm -rf sketchbook/libraries; tar -zxvf processinglibs.tar.gz -C sketchbook'
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'sudo systemctl restart processing'
+done

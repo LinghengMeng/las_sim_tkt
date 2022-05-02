@@ -1,0 +1,27 @@
+{
+  "/  Presence": {
+    "min": 0,
+    "max": 100,
+    "value": 90
+  },
+  "/  Hearing": {
+    "min": 0,
+    "max": 100,
+    "value": 90
+  },
+  "/  Vol External": {
+    "min": 0,
+    "max": 100,
+    "value": 84
+  },
+  "/Timer": {"value": 1},
+  "/  Vol Internal": {
+    "min": 0,
+    "max": 100,
+    "value": 70
+  },
+  "/Hour From": {"value": 6},
+  "/Min From": {"value": 0},
+  "/Min To": {"value": 30},
+  "/Hour To": {"value": 23}
+}

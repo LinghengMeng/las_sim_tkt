@@ -1,0 +1,3 @@
+{
+    "exc_core_sz_down": {"behaviour": "Excitors", "param": "coreSize", "start_time": 3000, "duration": 10000, "start_value": 0.1, "end_value": 1.0}
+}

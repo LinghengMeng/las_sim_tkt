@@ -1,0 +1,2310 @@
+{
+  "currentPatchables": {
+    "NR:4:ND:1_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "NR:4:ND:1_SD1",
+      "behaviour": "Sensors",
+      "displayName": "NR:4:ND:1_SD1",
+      "screenX": 40,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:1:ND:1_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "NR:1:ND:1_SD1",
+      "behaviour": "Sensors",
+      "displayName": "NR:1:ND:1_SD1",
+      "screenX": 60,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_510": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "1",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4610",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_510",
+      "behaviour": "GridRunner",
+      "displayName": "Source_510",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_511": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "1",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "3560",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_511",
+      "behaviour": "GridRunner",
+      "displayName": "Source_511",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "TG:1:HU:3_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "TG:1:HU:3_SD1",
+      "behaviour": "Sensors",
+      "displayName": "TG:1:HU:3_SD1",
+      "screenX": 80,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "TG:4:HU:3_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "TG:4:HU:3_SD1",
+      "behaviour": "Sensors",
+      "displayName": "TG:4:HU:3_SD1",
+      "screenX": 100,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:1:ND:1_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "SR:1:ND:1_SD1",
+      "behaviour": "Sensors",
+      "displayName": "SR:1:ND:1_SD1",
+      "screenX": 120,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_519": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "3030",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_519",
+      "behaviour": "GridRunner",
+      "displayName": "Source_519",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:6:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0,
+          "latching": false
+        }
+      ],
+      "realName": "NR:6:P1:1_IR1",
+      "displayName": "NR:6:P1:1_IR1",
+      "screenX": 200,
+      "screenY": 180,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:3:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0,
+          "latching": false
+        }
+      ],
+      "realName": "NR:3:P1:1_IR1",
+      "displayName": "NR:3:P1:1_IR1",
+      "screenX": 220,
+      "screenY": 80,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:4:ND:1_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "SR:4:ND:1_SD1",
+      "behaviour": "Sensors",
+      "displayName": "SR:4:ND:1_SD1",
+      "screenX": 140,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:1:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0,
+          "latching": false
+        }
+      ],
+      "realName": "NR:1:P1:1_IR1",
+      "displayName": "NR:1:P1:1_IR1",
+      "screenX": 220,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_275": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "35",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "2140",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_275",
+      "behaviour": "GridRunner",
+      "displayName": "Source_275",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_274": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "2140",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_274",
+      "behaviour": "GridRunner",
+      "displayName": "Source_274",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_59": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "2140",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_59",
+      "behaviour": "GridRunner",
+      "displayName": "Source_59",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_527": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "3030",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_527",
+      "behaviour": "GridRunner",
+      "displayName": "Source_527",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_528": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "3030",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_528",
+      "behaviour": "GridRunner",
+      "displayName": "Source_528",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_525": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "3030",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_525",
+      "behaviour": "GridRunner",
+      "displayName": "Source_525",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_526": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "3030",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_526",
+      "behaviour": "GridRunner",
+      "displayName": "Source_526",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_523": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "3030",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_523",
+      "behaviour": "GridRunner",
+      "displayName": "Source_523",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_524": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "3030",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_524",
+      "behaviour": "GridRunner",
+      "displayName": "Source_524",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_521": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "3030",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_521",
+      "behaviour": "GridRunner",
+      "displayName": "Source_521",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:4:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0,
+          "latching": false
+        }
+      ],
+      "realName": "SR:4:P1:1_IR1",
+      "displayName": "SR:4:P1:1_IR1",
+      "screenX": 40,
+      "screenY": 100,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_522": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "3030",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_522",
+      "behaviour": "GridRunner",
+      "displayName": "Source_522",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:7:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0,
+          "latching": false
+        }
+      ],
+      "realName": "NR:7:P1:1_IR1",
+      "displayName": "NR:7:P1:1_IR1",
+      "screenX": 220,
+      "screenY": 240,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_529": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "3030",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_529",
+      "behaviour": "GridRunner",
+      "displayName": "Source_529",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_520": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "3030",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_520",
+      "behaviour": "GridRunner",
+      "displayName": "Source_520",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_440": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "6",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "2070",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_440",
+      "behaviour": "GridRunner",
+      "displayName": "Source_440",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:2:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0,
+          "latching": false
+        }
+      ],
+      "realName": "NR:2:P1:1_IR1",
+      "displayName": "NR:2:P1:1_IR1",
+      "screenX": 200,
+      "screenY": 20,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:5:ND:1_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "NR:5:ND:1_SD1",
+      "behaviour": "Sensors",
+      "displayName": "NR:5:ND:1_SD1",
+      "screenX": 160,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:3:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0,
+          "latching": false
+        }
+      ],
+      "realName": "SR:3:P1:1_IR1",
+      "displayName": "SR:3:P1:1_IR1",
+      "screenX": 60,
+      "screenY": 80,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:8:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0,
+          "latching": false
+        }
+      ],
+      "realName": "NR:8:P1:1_IR1",
+      "displayName": "NR:8:P1:1_IR1",
+      "screenX": 60,
+      "screenY": 240,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:5:ND:1_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "SR:5:ND:1_SD1",
+      "behaviour": "Sensors",
+      "displayName": "SR:5:ND:1_SD1",
+      "screenX": 180,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:5:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0,
+          "latching": false
+        }
+      ],
+      "realName": "SR:5:P1:1_IR1",
+      "displayName": "SR:5:P1:1_IR1",
+      "screenX": 60,
+      "screenY": 160,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "TG:5:HU:3_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "TG:5:HU:3_SD1",
+      "behaviour": "Sensors",
+      "displayName": "TG:5:HU:3_SD1",
+      "screenX": 200,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "TG:2:HU:3_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "TG:2:HU:3_SD1",
+      "behaviour": "Sensors",
+      "displayName": "TG:2:HU:3_SD1",
+      "screenX": 220,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_290": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "3030",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_290",
+      "behaviour": "GridRunner",
+      "displayName": "Source_290",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:6:ND:1_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "NR:6:ND:1_SD1",
+      "behaviour": "Sensors",
+      "displayName": "NR:6:ND:1_SD1",
+      "screenX": 240,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:2:ND:1_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "SR:2:ND:1_SD1",
+      "behaviour": "Sensors",
+      "displayName": "SR:2:ND:1_SD1",
+      "screenX": 260,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:2:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0,
+          "latching": false
+        }
+      ],
+      "realName": "SR:2:P1:1_IR1",
+      "displayName": "SR:2:P1:1_IR1",
+      "screenX": 40,
+      "screenY": 20,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_530": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "17",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "3030",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_530",
+      "behaviour": "GridRunner",
+      "displayName": "Source_530",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:2:F1:1_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "NR:2:F1:1_SD1",
+      "behaviour": "Sensors",
+      "displayName": "NR:2:F1:1_SD1",
+      "screenX": 280,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_212": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "6",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "2070",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_212",
+      "behaviour": "GridRunner",
+      "displayName": "Source_212",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:3:ND:1_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "SR:3:ND:1_SD1",
+      "behaviour": "Sensors",
+      "displayName": "SR:3:ND:1_SD1",
+      "screenX": 300,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_501": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "6",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "2070",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_501",
+      "behaviour": "GridRunner",
+      "displayName": "Source_501",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "TG:3:HU:3_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "TG:3:HU:3_SD1",
+      "behaviour": "Sensors",
+      "displayName": "TG:3:HU:3_SD1",
+      "screenX": 320,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_345": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "6",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "2070",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_345",
+      "behaviour": "GridRunner",
+      "displayName": "Source_345",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:4:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0,
+          "latching": false
+        }
+      ],
+      "realName": "NR:4:P1:1_IR1",
+      "displayName": "NR:4:P1:1_IR1",
+      "screenX": 200,
+      "screenY": 100,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "SR:1:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0,
+          "latching": false
+        }
+      ],
+      "realName": "SR:1:P1:1_IR1",
+      "displayName": "SR:1:P1:1_IR1",
+      "screenX": 60,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:8:ND:1_SD1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "norm_value_f",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "NR:8:ND:1_SD1",
+      "behaviour": "Sensors",
+      "displayName": "NR:8:ND:1_SD1",
+      "screenX": 300,
+      "screenY": 460,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_464": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "6",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "2070",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_464",
+      "behaviour": "GridRunner",
+      "displayName": "Source_464",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "NR:5:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.0,
+          "newDataPrecision": 0.0,
+          "latching": false
+        }
+      ],
+      "realName": "NR:5:P1:1_IR1",
+      "displayName": "NR:5:P1:1_IR1",
+      "screenX": 220,
+      "screenY": 160,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Source_263": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "active",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.7,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "heading",
+          "val": "0.0",
+          "min": 0.0,
+          "max": 6.2831855,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "sourceRotation",
+          "val": "0",
+          "min": 0.0,
+          "max": 2.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "6",
+          "min": 1.0,
+          "max": 250.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "2070",
+          "min": 10.0,
+          "max": 5000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Source_263",
+      "behaviour": "GridRunner",
+      "displayName": "Source_263",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "ElectricCells": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "triggerNow",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.2,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "ElectricCells",
+      "behaviour": "ElectricCells",
+      "displayName": "ElectricCells",
+      "screenX": 0,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    },
+    "Excitors": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "triggerExcitorNow",
+          "val": "false",
+          "min": 0.0,
+          "max": 0.0,
+          "trigger": 0.2,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "size",
+          "val": "920",
+          "min": 0.0,
+          "max": 2000.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        },
+        {
+          "inport": true,
+          "param": "coreSize",
+          "val": "0.4",
+          "min": 0.0,
+          "max": 1.0,
+          "trigger": 0.0,
+          "newDataPrecision": 1.0E-5,
+          "latching": false
+        }
+      ],
+      "realName": "Excitors",
+      "behaviour": "Excitors",
+      "displayName": "Excitors",
+      "screenX": 680,
+      "screenY": 380,
+      "screenW": 0,
+      "screenH": 0,
+      "hidden": false,
+      "killMe": false
+    }
+  },
+  "currentConnectors": [
+    {
+      "fromPatchable": "NR:7:P1:1_IR1",
+      "toPatchable": "Source_530",
+      "fromPort": "pct_value",
+      "toPort": "active"
+    },
+    {
+      "fromPatchable": "NR:6:P1:1_IR1",
+      "toPatchable": "Source_529",
+      "fromPort": "pct_value",
+      "toPort": "active"
+    },
+    {
+      "fromPatchable": "NR:5:P1:1_IR1",
+      "toPatchable": "Source_528",
+      "fromPort": "pct_value",
+      "toPort": "active"
+    },
+    {
+      "fromPatchable": "NR:4:P1:1_IR1",
+      "toPatchable": "Source_527",
+      "fromPort": "pct_value",
+      "toPort": "active"
+    },
+    {
+      "fromPatchable": "NR:2:P1:1_IR1",
+      "toPatchable": "Source_525",
+      "fromPort": "pct_value",
+      "toPort": "active"
+    },
+    {
+      "fromPatchable": "NR:1:P1:1_IR1",
+      "toPatchable": "Source_524",
+      "fromPort": "pct_value",
+      "toPort": "active"
+    },
+    {
+      "fromPatchable": "NR:3:P1:1_IR1",
+      "toPatchable": "Source_526",
+      "fromPort": "pct_value",
+      "toPort": "active"
+    },
+    {
+      "fromPatchable": "SR:5:P1:1_IR1",
+      "toPatchable": "Source_523",
+      "fromPort": "pct_value",
+      "toPort": "active"
+    },
+    {
+      "fromPatchable": "SR:4:P1:1_IR1",
+      "toPatchable": "Source_522",
+      "fromPort": "pct_value",
+      "toPort": "active"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_521",
+      "fromPort": "pct_value",
+      "toPort": "active"
+    },
+    {
+      "fromPatchable": "SR:2:P1:1_IR1",
+      "toPatchable": "Source_520",
+      "fromPort": "pct_value",
+      "toPort": "active"
+    },
+    {
+      "fromPatchable": "SR:1:P1:1_IR1",
+      "toPatchable": "Source_519",
+      "fromPort": "pct_value",
+      "toPort": "active"
+    },
+    {
+      "fromPatchable": "NR:8:P1:1_IR1",
+      "toPatchable": "Source_290",
+      "fromPort": "pct_value",
+      "toPort": "active"
+    }
+  ],
+  "patcherUpdateFrequency": 50,
+  "patcherSyncFrequency": 1000,
+  "patcherScanFrequency": 5000,
+  "autoScanPatchables": false,
+  "showHidden": true,
+  "gridSize": 20,
+  "defaultSnap": true,
+  "zoom": 1.0,
+  "neverSave": false,
+  "behaviourName": "Patcher"
+}

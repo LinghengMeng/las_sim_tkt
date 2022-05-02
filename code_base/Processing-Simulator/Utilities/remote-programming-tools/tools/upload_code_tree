@@ -1,0 +1,32 @@
+# batch file to upload the code source directly to RPis
+# 
+# run 'upload_code_tree'
+#
+# RG Apr 9 2018 for Amatria
+# RG Dec 4 2018 for testbed
+# RG Mar 1 2019 for symposium
+# NM Mar 29 2019 for futurium
+# NM April 2019 for futurium
+# MG Dec 7 2019 for Meander
+
+# get_pi_list
+pilist_file=$(./get_pi_list)
+
+# compress the code for uploading
+tar -zvcf code.tar.gz -C ../../.. RPi_World Node_World/Node_World.ino.hex Device_Locator_CSVs Hex_Files options.json
+
+# 2. for each line in RPi_World/data/<DL>.pilist
+while IFS="" read -r addr_to_upload_to;
+do
+
+  echo ======
+  echo uploading to $addr_to_upload_to
+  scp -i ~/.ssh/id_ecdsa pi_init_on_boot pi@$addr_to_upload_to:/home/pi/init_on_boot
+  scp -i ~/.ssh/id_ecdsa code.tar.gz pi@$addr_to_upload_to:/home/pi
+  ssh -n -i ~/.ssh/id_ecdsa pi@$addr_to_upload_to 'cd /home/pi; mkdir code; tar -zxvf code.tar.gz -C code'
+  ssh -n -i ~/.ssh/id_ecdsa pi@$addr_to_upload_to 'sudo systemctl restart processing'
+  printf '%s\n' "$addr_to_upload_to"
+
+done < "$pilist_file"
+
+

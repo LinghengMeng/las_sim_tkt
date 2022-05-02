@@ -1,0 +1,52 @@
+
+# The file $node_hex_files defined below should contain the node hex map 
+# in the format.  The colon separator is important.
+#
+# <node_id>:<hex_file_name>
+#
+# 12345:testa.hex
+# 34567:testa.hex
+# 23456:testb.hex
+# 4672346:testf.hex
+
+node_hex_file_path="/home/pi/code/RPi_World/data/"
+node_hex_file_name=`cat /home/pi/code/RPi_World/data/device_locator_select` # this file will have tell us what hexmap file to use
+node_hex_files="$node_hex_file_path$node_hex_file_name"     	 # cmdline parameter is the path to the node hex map
+node_id_file=teensy_ids  # this file is generated locally by 'tycmd list'
+
+# create arrays for the node hex map and list of local nodes
+declare -a node_code
+declare -a my_node_ids
+
+# read the files into the arrays
+node_hex_code=( `cat $node_hex_files`)
+my_node_ids=( `grep -Eo '[0-9]{1,7}' $node_id_file`)
+
+# go through the list of local node IDs
+for node in ${my_node_ids[@]}; do
+
+  # extract the hex file name corresponding to $node
+  hex_file=`echo ${node_hex_code[@]} | tr ' ' '\n' | grep -e $node: | cut -f 2 -d ':'`
+
+  # check file name string for spaces
+  echo $hex_file | grep -q ' '
+
+  # if filename string has spaces in it, node found more than once
+  if [[ $? -eq 0 ]]; then
+     echo --ERROR-- Node $node found more than once
+
+  # if $hex_file is empty, $node was not found in the node hex map
+  elif [ -z $hex_file ]; then
+    #handle the error here
+    echo --ERROR-- Node $node not found
+
+  else
+    # call tycmd here to load $hex_file into $node
+    cd /home/pi/code/Node_World # this should chagne to whereever hexfiles live
+    echo Teensy ID:$node gets $hex_file
+    sudo tycmd upload $hex_file --board $node
+  fi
+
+done
+
+

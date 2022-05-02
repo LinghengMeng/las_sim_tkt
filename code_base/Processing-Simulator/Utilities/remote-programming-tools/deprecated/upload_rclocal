@@ -1,0 +1,18 @@
+# batch file to copy a file to all the PIs
+#
+# edit the scp command below
+#
+# RG Apr 9 2018 for Amatria
+# RG Dec 4 2018 for testbed
+#
+
+read id_list < settings/nodelist
+
+for addr in $id_list
+do
+  echo Uploading rc.local file to /etc/rc.local on $addr
+  ssh pi@172.23.0.$addr 'sudo chmod 777 /etc; sudo chmod 777 /etc/rc.local'
+  scp -i ~/.ssh/id_ecdsa rc.local pi@172.23.0.$addr:/etc/rc.local
+  ssh pi@172.23.0.$addr 'sudo chmod 755 /etc; sudo chmod 755 /etc/rc.local'
+done
+

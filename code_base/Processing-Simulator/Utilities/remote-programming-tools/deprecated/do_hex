@@ -1,0 +1,32 @@
+# batch file to copy a hex file to <PI ID>, renaming it and replacing ~/Code/Teensy/LuddyNode.ino.hex 
+#
+# then it will reboot the pis so they reprogram their teensys
+#
+# usage: bash do_hex <hexfilepath/hexfilename> <PI ID>
+#
+# RG Apr 9 2018 for Amatria
+# RG Dec 5 2018 for testbed
+#
+
+echo ''
+echo == note: this will take a few minutes and if redirected to a log file will be silent ==
+echo ''
+
+if [[ $# -eq 2 ]]
+then
+    id_list=$2
+else
+    id_list="101 102 103 104 105"
+fi
+
+# upload the new code to the PIs
+echo === uploading new code to PIs
+./upload_hex $1 $2
+
+# reboot the PIs which will then push code to the Teensys 
+# and run the slave script
+echo === telling PIs to do their thing
+./reboot_pis $2
+
+# run the windows master software when done!
+echo === do not forget to run the windows master python code

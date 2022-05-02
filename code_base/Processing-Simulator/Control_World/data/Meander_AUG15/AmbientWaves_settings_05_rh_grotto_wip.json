@@ -1,0 +1,62 @@
+{
+  "num_waves": 5,
+  "display": false,
+  "influenceActive": true,
+  "masterIntensity": 1.0,
+  "waves": [
+    {
+      "velocity": 0.43,
+      "amplitude": 0.25,
+      "period": 0.87,
+      "angle": 2.51,
+      "sourceName": "Wave_NR_1",
+      "actuatorMask": "NR",
+      "wavenum": 1,
+      "waveActive": true,
+      "delay": 1000,
+      "neverSave": true,
+      "behaviourName": "Wave_NR_1"
+    },
+    {
+      "velocity": 0.07,
+      "amplitude": 0.25,
+      "period": 0.85,
+      "angle": 2.94,
+      "sourceName": "Wave_NR_2",
+      "actuatorMask": "NR",
+      "wavenum": 2,
+      "waveActive": true,
+      "delay": 1000,
+      "neverSave": true,
+      "behaviourName": "Wave_NR_2"
+    },
+    {
+      "velocity": 0.57,
+      "amplitude": 0.25,
+      "period": 0.79,
+      "angle": 4.28,
+      "sourceName": "Wave_SR_3",
+      "actuatorMask": "SR",
+      "wavenum": 3,
+      "waveActive": true,
+      "delay": 1000,
+      "neverSave": true,
+      "behaviourName": "Wave_SR_3"
+    },
+    {
+      "velocity": 0.18,
+      "amplitude": 0.25,
+      "period": 0.97,
+      "angle": 3.62,
+      "sourceName": "Wave_SR_4",
+      "actuatorMask": "SR",
+      "wavenum": 4,
+      "waveActive": true,
+      "delay": 1000,
+      "neverSave": true,
+      "behaviourName": "Wave_SR_4"
+    }
+  ],
+  "neverSave": false,
+  "behaviourName": "AmbientWaves"
+}

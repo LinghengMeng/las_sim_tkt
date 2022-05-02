@@ -1,0 +1,53 @@
+digraph "Sensor"
+{
+ // INTERACTIVE_SVG=YES
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node3 [label="Sensor",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Processing sensor class to create virtual sensors. Abstract so the specific sensors can expand on bas..."];
+  Node4 -> Node3 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" parent" ,fontname="Helvetica"];
+  Node4 [label="Node",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_node.html",tooltip=" "];
+  Node5 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="Thread",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
+  Node6 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" my_sound_detectors" ,fontname="Helvetica"];
+  Node6 [label="SoundDetector",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_sound_detector.html",tooltip="Processing sensor class to create virtual Sound Detector extending Sensor."];
+  Node3 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" my_rebel_stars" ,fontname="Helvetica"];
+  Node7 [label="RebelStar",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_rebel_star.html",tooltip=" "];
+  Node8 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="Actuator",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_actuator.html",tooltip="superclass for actuators, all actuators inherit from this."];
+  Node4 -> Node8 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" parent" ,fontname="Helvetica"];
+  Node9 -> Node8 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" designator" ,fontname="Helvetica"];
+  Node9 [label="DeviceIdentifier",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_device_identifier.html",tooltip=" "];
+  Node10 -> Node7 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" cur_values" ,fontname="Helvetica"];
+  Node10 [label="DInt",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_d_int.html",tooltip=" "];
+  Node11 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" my_grideyes" ,fontname="Helvetica"];
+  Node11 [label="GridEye",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_grid_eye.html",tooltip=" "];
+  Node3 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node12 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" my_wav_triggers" ,fontname="Helvetica"];
+  Node12 [label="WAV_Trigger",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_w_a_v___trigger.html",tooltip="The virtual wav trigger class."];
+  Node8 -> Node12 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 -> Node12 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" master_volume\nvolumes" ,fontname="Helvetica"];
+  Node13 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" my_double_rebel_stars" ,fontname="Helvetica"];
+  Node13 [label="DoubleRebelStar",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_double_rebel_star.html",tooltip=" "];
+  Node8 -> Node13 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 -> Node13 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" bottom_value\ntop_value" ,fontname="Helvetica"];
+  Node14 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" my_moths" ,fontname="Helvetica"];
+  Node14 [label="Moth",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_moth.html",tooltip=" "];
+  Node8 -> Node14 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 -> Node14 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" cur_values" ,fontname="Helvetica"];
+  Node15 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" dl" ,fontname="Helvetica"];
+  Node15 [label="DeviceLocatorNode",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_device_locator_node.html",tooltip=" "];
+  Node16 -> Node15 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" dl" ,fontname="Helvetica"];
+  Node16 [label="DeviceLocator",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_device_locator.html",tooltip=" "];
+  Node17 -> Node16 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" nodes" ,fontname="Helvetica"];
+  Node17 [label="LinkedHashMap\< Integer,\l Node \>",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
+  Node18 -> Node17 [dir="back",color="orange",fontsize="10",style="dashed",label=" \< Integer, Node \>" ,fontname="Helvetica"];
+  Node18 [label="LinkedHashMap",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
+  Node19 -> Node16 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" rpis" ,fontname="Helvetica"];
+  Node19 [label="LinkedHashMap\< String,\l RPi \>",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
+  Node18 -> Node19 [dir="back",color="orange",fontsize="10",style="dashed",label=" \< String, RPi \>" ,fontname="Helvetica"];
+  Node9 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" uid_to_type" ,fontname="Helvetica"];
+  Node9 -> Node3 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" designator" ,fontname="Helvetica"];
+}

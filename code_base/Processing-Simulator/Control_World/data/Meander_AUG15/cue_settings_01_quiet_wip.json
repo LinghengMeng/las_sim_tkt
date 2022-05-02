@@ -1,0 +1,19 @@
+{
+    "behaviourIntensityFadeToBlack": {
+        "behaviour": "globalSetting",
+        "param": "behaviourIntensity",
+        "start_value": 0.75,
+        "end_value": 0,
+        "start_time": 0,
+        "duration": 4000
+    },
+    
+    "behaviourIntensityRamp": {
+        "behaviour": "globalSetting",
+        "param": "behaviourIntensity",
+        "start_value": 0,
+        "end_value": 0.17,
+        "start_time": 67000,
+        "duration": 5000
+    }
+}

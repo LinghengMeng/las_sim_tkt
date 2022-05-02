@@ -1,0 +1,23 @@
+{
+  "edgeRange": 1000,
+  "respawnRange": 500,
+  "particleCount": 50,
+  "ff_update_rate": 0,
+  "sculptmode": 2,
+  "flowInfluenceScalar": 5.0,
+  "maxSpeed": 1.0,
+  "threshold": 275.0,
+  "core_size": 0.5,
+  "perlinOffsetInc": 0.005,
+  "randomForceAmount": 0.5,
+  "display": false,
+  "displayVecs": false,
+  "displayBorders": false,
+  "showNearestVecLines": true,
+  "showParticleOrientation": true,
+  "use_grid_vectors": true,
+  "neverSave": false,
+  "behaviourName": "FlowField",
+  "influenceActive": true,
+  "masterIntensity": 1.0
+}

@@ -1,0 +1,13 @@
+{
+  "particleCount": 12,
+  "rhRingSize": 12,
+  "rh_update_rate": 0,
+  "threshold": 275.0,
+  "rhVertexAngleSpeed": 0.1,
+  "masterIntensity": 1.0,
+  "display": false,
+  "displayRings": true,
+  "influenceActive": true,
+  "neverSave": false,
+  "behaviourName": "RiverHead"
+}

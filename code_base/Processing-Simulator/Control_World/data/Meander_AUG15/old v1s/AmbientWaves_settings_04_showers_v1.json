@@ -1,0 +1,9 @@
+{
+  "num_waves": 5,
+  "display": true,
+  "waves": [],
+  "neverSave": false,
+  "behaviourName": "AmbientWaves",
+  "influenceActive": true,
+  "masterIntensity": 1.0
+}

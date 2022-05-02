@@ -1,0 +1,12 @@
+{
+  "file_name": "Meander_AUG15",
+  "run_mode": "SIM",
+  "framerate": "60",
+  "override_control_ip": "127.0.0.1",
+  "split_dot_h_file": "true",
+  "generate_alerts": "false",
+  "las_unity_simulator_ip": "127.0.0.1",
+  "sync_unity_sensor_reading": "true",
+  "las_ai_agent_ip": "127.0.0.1",
+  "las_ai_agent_port": "4010"
+}

@@ -1,0 +1,27 @@
+
+# kill all python3 processes
+echo === killing python processes
+ps | grep python3 > python_processes
+while read pid_string; do
+  pid_array=($pid_string) 
+  pid=${pid_array[0]}
+  echo killing python process $pid on $pi_num
+  kill $pid
+done < python_processes
+
+# get a list of connected teensys
+echo === getting teensy list
+sudo /home/pi/Downloads/tytools-0.8.8/build/linux/tycmd list > teensy_ids
+
+# for every teensy id found, do the right thing
+echo === programming teensys
+while read id_string; do
+  id_array=($id_string)
+  id=$(echo ${id_array[1]} | cut -c1-7)
+
+  sudo /home/pi/Downloads/tytools-0.8.8/build/linux/tycmd reset --board $id
+done < teensy_ids
+
+# run LuddyPiSlave
+echo === Running LuddyPiSlave.py on RPi $pi_num
+python3 /home/pi/Code/Raspberry\ Pi/LuddyPiSlave.py 

@@ -1,0 +1,31 @@
+# before running this:
+# 
+# copy the PBAI_Engine folder from the Processing-Simulator project into the tools/code directory
+#
+
+echo ''
+echo == note: this will take a few minutes and if redirected to a log file will be silent ==
+echo ''
+
+# delete the code files off the PIs
+echo === removing old code from PIs
+./delete_pi_files
+
+# install the Processing service
+# ./install_service
+
+# upload the code directory to the PIs
+echo === uploading new code to PIs
+./upload_code_tree
+
+# reboot the PIs
+echo === rebooting PIs
+./reboot_pis
+
+# wait until the PIs reboot, then press a key to keep going (unnecessary now)
+#echo === wait 90 seconds then continue the script...
+#sleep 90
+
+# run "init_on_boot" on each PI (even though we're not booting) (unnecessary now)
+#echo === telling each PI to program its teensies and then run the PDE sketch
+#./run_pi_cmd init_on_boot

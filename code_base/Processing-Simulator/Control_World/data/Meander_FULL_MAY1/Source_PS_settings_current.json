@@ -1,0 +1,23 @@
+{
+  "sourceName": "Source_PS",
+  "sourceRotation": 2,
+  "linked": true,
+"burstFreq": 4290,
+  "burstFreqRandom" : 0.0,
+  "burstQty": 7,
+  "sourceCadence": 500.0,
+  "spread": 4.12,
+  "heading": 1.55,
+  "burstLength": 0.4,
+  "yvelocity": 0.1,
+  "position_x": -6042.3506,
+  "position_y": 1198.61,
+  "position_z": 2249.7273,
+  "behaviourName": "Source_PS",
+  "thread_update_rate": 10,
+  "last_behaviour_save": 7837,
+  "influenceActive": true,
+  "needToSave": true,
+  "neverSave": true,
+  "presetchanged": false
+}

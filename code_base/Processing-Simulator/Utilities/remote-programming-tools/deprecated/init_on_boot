@@ -1,0 +1,37 @@
+#/bin/bash
+#
+#
+# Code to initialize the Teensy code and then run the pi code when the Pi reboots
+#
+# This code is called from rc.local as follows and creates a log called 'initlog'
+#
+# TODO: It would be great if the PI could somehow signal when it has successfully completed running the local slave code and established the UDP socket
+#
+# RG Apr 12 2018
+# RG Dec 5 2018 - updated for the testbed
+# RG Mar 1 2019 - updated for the
+#
+
+# get a list of connected teensys
+echo ...........................
+date
+echo === getting teensy list
+sudo tycmd list > teensy_ids
+
+# for every teensy id found, do the right thing
+echo === programming teensys
+
+while read id_string; do
+  id_array=($id_string)
+  id=$(echo ${id_array[1]} | cut -c1-7)
+
+  # Use the line below if there's only one type of hex file/teensy in the sculpture
+  echo programming cpp.ino.hex to $id on RPi $pi_num
+  sudo /home/pi/Downloads/tytools-0.8.8/build/linux/tycmd upload /home/pi/Code/PBAI_Engine/RPi_World_Builder/cpp.ino.hex --board $id
+
+
+done < teensy_ids
+
+# run Processing sketch on PI
+echo === Running processing sketch on RPi $pi_num
+xvfb-run /usr/local/bin/processing-3.5.3/processing-java --sketch=/home/pi/Code/PBAI_Engine/RPi_World_Builder --force --run

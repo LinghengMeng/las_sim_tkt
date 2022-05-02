@@ -1,0 +1,14 @@
+# batch file to delete all code on all the PIs
+#
+# RG Apr 9 2018 for Amatria
+# RG Dec 4 2018 updated for testbed
+#
+
+read id_list < settings/nodelist
+
+for addr in $id_list
+do
+  echo deleting code files on $addr
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'rm -rf code'
+done
+

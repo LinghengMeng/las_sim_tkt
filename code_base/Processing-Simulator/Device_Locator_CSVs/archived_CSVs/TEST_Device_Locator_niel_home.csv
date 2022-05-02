@@ -1,0 +1,5 @@
+Control IP,Section,peripheral,num,Pi IP,Node ID,Teensy Type,pin,x,y,z,installed,type
+172.23.0.99,SPHERE1,MO,1,192.168.1.42,362340,HU,33,-100,100,0,yes,actuator
+172.23.0.99,SPHERE2,MO,1,192.168.1.42,258581,HU,33,100,-100,0,yes,actuator
+172.23.0.99,SPHERE1,MO,2,192.168.1.42,362340,HU,11,-100,100,100,yes,actuator
+172.23.0.99,SPHERE2,MO,2,192.168.1.42,258581,HU,11,100,-100,100,yes,actuator

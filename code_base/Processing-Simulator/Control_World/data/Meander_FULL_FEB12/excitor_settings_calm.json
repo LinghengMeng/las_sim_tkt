@@ -1,0 +1,14 @@
+{
+  "excitorSpeedLimit": 0.11141232,
+  "masterIntensity": 0.8,
+  "attractorAngleSpeed": 0.008063116,
+  "forceScalar": 1.0,
+    "bgHowOften" : 5000,
+  "bhHowRandom" : 0.0,
+"excitorsInfluenceActive": true,
+  "showExcitors": true,
+  "backgroundBehaviourEnabled": true,
+  "showAttractors": true,
+  "maxExcitorAmount": 13,
+  "excitor_update_rate": 10
+}

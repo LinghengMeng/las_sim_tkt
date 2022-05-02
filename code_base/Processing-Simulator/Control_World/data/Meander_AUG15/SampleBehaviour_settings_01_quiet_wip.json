@@ -1,0 +1,19 @@
+{
+  "int_1": 3,
+  "int_2": 0,
+  "int_3": 0,
+  "etc_ints": 0,
+  "float_1": 0.3,
+  "float_2": 0.0,
+  "float_3": 0.0,
+  "etc_floats": 0.0,
+  "display": false,
+  "bool_1": true,
+  "bool_2": false,
+  "etc_bools": false,
+  "samples": {},
+  "neverSave": false,
+  "behaviourName": "SampleBehaviour",
+  "influenceActive": true,
+  "masterIntensity": 1.0
+}

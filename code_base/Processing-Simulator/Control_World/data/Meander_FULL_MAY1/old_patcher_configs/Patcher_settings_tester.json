@@ -1,0 +1,40 @@
+{
+  "allPatchables": {
+    "Source_231": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "94"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "960"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.1"
+        }
+      ],
+      "realName": "Source_231",
+      "displayName": "Source_231",
+      "screenX": 440,
+      "screenY": 160,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    }
+  },
+  "currentConnectors": [],
+  "patcher_scan_frequency": 5000,
+  "autoScanPatchables": true,
+  "showHidden": false,
+  "gridSize": 0,
+  "defaultSnap": false,
+  "zoom": 0.0,
+  "behaviourName": "Patcher",
+  "influenceActive": true,
+  "neverSave": false
+}

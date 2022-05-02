@@ -1,0 +1,14 @@
+digraph "DoubleRebelStar"
+{
+ // INTERACTIVE_SVG=YES
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node2 [label="DoubleRebelStar",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="A subclass of Actuator, implements DoubleRebelStar specific behaviour."];
+  Node3 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="Actuator",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_actuator.html",tooltip=" "];
+  Node4 -> Node3 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" designator" ,fontname="Helvetica"];
+  Node4 [label="DeviceIdentifier",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_device_identifier.html",tooltip=" "];
+  Node5 -> Node2 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" bottom_value\ntop_value" ,fontname="Helvetica"];
+  Node5 [label="DInt",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_d_int.html",tooltip="Dynamic Integer to control actuation levels. The different variables are required in tandem to fade a..."];
+}

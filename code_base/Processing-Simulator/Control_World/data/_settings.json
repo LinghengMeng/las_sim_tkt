@@ -1,0 +1,11 @@
+{
+  "/cam_distance": {"value": 2634.957275390625},
+  "/message_input_data": {"text": "MO1 200 2500 MO3 200 1500 MO5 200 4000"},
+  "/cam_rotate_y": {"value": 0.3554375171661377},
+  "/cam_rotate_z": {"value": -3.0717220306396484},
+  "/cam_lookat_y": {"value": 911.9137573242188},
+  "/cam_lookat_x": {"value": -1367.923583984375},
+  "/cam_lookat_z": {"value": 1256.994873046875},
+  "/message_input_code": {"text": "/CONTROL/FADE_ACTUATOR_GROUPS/192.168.50.34/362145"},
+  "/cam_rotate_x": {"value": 1.319872260093689}
+}

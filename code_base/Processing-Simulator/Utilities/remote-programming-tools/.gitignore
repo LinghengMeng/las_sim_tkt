@@ -1,0 +1,11 @@
+.DS_Store
+*.DS_Store
+**/*.DS_Store
+doc/*
+node_modules/*
+docSource/*
+.DS_Store
+*.tar.gz
+tmp_build/*
+tmp_cache/*
+Node_World_DLs/DeviceLocator*.h

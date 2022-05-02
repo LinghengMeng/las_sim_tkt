@@ -1,0 +1,15 @@
+{
+    "profile": [ 1.0,
+                 0.7,
+                 0.1,
+                 0.7,
+                 1.0
+                ],
+    "x_attenuation":  1.0,
+    "y_attenuation":  0.75,
+    "propagation_dampening": 0.8,
+    "propagation_delay": 100,
+    "trigger_mode": "SAI_REPEAT",
+    "trigger_cooldown": 10,
+    "trigger_threshold": 0.5
+}

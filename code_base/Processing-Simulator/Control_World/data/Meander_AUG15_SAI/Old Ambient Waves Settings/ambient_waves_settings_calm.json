@@ -1,0 +1,10 @@
+{
+  "default_velocity": 0.1,
+  "default_amplitude": 0.25,
+  "default_period": 0.2,
+  "default_angle": 0.0,
+  "num_waves": 3,
+  "thread_update_rate": 20,
+  "wave_influence_active": true,
+  "display": true
+}

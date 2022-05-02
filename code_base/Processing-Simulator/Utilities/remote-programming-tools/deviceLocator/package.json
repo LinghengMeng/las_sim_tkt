@@ -1,0 +1,31 @@
+{
+  "name": "sharedevicelocator",
+  "version": "0.0.1",
+  "description": "server-client to auto-update all devices on network with whichever version of the devicelocator CSV that the master script is currently using",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pbarch/remote-programming-tools.git"
+  },
+  "keywords": [
+    "server",
+    "client",
+    "node",
+    "devicelocator",
+    "csv"
+  ],
+  "author": "michael palumbo http://github.com/michaelpalumbo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pbarch/remote-programming-tools/issues"
+  },
+  "homepage": "https://github.com/pbarch/remote-programming-tools#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "papaparse": "^4.6.3",
+    "ws": "^6.1.4"
+  }
+}

@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['radius',['radius',['../class_attractor.html#a1e55cea140236da92832cf7c42b7612a',1,'Attractor']]],
+  ['random_5factuator_5fon',['random_actuator_on',['../class_control.html#a496b91d4bb4c313d56946827f411d63a',1,'Control']]],
+  ['reading_5flive_5fdata',['reading_live_data',['../class_grid_eye.html#a450b57cef9d6c6a4151446935a785787',1,'GridEye']]],
+  ['readme',['readme',['../class_grid_eye.html#a41a13925207c712bfd349ae680e8c4fe',1,'GridEye.readme()'],['../class_sound_detector.html#ad89ac41b3484914a250b95872ff388dd',1,'SoundDetector.readme()']]],
+  ['real_5freceived_5fmessage',['real_received_message',['../class_external___comms.html#a39c62e341fb45f28463815db1ab24c02',1,'External_Comms']]],
+  ['real_5freceived_5fmessage_5fqueue',['real_received_message_queue',['../class_comm___manager.html#a76f57e7f086ea0cf2e4cbd5d6c765950',1,'Comm_Manager']]],
+  ['rec_5fx_5foffset',['rec_x_offset',['../class_grid_eye___analyzer.html#a31ce6032bedec55a2c9e7e6bff0f9b27',1,'GridEye_Analyzer']]],
+  ['rec_5fy_5foffset',['rec_y_offset',['../class_grid_eye___analyzer.html#af0395f6d20fbc103ea8301ce000c2935',1,'GridEye_Analyzer']]],
+  ['recording_5ffilename',['recording_filename',['../class_grid_eye___sim.html#a11781430d178e28069a8e0941d5c4aea',1,'GridEye_Sim']]],
+  ['recording_5findex',['recording_index',['../class_grid_eye___sim.html#aae65f1f6cfedc07d204968b0f7570fed',1,'GridEye_Sim']]],
+  ['recording_5flines',['recording_lines',['../class_grid_eye___sim.html#a7fe2b6395ded6ad02becdca08bf5fce3',1,'GridEye_Sim']]],
+  ['recording_5frotation',['recording_rotation',['../class_grid_eye___sim.html#a888bc28e9b05a67b6fafd2e53198203d',1,'GridEye_Sim']]],
+  ['rpis',['rpis',['../class_device_locator.html#a2d1ed58f9170774f963cfd4a55ffa02d',1,'DeviceLocator']]],
+  ['run_5fexcitorbehaviour',['run_excitorBehaviour',['../_control___world_8pde.html#af7d835f38d893c92fd8f5ea625a4c9b2',1,'Control_World.pde']]],
+  ['run_5flength',['run_length',['../class_d_int.html#ab8246214184390f604cfeb55af7568b4',1,'DInt']]],
+  ['run_5fmode',['run_mode',['../_control___world_8pde.html#a7433a94b15fdfdc1fcf59a935a2771e3',1,'Control_World.pde']]],
+  ['run_5ftime',['run_time',['../class_d_int.html#afe1ddcd7cd2aca347f374100a1d17af7',1,'DInt']]],
+  ['runtime',['runtime',['../class_w_a_v___trigger.html#aed896d01c9322187c45daddef4987abf',1,'WAV_Trigger']]],
+  ['rxpin',['rxpin',['../class_w_a_v___trigger.html#a154e405e644b7c380079008e30eeca60',1,'WAV_Trigger']]]
+];

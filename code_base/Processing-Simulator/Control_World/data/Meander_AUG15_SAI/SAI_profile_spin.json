@@ -1,0 +1,18 @@
+{
+    "sequence": [1.0,
+                 1.0,
+                 1.0,
+                 0.25,
+                 0.25,
+                 0.2,
+                 0.1,
+                 0.0,
+                 0.0 ],
+    "x_attenuation":  1.0,
+    "y_attenuation":  0.5,
+    "propagation_dampening": 0.93,
+    "propagation_delay": -900,
+    "trigger_mode": "SAI_REPEAT",
+    "trigger_cooldown": 10,
+    "trigger_threshold": 0.5
+}

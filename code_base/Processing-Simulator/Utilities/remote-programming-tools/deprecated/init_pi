@@ -1,0 +1,44 @@
+# figure out the number of our PI
+pi_num=$(hostname | cut -c10-)
+
+# kill all python3 processes
+echo === killing python processes
+ps | grep python3 > python_processes
+while read pid_string; do
+  pid_array=($pid_string) 
+  pid=${pid_array[0]}
+  echo killing python process $pid on $pi_num
+  kill $pid
+done < python_processes
+
+# get a list of connected teensys
+echo === getting teensy list
+sudo /home/pi/Downloads/tytools-0.8.8/build/linux/tycmd list > teensy_ids
+
+# for every teensy id found, do the right thing
+echo === programming teensys
+while read id_string; do
+  id_array=($id_string)
+  id=$(echo ${id_array[1]} | cut -c1-7)
+
+  # Use the line below if there's only one type of hex file/teensy in the sculpture
+  echo programming LuddyNode.ino.hex to $id on RPi $pi_num
+  sudo /home/pi/Downloads/tytools-0.8.8/build/linux/tycmd upload /home/pi/Code/Teensy/LuddyNode.ino.hex --board $id
+
+  # Use the IF structure below if there's more than one type of Teensy/code in the sculpture
+  # if the teensy ID corresponds to a 3.6 not a 3.2
+  #if [ $id -lt 3100000 ]
+  #then
+    #echo programming LuddyNode.ino.hex to $id on RPi $pi_num
+    #sudo /home/pi/Downloads/tytools-0.8.8/build/linux/tycmd upload /home/pi/Code/Teensy/LuddyNode.ino.hex --board $id
+  #else
+    #echo programming 3.2 to $id on RPi $pi_num
+    #sudo /home/pi/Downloads/tytools-0.8.8/build/linux/tycmd upload /home/pi/Code/LuddyNode3-2.hex --board $id
+  #fi
+
+done < teensy_ids
+
+# run Processing sketch on PI
+echo === Running processing sketch on RPi $pi_num
+/usr/local/bin/processing-java --sketch=/home/pi/sketchbook/sketchname --run
+# python3 /home/pi/Code/Raspberry\ Pi/LuddyPiSlave.py 

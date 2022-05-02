@@ -1,0 +1,41 @@
+# batch file to upload packages and libraries required for processing on the PIs
+#
+# RG Mar 2 2019 for symposium
+#
+
+# RG FEB 17 2020: SHOULD THIS CODE UPLOAD RC.LOCAL OR IS THAT NO LONGER NEEDED?  It looks like that's taken care of by processing.service now
+# RG FEB 17 2020: It looks like this file assumes the following two things are in the working directory:
+#
+#  processing.service
+#  processing_install.tar
+
+read id_list < settings/nodelist
+
+for addr in $id_list
+do
+  # install the processing.service to ensure init_on_boot runs whenever the PI is rebooted
+  scp -i ~/.ssh/id_ecdsa processing.service pi@172.23.0.$addr:/etc/systemd/system
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'chown root /etc/systemd/system/processing.service; sudo systemctl start processing; sudo systemctl enable processing'
+
+  # upload the processing files zip file to the PI
+  echo uploading processing install files to 172.23.0.$addr
+  scp -i ~/.ssh/id_ecdsa processing_install.tar pi@172.23.0.$addr:/home/pi/
+
+  # unzip the processing files
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'cd /home/pi;mkdir processing_install; tar -xvf processing_install.tar -C processing_install'
+
+  # install processing
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'sudo mv /home/pi/processing_install/processing-3.5.3-linux-armv6hf.tgz /usr/local/bin'
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'cd /usr/local/bin; sudo tar -xvf processing-3.5.3-linux-armv6hf.tgz'
+
+  # install libraries
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'cp -rf /home/pi/processing_install/sketchbook /home/pi'
+
+  # install xvfb
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'sudo dpkg -i /home/pi/processing_install/xvfb_1.19.2-1+rpt1+deb9u2_armhf.deb'
+
+  # remove the install directory and files
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'rm -rf /home/pi/processing_install; rm /home/pi/processing_install.tar; sudo rm /usr/local/bin/processing-3.5.3-linux-armv6hf.tgz'
+
+done
+

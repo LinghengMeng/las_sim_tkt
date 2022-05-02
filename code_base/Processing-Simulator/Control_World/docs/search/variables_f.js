@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['p_5faudio',['p_audio',['../class_sound_detector.html#a7042c525c70fee786e612cca92a6f88e',1,'SoundDetector']]],
+  ['p_5fenvelope',['p_envelope',['../class_sound_detector.html#a36b617c84750ce06a09040837cd3a6cc',1,'SoundDetector']]],
+  ['panels',['panels',['../class_vis_gui.html#aa06664a4662b59910f7b252d6d745822',1,'VisGui']]],
+  ['parent',['parent',['../class_actuator.html#add7e53e17e0280691e8975271cc47a8a',1,'Actuator.parent()'],['../class_grid_eye___analyzer.html#a53c080b72b06ffd40f1e79677b363e6c',1,'GridEye_Analyzer.parent()'],['../class_sensor.html#a36f66a119f38e4c8049e55e136eeed1e',1,'Sensor.parent()']]],
+  ['password_5farray',['password_array',['../_comm___manager_8pde.html#a8107ceb5d609b6e41d6cc4f8656bdedd',1,'Comm_Manager.pde']]],
+  ['password_5freply_5flength',['password_reply_length',['../class_comm___manager.html#a011fc68c1cb7d4a1a5aa233f4f03c366',1,'Comm_Manager']]],
+  ['pi_5fid',['pi_id',['../class_r_pi.html#a67157a7dfede8f143cea64389573c82d',1,'RPi']]],
+  ['pi_5ftimes',['pi_times',['../class_comm___manager.html#a93b9211b1e70310205c8772f4744959c',1,'Comm_Manager']]],
+  ['ping_5ftime',['ping_time',['../class_control.html#a45a7e25bf392fde9dc1d6fc176aeef7b',1,'Control.ping_time()'],['../class_r_pi.html#a07da102c87b84ae9d35db9ce576b2538',1,'RPi.ping_time()']]],
+  ['pixelvalues',['pixelValues',['../class_grid_eye___analyzer.html#a235f83fc4e736dd49c555225fcecdf54',1,'GridEye_Analyzer']]],
+  ['playing',['playing',['../class_w_a_v___trigger.html#a0987be0d54f99f64f565959049b6818f',1,'WAV_Trigger']]],
+  ['poll_5flength',['poll_length',['../class_comm___manager.html#a12c89caa971b75fea08588e433d9af29',1,'Comm_Manager']]],
+  ['polling_5ffrequency',['polling_frequency',['../class_grid_eye___analyzer.html#ac2d69d7fc0c7b74e116e9628ae89458e',1,'GridEye_Analyzer']]],
+  ['port_5fext',['port_ext',['../class_external___comms.html#aa76ebdf6e97759827e6ed4406cc348fd',1,'External_Comms']]],
+  ['ports_5ftimeout_5ftime',['ports_timeout_time',['../class_comm___manager.html#a04cc70f6813da586dee25e2d630b6433',1,'Comm_Manager']]],
+  ['position',['position',['../class_actuator.html#a64edb7e870afd51d73f8fcea9e446be2',1,'Actuator.position()'],['../class_sensor.html#a920be3f19ab4859d171aa683a4090809',1,'Sensor.position()']]],
+  ['prerecorded',['prerecorded',['../_control___world_8pde.html#a73286567f3870329cf93985dc75d9334',1,'Control_World.pde']]],
+  ['presence',['presence',['../class_excitor.html#a226c6235f252271e51b30173c2af0e18',1,'Excitor.presence()'],['../class_attractor.html#a49cf101b56f1b17c31a2cc6c61eeac06',1,'Attractor.presence()']]],
+  ['presence_5fthreshold',['presence_threshold',['../class_grid_eye___analyzer.html#a5652b96dbb613f105c05366aaa2de928',1,'GridEye_Analyzer']]],
+  ['prevomnimastervolume',['prevOmniMasterVolume',['../class_excitor_behaviour.html#ad13f26ce598579d80246f1922bbb9f22',1,'ExcitorBehaviour']]],
+  ['ps',['ps',['../_control___world_8pde.html#ab0cf436f2f4d4066cf090180687e3007',1,'Control_World.pde']]],
+  ['push_5fvalue',['push_value',['../class_sound_detector.html#a6d844918e05748b7d9d86823868062cf',1,'SoundDetector']]]
+];

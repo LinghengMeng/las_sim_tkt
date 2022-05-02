@@ -1,0 +1,929 @@
+{
+  "allPatchables": {
+    "Source_439": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_439",
+      "displayName": "Source_439",
+      "screenX": 400,
+      "screenY": 180,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_437": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_437",
+      "displayName": "Source_437",
+      "screenX": 620,
+      "screenY": 500,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "NR:8:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0"
+        }
+      ],
+      "realName": "NR:8:P1:1_IR1",
+      "displayName": "NR:8:P1:1_IR1",
+      "screenX": 120,
+      "screenY": 420,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_414": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_414",
+      "displayName": "Source_414",
+      "screenX": 620,
+      "screenY": 0,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_279": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_279",
+      "displayName": "Source_279",
+      "screenX": 500,
+      "screenY": 40,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_159": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_159",
+      "displayName": "Source_159",
+      "screenX": 520,
+      "screenY": 200,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_456": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_456",
+      "displayName": "Source_456",
+      "screenX": 380,
+      "screenY": 20,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "SR:5:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0"
+        }
+      ],
+      "realName": "SR:5:P1:1_IR1",
+      "displayName": "SR:5:P1:1_IR1",
+      "screenX": 120,
+      "screenY": 100,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "NR:6:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0"
+        }
+      ],
+      "realName": "NR:6:P1:1_IR1",
+      "displayName": "NR:6:P1:1_IR1",
+      "screenX": 120,
+      "screenY": 660,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "NR:3:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0"
+        }
+      ],
+      "realName": "NR:3:P1:1_IR1",
+      "displayName": "NR:3:P1:1_IR1",
+      "screenX": 120,
+      "screenY": 740,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "SR:2:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0"
+        }
+      ],
+      "realName": "SR:2:P1:1_IR1",
+      "displayName": "SR:2:P1:1_IR1",
+      "screenX": 120,
+      "screenY": 180,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_278": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_278",
+      "displayName": "Source_278",
+      "screenX": 700,
+      "screenY": 260,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_498": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_498",
+      "displayName": "Source_498",
+      "screenX": 620,
+      "screenY": 180,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "NR:1:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0"
+        }
+      ],
+      "realName": "NR:1:P1:1_IR1",
+      "displayName": "NR:1:P1:1_IR1",
+      "screenX": 120,
+      "screenY": 740,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_474": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_474",
+      "displayName": "Source_474",
+      "screenX": 580,
+      "screenY": 300,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_331": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_331",
+      "displayName": "Source_331",
+      "screenX": 480,
+      "screenY": 460,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_274": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_274",
+      "displayName": "Source_274",
+      "screenX": 560,
+      "screenY": 400,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_492": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_492",
+      "displayName": "Source_492",
+      "screenX": 680,
+      "screenY": 380,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_349": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_349",
+      "displayName": "Source_349",
+      "screenX": 480,
+      "screenY": 340,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_446": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_446",
+      "displayName": "Source_446",
+      "screenX": 320,
+      "screenY": 540,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_424": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_424",
+      "displayName": "Source_424",
+      "screenX": 440,
+      "screenY": 560,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "SR:4:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0"
+        }
+      ],
+      "realName": "SR:4:P1:1_IR1",
+      "displayName": "SR:4:P1:1_IR1",
+      "screenX": 120,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_423": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_423",
+      "displayName": "Source_423",
+      "screenX": 540,
+      "screenY": 580,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "NR:7:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0"
+        }
+      ],
+      "realName": "NR:7:P1:1_IR1",
+      "displayName": "NR:7:P1:1_IR1",
+      "screenX": 120,
+      "screenY": 20,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "NR:4:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0"
+        }
+      ],
+      "realName": "NR:4:P1:1_IR1",
+      "displayName": "NR:4:P1:1_IR1",
+      "screenX": 120,
+      "screenY": 500,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "SR:1:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0"
+        }
+      ],
+      "realName": "SR:1:P1:1_IR1",
+      "displayName": "SR:1:P1:1_IR1",
+      "screenX": 120,
+      "screenY": 740,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "NR:2:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0"
+        }
+      ],
+      "realName": "NR:2:P1:1_IR1",
+      "displayName": "NR:2:P1:1_IR1",
+      "screenX": 120,
+      "screenY": 260,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "NR:5:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0"
+        }
+      ],
+      "realName": "NR:5:P1:1_IR1",
+      "displayName": "NR:5:P1:1_IR1",
+      "screenX": 120,
+      "screenY": 740,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "Source_460": {
+      "dataPorts": [
+        {
+          "inport": true,
+          "param": "burstQty",
+          "val": "7"
+        },
+        {
+          "inport": true,
+          "param": "burstFreq",
+          "val": "4290"
+        },
+        {
+          "inport": true,
+          "param": "burstLength",
+          "val": "0.4"
+        }
+      ],
+      "realName": "Source_460",
+      "displayName": "Source_460",
+      "screenX": 360,
+      "screenY": 400,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    },
+    "SR:3:P1:1_IR1": {
+      "dataPorts": [
+        {
+          "inport": false,
+          "param": "pct_value",
+          "val": "0.0"
+        }
+      ],
+      "realName": "SR:3:P1:1_IR1",
+      "displayName": "SR:3:P1:1_IR1",
+      "screenX": 120,
+      "screenY": 340,
+      "screenW": 0,
+      "screenH": 0,
+      "show": false
+    }
+  },
+  "currentConnectors": [
+    {
+      "fromPatchable": "NR:1:P1:1_IR1",
+      "toPatchable": "Source_423",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "NR:8:P1:1_IR1",
+      "toPatchable": "Source_439",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "NR:2:P1:1_IR1",
+      "toPatchable": "Source_460",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:5:P1:1_IR1",
+      "toPatchable": "Source_439",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:5:P1:1_IR1",
+      "toPatchable": "Source_279",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:5:P1:1_IR1",
+      "toPatchable": "Source_456",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_446",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_424",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_423",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_274",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_492",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_349",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_331",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_278",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_498",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_474",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_414",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_279",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_159",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_439",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_437",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_456",
+      "fromPort": "pct_value",
+      "toPort": "burstQty"
+    },
+    {
+      "fromPatchable": "NR:1:P1:1_IR1",
+      "toPatchable": "Source_423",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "NR:8:P1:1_IR1",
+      "toPatchable": "Source_439",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "NR:2:P1:1_IR1",
+      "toPatchable": "Source_460",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:5:P1:1_IR1",
+      "toPatchable": "Source_439",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:5:P1:1_IR1",
+      "toPatchable": "Source_279",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:5:P1:1_IR1",
+      "toPatchable": "Source_456",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_446",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_424",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_423",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_274",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_492",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_349",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_331",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_278",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_498",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_474",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_414",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_279",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_159",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_439",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_437",
+      "fromPort": "pct_value",
+      "toPort": "burstLength"
+    },
+    {
+      "fromPatchable": "SR:3:P1:1_IR1",
+      "toPatchable": "Source_456",
+      "fromPort": "pct_value",
+      "toPort": "burstQty"
+    }
+  ],
+  "patcher_scan_frequency": 5000,
+  "autoScanPatchables": false,
+  "showHidden": false,
+  "gridSize": 20,
+  "defaultSnap": true,
+  "zoom": 1.0,
+  "behaviourName": "Patcher",
+  "influenceActive": true,
+  "neverSave": false
+}

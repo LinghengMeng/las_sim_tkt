@@ -1,0 +1,19 @@
+# batch file to upload packages and libraries required for processing on the PIs
+#
+# RG Mar 2 2019 for symposium
+#
+
+read id_list < settings/nodelist
+
+for addr in $id_list
+do
+  # install the processing.service to ensure init_on_boot runs whenever the PI is rebooted
+  scp -i ~/.ssh/id_ecdsa processing.service pi@172.23.0.$addr:/home/pi
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'sudo systemctl stop processing'
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'sudo mv -f /home/pi/processing.service /etc/systemd/system; sudo chown root /etc/systemd/system/processing.service'
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'sudo systemctl start processing; sudo systemctl enable processing'
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'sudo systemctl daemon-reload'
+
+
+done
+

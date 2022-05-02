@@ -1,0 +1,7 @@
+{
+  "neighbourRange": 3,
+  "cellCount": 3,
+  "rate": 200,
+  "masterIntensity": 1.0,
+  "display": false
+}

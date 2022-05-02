@@ -1,0 +1,14 @@
+{
+  "neighbourRange": 3,
+  "cellCount": 2,
+  "rate": 75,
+  "ec_update_rate": 0,
+  "trigger_length": 920,
+  "trigger_chance": 0.007,
+  "trigger_length_random": 0.2,
+  "masterIntensity": 1.0,
+  "display": false,
+  "active": true,
+  "neverSave": false,
+  "behaviourName": "ElectricCells"
+}

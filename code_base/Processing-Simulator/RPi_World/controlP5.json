@@ -1,0 +1,32 @@
+{
+  "/gesim": {"value": 0},
+  "/overall_relax": {
+    "min": 0,
+    "max": 0.9900000095367432,
+    "value": 0.6600000262260437
+  },
+  "/interestThreshold": {
+    "min": 500,
+    "max": 1500,
+    "value": 722.2222290039062
+  },
+  "/angle_adjust": {"value": 0},
+  "/togglepre": {"value": 0},
+  "/setRotation": {"arrayValue": [
+    1,
+    0,
+    0,
+    0
+  ]},
+  "/pickfile": {"value": 1},
+  "/frameskip": {
+    "min": 1,
+    "max": 10,
+    "value": 2
+  },
+  "/noiseThreshold": {
+    "min": 0,
+    "max": 1,
+    "value": 0.7777777910232544
+  }
+}

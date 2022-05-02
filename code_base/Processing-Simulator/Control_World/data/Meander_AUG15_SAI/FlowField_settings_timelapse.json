@@ -1,0 +1,22 @@
+{
+  "edgeRange": 1000,
+  "respawnRange": 500,
+  "particleCount": 25,
+  "projectionSphereSize": 800,
+  "rhRingSize": 12,
+  "ff_update_rate": 10,
+  "flowInfluenceScalar": 3.0,
+  "maxSpeed": 2.0,
+  "threshold": 205.0,
+  "perlinOffsetInc": 5.0E-4,
+  "randomForceAmount": 0.6,
+  "masterIntensity": 0.7,
+  "rhVertexAngleSpeed": 0.1,
+  "sphereProjectionEnable": false,
+  "display": true,
+  "displayRings": true,
+  "displayVecs": false,
+  "showRHVertices": false,
+  "showNearestVecLines": true,
+  "showParticleOrientation": true
+}

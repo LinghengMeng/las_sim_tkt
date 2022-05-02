@@ -1,0 +1,19 @@
+{
+    "behaviourIntensityRamp": {
+        "behaviour": "globalSetting",
+        "param": "behaviourIntensity",
+        "start_value": 0.73,
+        "end_value": 0.80,
+        "start_time": 0,
+        "duration": 118000
+    },
+
+    "behaviourIntensityRamp2": {
+        "behaviour": "globalSetting",
+        "param": "behaviourIntensity",
+        "start_value": 0.8,
+        "end_value": 0.87,
+        "start_time": 118000,
+        "duration": 5000
+    }
+}

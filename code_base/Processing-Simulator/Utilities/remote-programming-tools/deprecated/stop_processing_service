@@ -1,0 +1,25 @@
+# batch file to reboot PI <PI ID>
+#
+# usage: bash reboot_pis <PI ID>
+#
+# if <PI ID> is absent it will reboot all PIs with addresses hard coded below
+#
+
+#
+# NM April 2019 for Futurium
+#
+
+if [[ $# -eq 1 ]]
+then
+    id_list=$1
+else
+    read id_list < settings/nodelist
+fi
+
+for addr in $id_list
+do
+  echo '--------------------------------------------------------'
+  echo === running remote_reboot on 172.23.0.$addr
+  ssh -i ~/.ssh/id_ecdsa pi@172.23.0.$addr 'sudo systemctl stop processing'
+done
+

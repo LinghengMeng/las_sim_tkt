@@ -1,0 +1,21 @@
+12345:testa.hex
+
+#Testing what happens with text lines between
+
+34567:testa.hex
+23456:testb.hex
+4672346:testf.hex
+
+random comment line; doesn't need to start with #
+
+can comments have : in them?
+
+234:thisfile.hex
+
+yes, they can!  They can even have node ids like 234 in them...
+
+but they can't have node ids followed by colons, like 12345: that will break things (actually it doesn't, but I don't know why so don't do it)
+
+what happens if a teensy appears twice?
+
+234:andthisfile.hex

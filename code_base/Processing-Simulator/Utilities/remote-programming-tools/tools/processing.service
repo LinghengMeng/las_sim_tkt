@@ -1,0 +1,14 @@
+[Unit]
+Description=Processing and Teensy startup service for LAS
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=pi
+ExecStart=/bin/bash /home/pi/init_on_boot
+
+[Install]
+WantedBy=multi-user.target

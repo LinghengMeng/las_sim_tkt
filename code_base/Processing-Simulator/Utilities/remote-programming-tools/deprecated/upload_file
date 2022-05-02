@@ -1,0 +1,16 @@
+# batch file to copy a file to all the PIs
+#
+# edit the scp command below
+#
+# RG Apr 9 2018 for Amatria
+# RG Dec 4 2018 for testbed
+#
+
+read id_list < settings/nodelist
+
+for addr in $id_list
+do
+  echo Uploading file $1 to 172.23.0.$addr home directory
+  scp -i ~/.ssh/id_ecdsa $1 pi@172.23.0.$addr:/home/pi
+done
+

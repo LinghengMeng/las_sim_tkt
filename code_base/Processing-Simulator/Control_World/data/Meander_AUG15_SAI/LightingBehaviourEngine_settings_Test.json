@@ -1,0 +1,18 @@
+{
+  "cloud_active_playback": "Bright",
+  "cloud_level": 0.0,
+  "cloud_fade_in": 11,
+  "cloud_fade_out": 6,
+  "river_active_playback": "Bright",
+  "river_level": 0.0,
+  "river_fade_in": 13,
+  "river_fade_out": 11,
+  "grotto_active_playback": "Off",
+  "grotto_level": 0.0,
+  "grotto_fade_in": 12,
+  "grotto_fade_out": 9,
+  "behaviourName": "LightingBehaviourEngine",
+  "influenceActive": true,
+  "neverSave": false,
+  "masterIntensity": 1.0
+}

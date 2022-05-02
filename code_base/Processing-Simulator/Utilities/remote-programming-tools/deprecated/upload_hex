@@ -1,0 +1,25 @@
+# batch file to copy a hex file to the PI at <PI ID>, renaming it and replacing ~/Code/Teensy/LuddyNode.ino.hex 
+#
+# CALLED FROM DO_HEX AND PROBABLY SHOULD NOT BE CALLED ON ITS OWN 
+# 
+# usage: bash upload_hex <hexfilepath/hexfilename> <PI ID> 
+#
+# if <PI ID> is absent it will copy to all PIs (addresses hard coded below)
+
+#
+# RG Apr 9 2018 for Amatria
+# RG Dec 4 2018 for testbed
+#
+
+if [[ $# -eq 2 ]]
+then
+    id_list=$2
+else
+    id_list="101 102 103 104 105"
+fi
+
+for addr in $id_list
+do
+  echo Uploading file $1 to 172.23.0.$addr ~/Code/Teensy directory as LuddyNode.ino.hex
+  scp -i ~/.ssh/id_ecdsa $1 pi@172.23.0.$addr:/home/pi/Code/Teensy/LuddyNode.ino.hex
+done

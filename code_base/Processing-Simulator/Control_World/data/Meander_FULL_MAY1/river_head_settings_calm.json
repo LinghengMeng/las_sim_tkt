@@ -1,0 +1,11 @@
+{
+  "particleCount": 12,
+  "rhRingSize": 12,
+  "rh_update_rate": 10,
+  "threshold": 220.0,
+  "masterIntensity": 0.3,
+  "rhVertexAngleSpeed": 0.1,
+  "display": true,
+  "displayRings": true,
+  "showRHVertices": false
+}

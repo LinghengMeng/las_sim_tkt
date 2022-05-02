@@ -1,0 +1,30 @@
+# batch file to run some code on all the pis 
+# 
+# RG Apr 9 2018 for Amatria
+# RG Dec 4 2018 for testbed
+# RG Mar 1 2019 for symposium
+# NM Mar 29 2019 for futurium
+# NM April 2019 for futurium
+# MG Dec 7 2019 for Meander
+# RG Feb 16 2020 for Meander
+
+# get_pi_list
+pilist_file=$(./get_pi_list)
+
+while IFS="" read -r pi_addr;
+do
+
+  # This loop gets done to each PI in the current .pilist
+
+  echo ======
+  echo working on $pi_addr
+
+  # put the code you want to run here.  Some sample commands are shown in the comments
+  #
+  #  CHECK UPTIME: ssh -n -i ~/.ssh/id_ecdsa pi@$pi_addr 'uptime'
+  #  REBOOT: ssh -n -i ~/.ssh/id_ecdsa pi@$pi_addr 'sudo reboot'
+  #  COPY A FILE: scp -i ~/.ssh/id_ecdsa <src_filename> pi@$pi_addr:<dest_filename>
+
+  ssh -n -i ~/.ssh/id_ecdsa pi@$pi_addr 'uptime'
+
+done < "$pilist_file"

@@ -1,0 +1,5 @@
+Control IP,Section,peripheral,num,Pi IP,Node ID,Teensy Type,pin,x,y,z,installed,type,config
+10.14.4.150,CANOPY,DR,1,172.23.0.82,432787,HU,3,0,0,-200,yes,actuator,TOPPIN 4;
+10.14.4.150,CANOPY,MO,1,172.23.0.82,432787,HU,5,0,300,-200,yes,actuator,
+10.14.4.150,CANOPY,WT,1,172.23.0.82,432787,HU,9,0,400,-200,yes,actuator,TXPIN 10;
+10.14.4.150,CANOPY,SD,1,172.23.0.82,432787,HU,29,0,500,-200,yes,actuator,ENVELOPEPIN 30;
