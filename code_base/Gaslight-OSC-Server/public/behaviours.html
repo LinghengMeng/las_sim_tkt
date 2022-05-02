@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Meander Behaviours</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" id="pagestyle" type="text/css" href="css/style.css">
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+        <script src="libraries/common_utils.js"></script>
+
+    </head>
+
+    <body onload = "onload()">
+
+
+        <div class = "card">
+            <h2>Riverhead (experimental)</h2>
+            <div></div>
+            <button id="rh_toggle" onClick="rh_toggle(this.id)">Toggle Riverhead</button>
+            <div class="slidecontainer">
+                <input type="range" min="0.0" max="1.0" value="0.1" class="slider" id="rhSpeed" step=0.1>
+            </div>   
+        </div>     
+
+        <div class = "card">
+            <h2>Ambient Wavefront Control</h2>
+            <div></div>
+            <button id="aw_toggle" onClick="aw_toggle(this.id)">Toggle Ambient Wave Arrow</button>
+            <div class="slidecontainer">
+                Velocity
+                <input type="range" min="0.0" max="1.0" value="0.1" class="slider" id="slider_awVelocity" step=0.02>
+            </div>   
+            <div class="slidecontainer">
+                Angle
+                <input type="range" min="0.0" max="6.283" value="0.1" class="slider" id="slider_awAngle" step=0.02>
+            </div>   
+            <div class="slidecontainer">
+                Period
+                <input type="range" min="0.0" max="1.0" value="0.1" class="slider" id="slider_awPeriod" step=0.02>
+            </div>   
+            <div class="slidecontainer">
+                Amplitude
+                <input type="range" min="0.0" max="1.0" value="0.15" class="slider" id="slider_awAmplitude" step=0.02>
+            </div>   
+        </div>     
+
+        <div class = "card">
+            <h2>Timelapse Scale Factor Control</h2>
+            <div></div>
+            <button id="tl_toggle" onClick="tl_toggle(this.id)">Toggle Timelapse</button>
+            <div class="slidecontainer">
+                Timelapse Speed (0-100)
+                <input type="range" min="0.0" max="1.0" value="1.0" class="slider" id="slider_tlScaleFactor" step=0.01>
+            </div>   
+        </div>     
+
+    </body>
+</html>
+
+<script type="text/javascript">
+
+    // Define Socket Messages and their Corresponding function
+    socket.on('setRHSpeed',updateRHSpeed);
+    socket.on('loginVerified',loginVerified);
+    socket.on('setAwVelocity',updateAwVelocity);
+    socket.on('setAwPeriod',updateAwPeriod);
+    socket.on('setAwAmplitude',updateAwAmplitude);
+    socket.on('setAwAngle',updateAwAngle);
+    socket.on('awToggle', updateAwState);
+    socket.on('tlToggle', updateTlState);
+    socket.on('setTlScaleFactor', updateTlScaleFactor);
+
+    // Grab the values of sliders from sliderName into sliderVariableName
+    var rhSlider = document.getElementById("rhSpeed");
+    var awVelSlider = document.getElementById("slider_awVelocity");
+    var awAngSlider = document.getElementById("slider_awAngle");
+    var awAmpSlider = document.getElementById("slider_awAmplitude");
+    var awPerSlider = document.getElementById("slider_awPeriod");
+    var tlScaleSlider = document.getElementById("slider_tlScaleFactor");
+
+
+    // toggle Riverhead
+    function rh_toggle(id){
+        console.log(date + 'Riverhead toggle');
+        socket.emit('rhToggle',id);
+    }
+
+    // toggle Ambient Waves
+    function aw_toggle(id){
+        console.log(date + 'AW arrow toggle');
+        socket.emit('awToggle',id);
+    }
+
+    // toggle Timelapse Scale Factor
+    function tl_toggle(id){
+        console.log(date + 'TL toggle');
+        socket.emit('tlToggle',id);
+        socket.emit('setTlScaleFactor',slider_tlScaleFactor.value)
+    }    
+
+    // RH slider
+    rhSlider.oninput = function() {
+        console.log(date + 'RH speed: ' + this.value);
+        socket.emit('setRHSpeed', (this.value));
+    }
+
+    // AW sliders
+    awVelSlider.oninput = function() {
+        console.log(date + 'AW velocity: ' + this.value);
+        socket.emit('setAwVelocity', (this.value));
+    }
+    awAngSlider.oninput = function() {
+        console.log(date + 'AW angle: ' + this.value);
+        socket.emit('setAwAngle', (this.value));
+    }
+    awPerSlider.oninput = function() {
+        console.log(date + 'AW period: ' + this.value);
+        socket.emit('setAwPeriod', (this.value));
+    }
+    awAmpSlider.oninput = function() {
+        console.log(date + 'AW amplitude: ' + this.value);
+        socket.emit('setAwAmplitude', (this.value));
+    }
+
+    // Timelapse sliders
+    tlScaleSlider.oninput = function() {
+        console.log(date + 'TL scale factor: ' + this.value);
+        socket.emit('setTlScaleFactor', (this.value));
+    }
+
+    /////////////////////////////////////////
+    /////      Update Functions          ////
+    /////////////////////////////////////////
+    // Rather than having a million methods here I should just get the json object
+    // here and set all respective properties in a single function.
+
+    // Riverhead Control
+
+    // MG: why is there no update function for the RH toggle?
+
+    function updateRHSpeed(value){
+        rhSlider.value = value
+        console.log(date + 'Riverhead slider updating');
+    }
+
+    // Ambient Wave Control
+    function updateAwState(value){
+        document.getElementById("awState").innerHTML = ("Display AW arrow: " + value);
+        awState = value;
+    }
+
+    function updateAwVelocity(value){
+        awVelSlider.value = value
+        console.log(date + 'AW Velocity slider updating');
+    }
+
+    function updateAwPeriod(value){
+        awPerSlider.value = value
+        console.log(date + 'AW Period slider updating');
+    }
+
+    function updateAwAngle(value){
+        awAngSlider.value = value
+        console.log(date + 'AW Angle slider updating');
+    }
+
+    function updateAwAmplitude(value){
+        awAmpSlider.value = value
+        console.log(date + 'AW Amplitude slider updating');
+    }
+
+    // Timelapse Scale Factor Control
+    function updateTlState(value){
+        document.getElementById("tlState").innerHTML = ("Timelapse state:" + value);
+        tlState = value;
+    }
+
+    function updateTlScaleFactor(value){
+        tlScaleSlider.value = value
+        console.log(date + 'TL Scale Factor slider updating');
+    }
+
+</script> 

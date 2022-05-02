@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sample GUI</title>
+    <link rel="stylesheet" id="pagestyle" type="text/css" href="css/style.css">
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="libraries/dat.gui.min.js"></script>
+
+    <script src="libraries/behaviour_preset_utilities.js"></script>   
+    <script src="libraries/common_utils.js"></script>
+
+    <script type="text/javascript">
+
+    // Javascript objects for each behaviour I'm going to control
+    //  these require 'curpresetindex' and 'ischanged' in order to work with presets.
+    //  The 'settings' object is left empty here and will be populated automatically
+    //  at runtime with whatever param/value pairs are stored in the default .json for this 
+    //  behaviour.
+    //  The name of this object must be consistent with the objectlist below.
+
+    // LightingBehaviourEngine
+    var lb = {
+        "curpresetindex" : 0,
+        "ischanged" : false,
+        "folderstates" : {},
+        functions: { sampleFunction:function(){outgoingDatCommand('LightingBehaviourEngine', 'LightingBehaviourEngineFunction', 'custom_object_or_string_or_data') }},
+        settings: {}
+    }
+
+     // Objectlist maps the full name of behaviour to object name (above) 
+     // -- used to update/sync values in guis, selection lists, etc.
+     // the behaviour name and abbreviation must be consistent everwhere for 
+     // messaging to work properly,
+     // including in the .json filenames, hmtl blocks, and the Processing code.
+
+     const objectList = {
+      LightingBehaviourEngine: lb
+     }
+
+
+
+      function createNestedFolders(behaviour) {
+
+      }
+
+      function rememberNestedFolders(behaviour) {
+
+      }
+
+      function manageNestedSettings(ndata) {
+
+      }
+
+
+     //  This callback will be called on start for each behaviour listed in objectList 
+     //  -- it can be ignored or else used (ie to generate DATGuis) but needs to be present
+     function createGUIs(behaviour) {
+
+      if(behaviour == 'LightingBehaviourEngine') { 
+
+        console.log("removing gui for " + behaviour);
+        var guiCardLB = document.getElementById('dat-gui-container-lb'); 
+        guiCardLB.removeChild(guiCardLB.lastChild);
+
+
+        // if we wanted a DAT gui for this, we'd create it as follows, referring to
+        // the HTML element defined below called 'dat-gui-container-pchr' to house it
+
+          var gui_lb = new dat.gui.GUI({ name: 'LightingBehaviourEngine', autoPlace: false, width: guiCardLB.offsetWidth-guiCardLB.padding, resizable: false, hideable: false, closeOnTop: true});
+          guiCardLB.appendChild(gui_lb.domElement);
+          gui_lb.__closeButton.remove();
+
+        // ... then we could add DAT folders and gui elements here (see examples in other .html files)
+
+        
+        
+        var lb_folder1 = gui_lb.addFolder('Grotto');
+        lb_folder1.open();
+        
+        lb_folder1.add(lb.settings, 'grotto_active_playback', ['off', 'dim', 'bright']).listen().onChange(sendDatOSC);
+        lb_folder1.add(lb.settings, 'grotto_level'           ).min(0.0).max(1.0).step(0.1).listen().onChange(sendDatOSC);
+        lb_folder1.add(lb.settings, 'grotto_fade_in'         ).min(0).max(20).step(1).listen().onChange(sendDatOSC);
+        lb_folder1.add(lb.settings, 'grotto_fade_out'         ).min(0).max(20).step(1).listen().onChange(sendDatOSC);
+
+        var lb_folder2 = gui_lb.addFolder('River');
+        lb_folder2.add(lb.settings, 'river_active_playback', ['off', 'narrow', 'wide']).listen().onChange(sendDatOSC);
+        lb_folder2.add(lb.settings, 'river_level'           ).min(0.0).max(1.0).step(0.1).listen().onChange(sendDatOSC);
+        lb_folder2.add(lb.settings, 'river_fade_in'         ).min(0).max(20).step(1).listen().onChange(sendDatOSC);
+        lb_folder2.add(lb.settings, 'river_fade_out'         ).min(0).max(20).step(1).listen().onChange(sendDatOSC);
+
+        var lb_folder3 = gui_lb.addFolder('Cloud');
+        lb_folder3.add(lb.settings, 'cloud_active_playback', ['off', 'narrow', 'wide']).listen().onChange(sendDatOSC);
+        lb_folder3.add(lb.settings, 'cloud_level'           ).min(0.0).max(1.0).step(0.1).listen().onChange(sendDatOSC);
+        lb_folder3.add(lb.settings, 'cloud_fade_in'         ).min(0).max(20).step(1).listen().onChange(sendDatOSC);
+        lb_folder3.add(lb.settings, 'cloud_fade_out'         ).min(0).max(20).step(1).listen().onChange(sendDatOSC);
+      }
+     }
+
+      
+      // Define Specific Socket Messages and their Corresponding function 
+      socket.on('LightingBehaviourEngineCommand', incomingLightingBehaviourEngineCommand);    
+
+      // Specific functions referred to by socket messages - can be here or directly in included p5.js code if something complicated like a Patcher or Dashboard UI
+      
+
+      function incomingLightingBehaviourEngineCommand(cmd) {        // cmd is a javascript object with fields 'name' and 'command' - could conceivably have other fields like value
+
+        //  if(cmd.command == "sample")     samplefunction(cmd.name);     // see patcher.html and patcher.js for examples of this
+
+      }
+
+      function outgoingLightingBehaviourEngineUpdate(name, params) {    // params is a javascript object that holds whatever pairs you want to send.
+
+       socket.emit('sendLightingBehaviourEngineUpdate', {sample: name, params});
+        setChanged('LightingBehaviourEngine', true);
+      
+      }
+
+
+    </script>      
+  </head>
+
+  <body onload = "onload()">
+
+
+    <div class="header">
+      <h1>Lighting Control GUI</h1>
+
+
+      <div class = row>
+        <div class = "column">
+            <select onchange="loadPreset('LightingBehaviourEngine')" type="bigtext" name="presetSelector" id="presets-LightingBehaviourEngine" placeholder="Select Preset">
+                <option value="" disabled selected>Current</option>
+            </select>
+                
+        </div>
+        <div class = "column">
+            <button onclick =   "savePreset('LightingBehaviourEngine')"   id="save-LightingBehaviourEngine" disabled>SAVE</button>
+            <button onclick = "savePresetAs('LightingBehaviourEngine')" id="saveAs-LightingBehaviourEngine" >SAVE AS</button>
+            <button onclick = "revertPreset('LightingBehaviourEngine')" id="revert-LightingBehaviourEngine" disabled>REVERT</button>
+        </div>
+
+        <div class = "card" id="dat-gui-container-lb">
+        </div>
+    </div>
+
+
+     <script src="sample_gui.js"> //   if any other more complex stuff is required by this gui, like P5.js stuff, reference it here </script>
+
+  </body>
+</html>

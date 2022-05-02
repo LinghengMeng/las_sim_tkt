@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>Meander Process Control</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" id="pagestyle" type="text/css" href="css/style.css">
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        
+        <script src="libraries/common_utils.js"></script>
+    </head>
+
+    <body onload = "onload()">
+
+
+
+    <div class = "card">
+        <h2>Restart, Kill or Launch</h2>
+        <h3 id="watchdogstatus">Use control watchdog: <span class = useControlWatchdog></span>  </h3>
+        <button id="trigger_restart" onClick="doRestart()">Restart</button>
+        <button id="trigger_kill"    onClick="doKill()">Kill</button>
+        <button id="trigger_launch"  onClick="doLaunch()">Launch</button>
+    </div>
+
+    </body>
+</html>
+
+<script type="text/javascript">
+
+    var localMuteState = false;
+    
+    async function doRestart(){
+        console.log(date + 'RESTARTING...');
+        socket.emit("restartControl")
+    }
+
+    async function doKill(){
+        console.log(date + 'KILLING CONTROL...');
+        socket.emit("killControl")
+    }
+
+    async function doLaunch(){
+        console.log(date + 'LAUNCHING CONTROL...');
+        socket.emit("launchControl")
+    }
+
+
+    //sleep function
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+   </script> 

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Scene Switcher</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" id="pagestyle" type="text/css" href="css/style.css">
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+        <script src="libraries/common_utils.js"></script>
+    </head>
+
+    <body onload = "onload()">
+
+    <div class="header">
+        <h1>Gaslight Meander Scene Switcher</h1>
+    </div>
+
+    <div class = "card">
+        <h2>Standard Scene Presets</h2>
+        <button id="trigger_default" onClick="triggerScene('default')">Default</button>
+    </div>
+
+    <div class = "card">
+        <h2>Performance Scene Triggers</h2>
+        <div>
+        <h3 id="lastScene">Last Scene: <span class = "behaviourScene"></span></h3>
+        <button id="trigger1" onClick="triggerScene('01_quiet_wip')">01 Quiet WIP</button>
+        <button id="trigger2" onClick="triggerScene('02_tidal_wip')">02 Tidal WIP</button>
+        <button id="trigger3" onClick="triggerScene('03_awake_wip')">03 Awake WIP</button>
+        <button id="trigger4" onClick="triggerScene('04_showers_wip')">04 Showers WIP</button>
+        <button id="trigger5" onClick="triggerScene('05_rh_grotto_wip')">05 RH Grotto WIP</button>
+        <button id="trigger6" onClick="triggerScene('06_wake_centre_wip')">06 Wake Center WIP</button>
+        <button id="trigger7" onClick="triggerScene('07_grotto_river_wip')">07 Grotto River WIP</button>
+        <button id="trigger8" onClick="triggerScene('08_surround_wip')">08 Surround WIP</button>
+        <button id="trigger9" onClick="triggerScene('09_climax_wip')">09 Climax WIP</button>
+        <button id="trigger10" onClick="triggerScene('10_recapit_wip')">10 Recapit WIP</button>
+        <button id="trigger11" onClick="triggerScene('11_quiet_end_wip')">11 Quiet End WIP</button>
+        <button id="trigger12" onClick="triggerScene('12_background_wip')">12 Background WIP</button>
+        </div>
+    </div>
+
+    </body>
+</html>
+
+<script type="text/javascript">
+
+    useSensorsON = ["03_awake_wip", 
+                    "04_showers_wip", 
+                    "05_rh_grotto_wip", 
+                    "06_wake_centre_wip",
+                    "07_grotto_river_wip", 
+                    "08_surround_wip", 
+                    "09_climax_wip", 
+                    "10_recapit_wip", 
+                    "11_quiet_end_wip"
+                    ]
+   
+    useSensorsOFF = ["01_quiet_wip", 
+                    "02_tidal_wip", 
+                    "12_background_wip",
+                    "default"
+                    ]
+    
+    async function triggerScene(id){
+        console.log(date + 'triggering Scene' + id);
+        socket.emit("behaviourScene",id)
+        document.getElementById("lastScene").innerHTML = ("Last Scene Triggered: " + id);
+        var buttons = document.getElementsByTagName('button');
+        if (useSensorsON.includes(id)){
+            socket.emit('gestureToggle', true);
+        }
+        else {
+            socket.emit('gestureToggle', false);
+        }
+        //for (let i = 0; i < buttons.length; i++) {
+        //  let button = buttons[i];
+        //  button.disabled = true;
+        //}
+
+        //await delay(10000);
+
+        //for (let i = 0; i < buttons.length; i++) {
+        //  let button = buttons[i];
+        //  button.disabled = false;
+        //}
+    }
+
+    //sleep function
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+</script> 

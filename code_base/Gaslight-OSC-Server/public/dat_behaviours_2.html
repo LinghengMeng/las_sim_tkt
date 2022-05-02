@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Behaviour Engines</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript" src="libraries/dat.gui.min.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+        <script src="libraries/common_utils.js"></script>
+        <script src="libraries/behaviour_preset_utilities.js"></script>
+    </head>
+
+    <body onload = "onload()">
+
+        <div class = "card" id="dat-gui-container-gr">
+            <h2>Grid Runners</h2>
+
+            <div class = row>
+                <div class = "column">
+                    <select onchange="loadPreset('GridRunner')" type="bigtext" name="presetSelector" id="presets-GridRunner" placeholder="Select Preset">
+                        <option value="" disabled selected>Current</option>
+                    </select>
+                        
+                </div>
+                <div class = "column">
+                    <button onclick = "savePreset('GridRunner')" id="save-GridRunner" disabled>SAVE</button>
+                    <button onclick = "savePresetAs('GridRunner')" id="saveAs-GridRunner" >SAVE AS</button>
+                    <button onclick = "revertPreset('GridRunner')" id="revert-GridRunner" disabled>REVERT</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class = "card" id="dat-gui-container-aw">
+            <h2>Ambient Waves</h2>
+
+            <div class = row>
+                <div class = "column">
+                    <select onchange="loadPreset('AmbientWaves')" type="bigtext" name="presetSelector" id="presets-AmbientWaves" placeholder="Select Preset">
+                        <option value="" disabled selected>Current</option>
+                    </select>
+                        
+                </div>
+                <div class = "column">
+                    <button onclick = "savePreset('AmbientWaves')" id="save-AmbientWaves" disabled>SAVE</button>
+                    <button onclick = "savePresetAs('AmbientWaves')" id="saveAs-AmbientWaves" >SAVE AS</button>
+                    <button onclick = "revertPreset('AmbientWaves')" id="revert-AmbientWaves" disabled>REVERT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class = "card" id="dat-gui-container-exc">
+            <h2>Excitors</h2>
+
+            <div class = row>
+                <div class = "column">
+                    <select onchange="loadPreset('Excitors')" type="bigtext" name="presetSelector" id="presets-Excitors" placeholder="Select Preset">
+                        <option value="" disabled selected>Current</option>
+                    </select>
+                        
+                </div>
+                <div class = "column">
+                    <button onclick = "savePreset('Excitors')" id="save-Excitors" disabled>SAVE</button>
+                    <button onclick = "savePresetAs('Excitors')" id="saveAs-Excitors" >SAVE AS</button>
+                    <button onclick = "revertPreset('Excitors')" id="revert-Excitors" disabled>REVERT</button>
+                </div>
+            </div>
+        </div>
+
+        <div class = "card" id="dat-gui-container-ec">
+            <h2>Electric Cells</h2>
+
+            <div class = row>
+                <div class = "column">
+                    <select onchange="loadPreset('ElectricCells')" type="bigtext" name="presetSelector" id="presets-ElectricCells" placeholder="Select Preset">
+                        <option value="" disabled selected>Current</option>
+                    </select>
+                        
+                </div>
+                <div class = "column">
+                    <button onclick =   "savePreset('ElectricCells')"   id="save-ElectricCells" disabled>SAVE</button>
+                    <button onclick = "savePresetAs('ElectricCells')" id="saveAs-ElectricCells" >SAVE AS</button>
+                    <button onclick = "revertPreset('ElectricCells')" id="revert-ElectricCells" disabled>REVERT</button>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
+
+<script type="text/javascript">
+
+
+    // Javascript objects for each behaviour I'm going to control
+    //  these require 'curpresetindex' and 'ischanged' in order to work with presets.
+    //  The 'settings' object is left empty here and will be populated automatically
+    //  at runtime with whatever param/value pairs are stored in the default .json for this 
+    //  behaviour.
+    //  The name of these objects must be consistent with the objectlist defined below.
+
+    // grid runners
+
+    var gr = {
+        "curpresetindex" : 0,
+        "ischanged" : false,
+        "folderstates" : {},
+        functions: {},
+        settings: {}
+    }
+
+     // excitors
+    var exc = {
+        "curpresetindex" : 0,
+        "ischanged" : false,
+        "folderstates" : {},
+        functions: { triggerExcitor: function(){outgoingDatCommand('Excitors', 'triggerExcitor',  'true') },
+                     revealPatchable:function(){outgoingDatCommand('Excitors', 'revealPatchable', 'true') }  },
+        settings: {}
+    }
+
+     // ambient waves
+     var aw = {
+        "curpresetindex" : 0,
+        "ischanged" : false,
+        "folderstates" : {},
+        functions: {},
+        settings: {}
+    }
+
+     // electric cells
+     var ec = {
+        "curpresetindex" : 0,
+        "ischanged" : false,
+        "folderstates" : {},
+        functions: { triggerElectricCell: function(){outgoingDatCommand('ElectricCells', 'triggerElectricCell',  'true') },
+                     revealPatchable:function(){outgoingDatCommand('ElectricCells', 'revealPatchable', 'true') }  },
+        settings: {}
+    }
+
+     // Objectlist maps the full name of behaviour to object name (above) 
+     // -- used to update/sync values in guis, selection lists, etc.
+     // the behaviour name and abbreviation must be consistent everwhere for 
+     // messaging to work properly,
+     // including in the .json filenames, hmtl blocks, and the Processing code.
+
+    const objectList = {
+      Excitors: exc,
+      AmbientWaves: aw,
+      GridRunner: gr,
+      ElectricCells: ec
+    }
+
+    
+    //  This callback will be called on start for each behaviour listed in objectList 
+    //  -- it can be ignored or else used (ie to generate DATGuis) but needs to be present
+
+    function createGUIs(behaviour) {
+
+    // Create the DAT guis if they dont' exist yet - check each one.
+
+    // console.log('checking for existance of ' + behaviour + ' gui...');
+   
+    // GRID RUNNERS
+
+    if(behaviour == 'GridRunner') { 
+
+        console.log("removing gui for " + behaviour);
+        var guiCardGR = document.getElementById('dat-gui-container-gr'); 
+        guiCardGR.removeChild(guiCardGR.lastChild);
+
+        var gui_gr = new dat.gui.GUI({ name: 'GridRunner', autoPlace: false, width: guiCardGR.offsetWidth-guiCardGR.padding, resizable: false, hideable: false, closeOnTop: true});
+        guiCardGR.appendChild(gui_gr.domElement);
+        gr.guiObj = gui_gr;
+        gui_gr.__closeButton.remove();
+
+        // controls for each influence, folders to organize them. -- MUST have one and only one folder above each controller (for now)
+
+        var gr_disp = gui_gr.addFolder('Display');
+        // gr_disp.close();
+        gr_disp.add(gr.settings, 'legacySteering'  ).listen().onChange(sendDatOSC);
+        gr_disp.add(gr.settings, 'debug'           ).listen().onChange(sendDatOSC);
+        gr_disp.add(gr.settings, 'debugOpacity'    ).min(0).max(1).step(0.01).listen().onChange(sendDatOSC);
+        gr_disp.add(gr.settings, 'displayModel'    ).listen().onChange(sendDatOSC);
+        gr_disp.add(gr.settings, 'gridScale'       ).min(0.5).max(5.0).step(0.5).listen().onChange(sendDatOSC);
+        gr_disp.add(gr.settings, 'displaySegments' ).listen().onChange(sendDatOSC);
+        gr_disp.add(gr.settings, 'displayParticles').listen().onChange(sendDatOSC);
+        gr_disp.add(gr.settings, 'partScale'       ).min(0).max(4).step(0.1).listen().onChange(sendDatOSC);
+        gr_disp.add(gr.settings, 'randomScale'     ).min(0).max(1).step(0.01).listen().onChange(sendDatOSC);
+        gr_disp.add(gr.settings, 'displayCore'     ).listen().onChange(sendDatOSC);
+        gr_disp.add(gr.settings, 'displaySources'  ).listen().onChange(sendDatOSC);
+        gr_disp.add(gr.settings, 'displayVertices' ).listen().onChange(sendDatOSC);
+        gr_disp.add(gr.settings, 'vertexOpacity'   ).min(0).max(1).step(0.01).listen().onChange(sendDatOSC);
+        gr_disp.add(gr.settings, 'nParticles'      ).min(5).max(2000).step(5).listen().onChange(sendDatOSC);
+        var gr_mesh = gui_gr.addFolder('Mesh');
+        gr_mesh.add(gr.settings, 'modelName', ['hexgrid-mg-1.obj', 'hexgrid-grotto-200.obj', 'meander_simple_hexgrid-200.obj']   ).listen().onChange(sendDatOSC);
+        gr_mesh.add(gr.settings, 'gridWaveX'       ).min(0).max(100).step(1).listen().onChange(sendDatOSC);
+        gr_mesh.add(gr.settings, 'gridWaveZ'       ).min(0).max(100).step(1).listen().onChange(sendDatOSC);        
+        var gr_source = gui_gr.addFolder('Source');
+        // gr_source.close();
+        gr_source.add(gr.settings, 'mouseSource'    ).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'sourceStep'     ).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'allSources'     ).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'linkedSources'  ).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'sourceRotation' ).min(0).max(2).step(1).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'sourceCadence'  ).min(20).max(5000).step(20).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'burstFreq'      ).min(10).max(5000).step(10).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'burstFreqRandom').min(0.0).max(1.0).step(0.1).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'burstLength'    ).min(.1).max(1.0).step(.1).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'burstQty'       ).min(0).max(250).step(1).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'spread'         ).min(0.0).max(6.2832).step(0.01).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'heading'        ).min(0.0).max(6.2832).step(0.01).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'yvelocity'      ).name('yVelocity').min(0.0).max(1.0).step(0.01).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'coreSize'        ).min(0).max(1).step(0.01).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'influenceSize'   ).min(0).max(1500).step(5).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'influenceIntensity').min(0).max(1.0).step(0.01).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'maxspeed'       ).min(0.5).max(10).step(0.05).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'randomspeed'    ).min(0.0).max(1.0).step(0.05).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'lookahead'      ).min(1).max(100).step(1).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'onGridSteering' ).min(0).max(1).step(0.01).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'offGridSteering').min(0).max(1).step(0.01).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'onGridFriction' ).min(0.9).max(1.1).step(0.001).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'offGridFriction').min(0.9).max(1.1).step(0.001).listen().onChange(sendDatOSC);
+        gr_source.add(gr.settings, 'segradius'      ).min(1).max(10).step(1).listen().onChange(sendDatOSC);
+        
+    }
+
+
+
+
+        // AMBIENT WAVES
+
+    if(behaviour == 'AmbientWaves') { 
+
+        console.log("removing gui for " + behaviour);
+        var guiCardAW = document.getElementById('dat-gui-container-aw'); 
+        guiCardAW.removeChild(guiCardAW.lastChild);
+
+        var gui_aw = new dat.gui.GUI({ name: 'AmbientWaves', autoPlace: false, width: guiCardAW.offsetWidth-guiCardAW.padding, resizable: false, hideable: false, closeOnTop: true});
+        guiCardAW.appendChild(gui_aw.domElement);
+        aw.guiObj = gui_aw;
+        gui_aw.__closeButton.remove();
+        var aw_disp = gui_aw.addFolder('Display');
+        aw_disp.add(aw.settings, 'influenceActive').listen().onChange(sendDatOSC);
+        aw_disp.add(aw.settings, 'masterIntensity').min(0.0).max(1.0).step(0.01).listen().onChange(sendDatOSC);
+        aw_disp.add(aw.settings, 'display').listen().onChange(sendDatOSC);
+        var aw_source = gui_aw.addFolder('Source');
+        aw_source.open();
+        
+        // var aw_phys = gui_aw.addFolder('Physics');
+        // aw_phys.add(aw.settings, 'velocity').min(0).max(2).step(0.01).listen().onChange(sendDatOSC);
+        // aw_phys.add(aw.settings, 'period').min(0).max(1).step(0.01).listen().onChange(sendDatOSC);
+        // aw_phys.add(aw.settings, 'angle').min(0).max(6.283).step(0.01).listen().onChange(sendDatOSC);
+        // aw_phys.add(aw.settings, 'num_waves').min(0).max(4).step(1).listen().onChange(sendDatOSC);
+        // aw_phys.add(aw.settings, 'influenceActive').listen().onChange(sendDatOSC);
+        // aw_phys.add(aw.settings, 'display').listen().onChange(sendDatOSC);
+    }
+        
+        // EXCITORS
+
+    if(behaviour == 'Excitors') { 
+
+        console.log("removing gui for " + behaviour);
+        var guiCardEXC = document.getElementById('dat-gui-container-exc'); 
+        guiCardEXC.removeChild(guiCardEXC.lastChild);
+
+        var gui_exc = new dat.gui.GUI({ name: 'Excitors', autoPlace: false, width: guiCardEXC.offsetWidth-guiCardEXC.padding, resizable: false, hideable: false, closeOnTop: true});
+        guiCardEXC.appendChild(gui_exc.domElement);
+        gui_exc.__closeButton.remove();
+        var exc_disp = gui_exc.addFolder('Display');
+        exc_disp.add(exc.functions, 'triggerExcitor');
+        exc_disp.add(exc.functions, 'revealPatchable');
+        exc_disp.add(exc.settings, 'showExcitors').listen().onChange(sendDatOSC);
+        exc_disp.add(exc.settings, 'size').min(40).max(exc.settings.sizeLimit).step(20).listen().onChange(sendDatOSC);
+        exc_disp.add(exc.settings, 'coreSize').min(0.0).max(1.0).step(0.05).listen().onChange(sendDatOSC);
+        exc_disp.add(exc.settings, 'showCore').listen().onChange(sendDatOSC);   
+        exc_disp.add(exc.settings, 'triggerTimeLimit').min(100).max(5000).step(100).listen().onChange(sendDatOSC);
+        exc_disp.add(exc.settings, 'lifespan').min(500).max(20000).step(500).listen().onChange(sendDatOSC);
+        exc_disp.add(exc.settings, 'fadeAt').min(0.0).max(1.0).step(0.05).listen().onChange(sendDatOSC);
+        exc_disp.add(exc.settings, 'showAttractors').listen().onChange(sendDatOSC);
+        exc_disp.add(exc.settings, 'attractorOpacity').min(0).max(0.5).step(0.02).listen().onChange(sendDatOSC);
+        var exc_phys = gui_exc.addFolder('Physics');
+        exc_phys.add(exc.settings, 'masterIntensity').min(0).max(1).step(0.01).listen().onChange(sendDatOSC);
+        exc_phys.add(exc.settings, 'excitorSpeedLimit').min(0).max(1.0).step(0.001).listen().onChange(sendDatOSC);
+        exc_phys.add(exc.settings, 'attractorAngleSpeed').min(0).max(0.25).step(0.01).listen().onChange(sendDatOSC);
+        exc_phys.add(exc.settings, 'forceScalar').min(0).max(5).step(0.1).listen().onChange(sendDatOSC);
+        exc_phys.add(exc.settings, 'excitorsInfluenceActive').listen().onChange(sendDatOSC);
+        exc_phys.add(exc.settings, 'backgroundBehaviourEnabled').listen().onChange(sendDatOSC);
+        exc_phys.add(exc.settings, 'bgHowOften').min(250).max(10000).step(50).listen().onChange(sendDatOSC);
+        exc_phys.add(exc.settings, 'bgHowRandom').min(0.0).max(1.0).step(0.01).listen().onChange(sendDatOSC);
+        exc_phys.add(exc.settings, 'maxExcitorAmount').min(1).max(35).step(1).listen().onChange(sendDatOSC);
+    }
+            // ELECTRIC CELLS
+
+    if(behaviour == 'ElectricCells') { 
+
+        console.log("removing gui for " + behaviour);
+        var guiCardEC = document.getElementById('dat-gui-container-ec'); 
+        guiCardEC.removeChild(guiCardEC.lastChild);
+
+        var gui_ec = new dat.gui.GUI({ name: 'ElectricCells', autoPlace: false, width: guiCardEC.offsetWidth-guiCardEC.padding, resizable: false, hideable: false, closeOnTop: true});
+        guiCardEC.appendChild(gui_ec.domElement);
+        gui_ec.__closeButton.remove();
+        
+        var ec_disp = gui_ec.addFolder('Display');
+        ec_disp.add(ec.functions, 'triggerElectricCell');
+        ec_disp.add(ec.functions, 'revealPatchable');
+        ec_disp.add(ec.settings, 'masterIntensity').min(0.0).max(1.0).step(0.05).listen().onChange(sendDatOSC);
+        ec_disp.add(ec.settings, 'display').listen().onChange(sendDatOSC);
+        ec_disp.add(ec.settings, 'active').listen().onChange(sendDatOSC);
+        var ec_phys = gui_ec.addFolder('Physics');
+        ec_phys.open();
+        ec_phys.add(ec.settings, 'neighbourRange'       ).min(1).max(10).step(1).listen().onChange(sendDatOSC);
+        ec_phys.add(ec.settings, 'cellCount'            ).min(1).max(8).step(1).listen().onChange(sendDatOSC);
+        ec_phys.add(ec.settings, 'rate'                 ).min(10).max(100).step(1).listen().onChange(sendDatOSC);
+        ec_phys.add(ec.settings, 'trigger_chance'       ).min(0).max(1.0).step(0.001).listen().onChange(sendDatOSC);
+        ec_phys.add(ec.settings, 'trigger_length'       ).min(10).max(2000).step(10).listen().onChange(sendDatOSC);
+        ec_phys.add(ec.settings, 'trigger_length_random').min(0.0).max(1.0).step(0.1).listen().onChange(sendDatOSC);
+    
+
+    }
+        
+}
+
+
+     /// special for nested GUI folders in GridRunner - don't need this for most GUIs:
+
+
+     var removals = []  //  this will hold an array of names of sources that I am in the process of removing, so don't regenerate them.
+
+     function clearRemovals(name) {
+         var i = removals.indexOf(name);
+         if(i < 0) return;
+         removals.splice(i, 1);
+     }
+
+     function createNestedFolders(behaviour) {
+
+        var b = objectList[behaviour];
+        var sourceArray = [];
+        if(behaviour == "AmbientWaves") sourceArray = b.settings.waves;
+        if(behaviour == "GridRunner")   sourceArray = b.settings.particleSourceVars;
+
+            if(sourceArray != null) {           
+            for (var f in sourceArray) {
+                if(sourceArray[f].sourceName == 'Source_PS') continue;  // don't add dynamic source in grid runner
+                console.log(" Will call add folder on " + sourceArray[f].sourceName);
+                manageNestedSettings({beh : behaviour, targ : sourceArray[f].sourceName, param : "folder", val : "add"});
+            }
+        }
+
+     }
+
+     function rememberNestedFolders(behaviour) {
+         var b = objectList[behaviour];
+        if(b.guiObj != null) {
+            for(var f in b.guiObj.__folders["Source"].__folders) {
+                if(b.guiObj.__folders["Source"].__folders[f].closed == false) {
+                    b.folderstates[f] = {closed : false};
+                    console.log(" subfolder " + f+ " is open");
+                }
+            }
+        }
+     }
+
+     function manageNestedSettings(ndata) {
+
+        var b = objectList[ndata.beh];
+
+        var sourceArray = [];
+
+        if(ndata.beh == "GridRunner")   sourceArray = b.settings.particleSourceVars;
+        if(ndata.beh == "AmbientWaves") sourceArray = b.settings.waves;
+
+        var sourceIndex = sourceArray.findIndex(x => ((x.sourceName === ndata.targ) || (x.sourceName === (ndata.targ + "  (linked)")) ));
+
+        if(ndata.val == "add") {
+            // this just makes sure we add the folder.  Will call it each time we reload the gui, by keeping track of source subfolders.
+            console.log(" Going to add folder " + ndata.targ);
+        }
+
+        if(ndata.val == "remove") {  // special message to remove this nested setting folder from the GUI because the data will shortly disappear from 'current' -  
+             // ideally we don't send any more patcher messages or anything because this element is gone, but just in case, we'll first add a flag to the object if it exists
+             if(sourceIndex != -1) {
+                 removals.push(ndata.targ);  // add its name to removals list
+                 setTimeout(() => { clearRemovals(ndata.targ); }, 2000);   // wait 3 seconds, then remove it from the removals list so it can be added again eventually.
+                 sourceArray.splice(sourceIndex, 1);
+             }
+
+             // now remove the folder
+             if(objectList[ndata.beh].guiObj != null) {
+            
+             var nestedFolder = b.guiObj.__folders["Source"].__folders[ndata.targ];
+             if(nestedFolder == null) {  // have we put a (linked) after it?
+             var nestedFolder = b.guiObj.__folders["Source"].__folders[ndata.targ + "  (linked)"];
+             }
+             if(nestedFolder != null) {
+                 // built-in folder remove function doesn't work (documented bug on the web) so:
+                 // nestedFolder.remove();  
+                 nestedFolder.close();
+                 b.guiObj.__folders["Source"].__ul.removeChild(nestedFolder.domElement.parentNode);
+                 // b.guiObj.__folders["Source"].__folders[ndata.targ] = null;
+                 delete b.guiObj.__folders["Source"].__folders[ndata.targ];
+                 b.guiObj.onResize();
+             }
+             if(b.folderstates[ndata.targ] != null) delete b.folderstates[ndata.targ];  // remove this subfolder from open/closed tracking
+
+            }
+            return;
+        }
+
+        
+        if(ndata.param == "highlightFolder") { // special message to highlight this folder
+
+            if(objectList[ndata.beh].guiObj != null) {
+            
+            var nestedFolder = b.guiObj.__folders["Source"].__folders[ndata.targ];
+            if(nestedFolder == null) {  // have we put a (linked) after it?
+             var nestedFolder = b.guiObj.__folders["Source"].__folders[ndata.targ + "  (linked)"];
+             }
+            if(nestedFolder != null) {
+                setTimeout(() => {
+                    nestedFolder.name = ndata.targ}, 1500);   // set it back in a short time 
+                nestedFolder.name = ndata.targ + "      <== ";
+            }
+
+           }
+          return;
+        }
+        
+
+        // if the parameter object doesn't exist yet in the gr object, keep calling the 'current' values and try again.
+
+        ///  THIS MIGHT BE CAUSING A NASTY EXPANDING OR INFINITE LOOP SOMETIMES -- CAN'T FIGURE OUT WHEN...
+
+        if (sourceIndex == -1) { 
+            console.log("Looking to edit a parameter ("+ ndata.param +" in " + ndata.targ + ") that isn't in the current context yet.  Keep trying. ");
+                requestSettings({beh : ndata.beh, preset : 'current', sendosc : false});
+
+                if(removals.indexOf(ndata.targ) == -1) {   // it's not in the removals list, so go ahaed and try reloading.
+                    setTimeout(() => {
+                    manageNestedSettings(ndata); }, 2000);   // wait 2 seconds to try again, ad infinitum.
+                } else {
+                    console.log("oops, it was in removal... too quick!");
+                }
+            return;
+        }
+
+        if(objectList[ndata.beh].guiObj != null) {
+            
+            var nestedFolder = b.guiObj.__folders["Source"].__folders[ndata.targ];
+            if(nestedFolder == null) {  // check to see if have we put a (linked) after it?
+             var nestedFolder = b.guiObj.__folders["Source"].__folders[ndata.targ + "  (linked)"];
+             }
+            console.log("nestedFolder is " + nestedFolder );
+
+            
+
+            if(nestedFolder == null || nestedFolder === undefined) {
+
+                console.log(" ... so adding it (" + ndata.targ + ") now.")
+
+                nestedFolder = b.guiObj.__folders["Source"].addFolder(ndata.targ);
+
+                if(ndata.beh == "GridRunner") {
+                nestedFolder.add(sourceArray[sourceIndex], 'active'         ).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'linked'         ).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'sourceRotation' ).min(0).max(2).step(1).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'lifespan'       ).min(250).max(10000).step(250).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'burstFreq'      ).min(10).max(5000).step(10).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'burstFreqRandom').min(0.0).max(1.0).step(0.1).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'burstLength'    ).min(.1).max(1.0).step(.1).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'burstQty'       ).min(1).max(250).step(1).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'spread'         ).min(0.0).max(6.2832).step(0.01).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'heading'        ).min(0.0).max(6.2832).step(0.01).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'yvelocity'      ).name('yVelocity').min(0.0).max(1.0).step(0.01).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'coreSize'        ).min(0).max(1).step(0.01).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'influenceSize'   ).min(0).max(1500).step(5).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'influenceIntensity').min(0).max(1.0).step(0.01).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'maxspeed'       ).min(0.5).max(10).step(0.05).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'randomspeed'    ).min(0.0).max(1.0).step(0.05).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'lookahead'      ).min(1).max(100).step(1).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'onGridSteering' ).min(0).max(1).step(0.01).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'offGridSteering').min(0).max(1).step(0.01).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'onGridFriction' ).min(0.9).max(1.1).step(0.001).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'offGridFriction').min(0.9).max(1.1).step(0.001).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'segradius'      ).min(1).max(10).step(1).listen().onChange(sendDatOSC);
+                    
+                    if(sourceArray[sourceIndex].linked == true) {
+                    // nestedFolder.name = (ndata.targ + "  (linked)");
+                    }
+                } else if(ndata.beh == "AmbientWaves") {
+                nestedFolder.add(sourceArray[sourceIndex], 'velocity'          ).min(0).max(2).step(0.01).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'period'            ).min(0).max(1).step(0.01).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'angle'             ).min(0).max(6.283).step(0.01).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'amplitude'         ).min(0).max(1.0).step(0.01).listen().onChange(sendDatOSC);
+                nestedFolder.add(sourceArray[sourceIndex], 'waveActive'        ).listen().onChange(sendDatOSC);
+                }
+
+                nestedFolder.close();
+                if(b.folderstates[ndata.targ] != null && b.folderstates[ndata.targ].closed == false) nestedFolder.open(); 
+
+            } else {
+                console.log("setting " + ndata.targ + "->" + ndata.param + " to " + ndata.val);
+                // if(ndata.param == "linked") {
+                //   //  if(ndata.val == true) nestedFolder.name = (ndata.targ + "  (linked)");
+                //   //  else                  nestedFolder.name = (ndata.targ);
+                // }
+                if(ndata.val == "add" || ndata.val == "remove") { return; }  // skip the setting, we're just here for the folder.
+                sourceArray[sourceIndex][ndata.param] = ndata.val;
+            }
+        }
+    
+}
+
+</script> 
+

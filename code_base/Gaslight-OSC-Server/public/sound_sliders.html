@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+        
+    <head>
+        <title>Gaslight Meander Audio Sliders</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" id="pagestyle" type="text/css" href="css/style.css">
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+        <script src="libraries/common_utils.js"></script>
+    </head>
+
+
+    <body onload = "onload()">
+
+    <div class = "card">
+            <h2> Intensity and Audio Controls </h2>
+
+    
+
+            <h3 id="bintLabel">Master Behaviour Intensity <span class="behaviourIntensity"></span></h3>
+            <div class="slidecontainer">
+                <input type="range" min="0.0" max="1.0" value="0.0" class="slider behaviourIntensity" id="behaviourIntensity" step=0.01>
+            </div>
+
+            <br><h3 id="gestureState">Use Sensors: <span class="gestureState"></span></h3>
+            <button id="ir_gesture_toggle" onclick="gesture_toggle(this.id)">Toggle Sensors</button> 
+
+            
+            <br><h3 id="masterLabel">Master Volume: <span class="masterVolume"></span></h3>
+            <div class="slidecontainer">
+                    <input type="range" min="0.0" max="0.3" value="0.1" class="slider masterVolume" id="masterVolume" step=0.01>
+            </div>
+
+
+            <h3 id="intLabel">Internal Volume: <span class="internalVolume"></span></h3>
+            <div class="slidecontainer">
+                    <input type="range" min="-70.0" max="0.0" value="-30.0" class="slider internalVolume" id="internalVolume" step=1.0>
+            </div>
+            
+
+            <h3 id="extLabel">External Volume: <span class="externalVolume"></span></h3>
+            <div class="slidecontainer">
+                    <input type="range" min="-70.0" max="0.0" value="-30.0" class="slider externalVolume" id="externalVolume" step=1.0>
+            
+            <!-- 
+            <h3 id="actLabel">Interactive Volume:</h3>
+            <div class="slidecontainer">
+                    <input type="range" min="-70.0" max="0.0" value="0.0" class="slider" id="InteractiveVolume" step=1.0>
+            </div>
+            --> 
+
+    
+        </div>
+
+    </body>
+</html>
+
+<script type="text/javascript">
+
+    var masterSlider = {'element': document.getElementById("masterVolume"),
+                        'label': document.getElementById("masterLabel"),
+                        'labelString':"Master Volume: ",
+                        'socketCall':'setVolumeGeneric',
+                        'speakerIdxs': [-1,-1]
+                    }
+
+    var intSlider = {'element': document.getElementById("internalVolume"),
+                        'label': document.getElementById("intLabel"),
+                        'labelString':"Internal Volume: ",
+                        'speakerIdxs': [25,43]
+                    }
+
+    var extSlider = {'element': document.getElementById("externalVolume"),
+                        'label': document.getElementById("extLabel"),
+                        'labelString':"External Volume: ",
+                        'speakerIdxs': [1,24]
+                    }
+
+    var actSlider = {'element': document.getElementById("InteractiveVolume"),
+                    'label': document.getElementById("actLabel"),
+                    'labelString':"Interactive Volume: ",
+                    'speakerIdxs': [0,0]
+                }
+
+    var bintSlider = {'element': document.getElementById("behaviourIntensity"),
+                    'label': document.getElementById("bintLabel"),
+                    'labelString':"Master Behaviour Intensity: ",
+    }
+
+    var sliders = [masterSlider,intSlider, extSlider];
+
+    // Sound Sliders
+    for (let i = 0; i < sliders.length; i++) {
+      let slider = sliders[i];
+      sliderElement = slider['element']
+      sliderElement.oninput = function() {
+        console.log(date + slider['labelString'] + this.value);
+        socket.emit('setVolumeGeneric', [slider['speakerIdxs'],this.value]);
+        }      
+    }
+
+    // Behaviour Intensity Slider
+    sliderElement = bintSlider['element']
+    sliderElement.oninput = function() {
+        console.log(date + bintSlider['labelString']  + this.value);
+        socket.emit('setBehaviourIntensity', this.value);
+        }      
+
+        // toggle use of sensors for sound gestures
+    function gesture_toggle(id){
+        console.log(date + 'gesture toggle')
+        socket.emit('gestureToggle',id);
+        //localGestureState = !localGestureState;
+        //document.getElementById("gestureState").innerHTML = ("Use Sensors: " + localGestureState);
+        
+    }
+
+</script> 

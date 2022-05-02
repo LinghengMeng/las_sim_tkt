@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Meander Control (PBSI)</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" id="pagestyle" type="text/css" href="css/style.css">
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        
+        <script src="libraries/common_utils.js"></script>
+    </head>
+
+    <body onload = "onload()">
+
+
+    <div class="card">
+        <h2>Meander Sleep/ Wake</h2>
+        <h3>Sleeping: <span class = "sleepState"></span></h3>
+        <div class="switch-field">
+                <input class = "sleepState" type="radio" onclick = "radioHandler(this);" id="sleepState-true" name="sleepWake" value="sleepButton" checked/>
+                <label for="sleepState-true">Sleep</label>
+                <input class = "sleepState" type="radio" onclick = "radioHandler(this);" id="sleepState-false" name="sleepWake" value="wakeButton" />
+                <label for="sleepState-false">Wake</label>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <h2>Meander Scheduled Sleep/ Wake</h2>
+        <h3>Timer Active: <span class="timerActive"></span> </h3>
+        <h3 id = "currentSleepTime">Sleep Time: <span class="sleepHour">00</span>:<span class="sleepMin">00</span></h3>
+        <h3 id = "currentWakeTime">Wake Time: <span class="wakeHour">00</span>:<span class="wakeMin">00</span></h3>
+        <div class="switch-field">
+                <input class="timerActive" type="radio" onclick = "radioHandler(this);" id="timerActive-true" name="useTimer" value="true" />
+                <label for="timerActive-true">Timer On </label>
+                <input class="timerActive" type="radio" onclick = "radioHandler(this);" id="timerActive-false" name="useTimer" value="false" checked/>
+                <label for="timerActive-false">Timer Off</label>
+        </div>
+
+        <div class = row>
+            <div class = "column">   
+                <h3>Sleep Time</h3>
+
+                <select id = "sleep-hour">
+                    <script type="text/javascript">
+                        for (i=0;i<24;i++){
+                            if (i<10){i="0"+i}
+                            document.write("<option value=\"" + i + "\"> " + i + ": </option>");
+                        }
+                    </script>
+                </select>
+
+                <select id = "sleep-minute">
+                        <script type="text/javascript">
+                            for (i=0;i<60;i++){
+                            var min = i
+                            if (min<10){min="0"+min}
+                            document.write("<option value=\"" + min + "\"> " + min + " </option>");
+                        }
+                        </script>
+                </select>
+
+            </div>
+
+            <div class = "column"> 
+                <h3>Wake Time</h3>
+                <select id = "wake-hour">
+                    <script type="text/javascript">
+                        for (i=0;i<24;i++){
+                            if (i<10){i="0"+i}
+                            document.write("<option value=\"" + i + "\"> " + i + ": </option>");
+                        }
+                    </script>
+                </select>
+                <select id = "wake-minute">
+                    <script type="text/javascript">
+                        for (i=0;i<60;i++){
+                            var min = i
+                            if (min<10){min="0"+min}
+                            document.write("<option value=\"" + min + "\"> " + min + " </option>");
+                        }
+                    </script>
+                </select>
+            </div>
+
+
+            <div class = "column"> 
+                <h3>Submit</h3>
+                <button id="submitTime" onClick="setTimer()">Set Timer</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class = "card">
+        <h2>Behaviour Scene</h2>
+        <h3>Active Behaviour: <span class="behaviourScene"></span> </h3>
+        <div class="switch-field">
+            <input class = "behaviourScene" type="radio" onclick = "radioHandler(this);" id="behaviourScene-default" name="scene" value="default" checked/>
+            <label for="behaviourScene-default">Default</label>
+            <input class = "behaviourScene" type="radio" onclick = "radioHandler(this);" id="behaviourScene-calm" name="scene" value="calm" />
+            <label for="behaviourScene-calm">Calm</label>
+            <input class = "behaviourScene" type="radio" onclick = "radioHandler(this);" id="behaviourScene-active" name="scene" value="active" />
+            <label for="behaviourScene-active">Active</label>
+            <input class = "behaviourScene" type="radio" onclick = "radioHandler(this);" id="behaviourScene-hyperActive" name="scene" value="hyperActive" />
+            <label for="behaviourScene-hyperActive">Hyper Active</label>
+        </div>
+    </div>
+
+
+
+
+    <!-- <div class = "card">
+        <h2>Lighting Controls</h2>
+
+        <div class="switch-field">
+            <input type="radio" onclick = "radioHandler(this);" id="light-grotto-off" name="grotto" value="off" checked/>
+            <label for="light-grotto-off">Grotto <br/> Off</label>
+            <input type="radio" onclick = "radioHandler(this);" id="light-grotto-11" name="grotto" value="11" />
+            <label for="light-grotto-11">Grotto <br/> Dim</label>
+            <input type="radio" onclick = "radioHandler(this);" id="light-grotto-12" name="grotto" value="12" />
+            <label for="light-grotto-12">Grotto <br/> Bright</label>
+        </div>
+
+        <div class="switch-field">
+            <input type="radio" onclick = "radioHandler(this);" id="light-river-off" name="river" value="off" checked/>
+            <label for="light-river-off">River <br/> Off</label>
+            <input type="radio" onclick = "radioHandler(this);" id="light-river-13" name="river" value="13" />
+            <label for="light-river-13">River <br/> Narrow</label>
+            <input type="radio" onclick = "radioHandler(this);" id="light-river-14" name="river" value="14" />
+            <label for="light-river-14">River <br/> Wide</label>
+        </div>
+        
+        <div class="switch-field">
+            <input type="radio" onclick = "radioHandler(this);" id="light-cloud-off" name="cloud" value="off" checked/>
+            <label for="light-cloud-off">Cloud <br/> Off</label>
+            <input type="radio" onclick = "radioHandler(this);" id="light-cloud-15" name="cloud" value="15" />
+            <label for="light-cloud-15">Cloud <br/> Narrow</label>
+            <input type="radio" onclick = "radioHandler(this);" id="light-cloud-16" name="cloud" value="16" />
+            <label for="light-cloud-16">Cloud <br/> Wide</label>
+        </div>
+    </div> -->
+
+
+    <!--div class = "card">
+        <h2>Dynamic Lighting Triggers</h2>
+        <div>
+        <button id="Ltrigger1" onClick="triggerLightGesture(31)">Light Gesture 1</button>
+        <button id="Ltrigger2" onClick="triggerLightGesture(32)">Light Gesture 2</button>
+        <button id="Ltrigger3" onClick="triggerLightGesture(33)">Light Gesture 3</button>
+        <button id="Ltrigger4" onClick="triggerLightGesture(34)">Light Gesture 4</button>
+        <button id="Ltrigger5" onClick="triggerLightGesture(35)">Light Gesture 5</button>
+        <button id="Ltrigger6" onClick="triggerLightGesture(36)">Light Gesture 6</button>
+        </div>
+    </div>  -->
+
+    <div class = "card">
+        <h2>Lighting Controls</h2>
+        <button id="walk_out_look" onClick="triggerLightGesture(12)"> Default</button>
+        <button id="fade_to_black2" onClick="triggerLightGesture(11)"> Fade to Black</button>
+        </div>
+    </div>
+
+
+    <div class = "card">
+        
+        <h2> Audio Controls </h2>
+        <h3> Audio Muted: <span class="muteState"></span></h3>
+        <h3> Current Volume: <span class="masterVolume"></span></h3>
+        <div></div>
+        <button id="mute_toggle" onclick="mute_toggle(this.id)">Toggle Mute</button>
+        <div class="slidecontainer">
+            <input type="range" min="0.0" max="0.3" value="0.1" class="slider masterVolume" id="masterVolume" step=0.001>
+        </div>
+    </div>
+
+    <div class = "card">
+        <h2>Sound Gesture Triggers</h2>
+        <h3><i>Note - master volume now also affects gesture volumes. - Mar 5, 2020</i></h3>
+        <div>
+        <button id="trigger1" onClick="triggerGesture(1)"> Gesture 1</button>
+        <button id="trigger2" onClick="triggerGesture(2)"> Gesture 2</button>
+        <button id="trigger3" onClick="triggerGesture(3)"> Gesture 3</button>
+        <button id="trigger4" onClick="triggerGesture(4)"> Gesture 4</button>
+        <button id="trigger5" onClick="triggerGesture(5)"> Gesture 5</button>
+        <button id="trigger6" onClick="triggerGesture(6)"> Gesture 6</button>
+        <button id="trigger7" onClick="triggerGesture(7)"> Gesture 7</button>
+        <button id="trigger8" onClick="triggerGesture(8)"> Gesture 8</button>
+        <button id="trigger9" onClick="triggerGesture(9)"> Gesture 9</button>
+        <button id="trigger10" onClick="triggerGesture(10)"> Gesture 10</button>
+        <button id="trigger11" onClick="triggerGesture(11)"> Gesture 11</button>
+        <button id="trigger12" onClick="triggerGesture(12)"> Gesture 12</button>
+        <button id="trigger13" onClick="triggerGesture(13)"> Gesture 13</button>
+        <button id="trigger14" onClick="triggerGesture(14)"> Gesture 14</button>
+        <button id="trigger15" onClick="triggerGesture(15)"> Gesture 15</button>
+        <button id="trigger16" onClick="triggerGesture(16)"> Gesture 16</button>
+        <button id="trigger17" onClick="triggerGesture(17)"> Gesture 17</button>
+        <button id="trigger18" onClick="triggerGesture(18)"> Gesture 18</button>
+        
+        <br>
+        <h3>Use Sensors: <span class="gestureState"></span></h3>
+        <button id="ir_gesture_toggle" onclick="gesture_toggle(this.id)">Toggle Sensors</button>      
+
+        </div>
+    </div>
+
+    <div class = "card">
+        <h2>Interpretive Display Monitor Control</h2>
+        <div>
+            <button id="pi1" onClick="toggleInterpDisplay(this.id)">Toggle Pi Display 1</button>
+            <button id="pi2" onClick="toggleInterpDisplay(this.id)">Toggle Pi Display 2</button>
+            <button id="pi3" onClick="toggleInterpDisplay(this.id)">Toggle Pi Display 3</button>
+        </div>
+    </div>
+
+
+    </body>
+</html>
+<script type="text/javascript">
+
+    var localMuteState = false;
+    var localGestureState = true;
+
+    // Grab the values of sliders from sliderName into sliderVariableName
+    // var lightSlider = document.getElementById("lightValue");
+    var volumeSlider = document.getElementById("masterVolume");
+
+    
+    // Set the Timer
+    function setTimer(){
+        var sleepHour = document.getElementById("sleep-hour").value
+        var sleepMin = document.getElementById("sleep-minute").value
+        var wakeHour = document.getElementById("wake-hour").value
+        var wakeMin = document.getElementById("wake-minute").value
+        
+        console.log ('Sleep Time: ' + sleepHour+":"+sleepMin)
+        console.log ('Wake Time: ' + wakeHour+":"+wakeMin)
+        values = [sleepHour,sleepMin,wakeHour,wakeMin]
+        socket.emit("setTimer", values)
+    }
+
+    // Radio Button event handler
+    function radioHandler(radio){
+        console.log(date + radio.id)
+        console.log(date + radio.name);
+        console.log(date + radio.value);
+        //use radio ID to delegate message
+        if (radio.id.includes("light")){
+            socket.emit("radioLight", [radio.name,radio.value])
+        }
+        if (radio.id.includes("Scene")){
+            socket.emit("behaviourScene",radio.value)
+        }
+        if (radio.id.includes("sleep")){
+            socket.emit(radio.value)
+        }
+        if (radio.id.includes("timer")){
+            socket.emit(radio.name,radio.value)
+        }
+    }
+
+    // Volume handler functions
+    // toggle mute and emit to server
+    function mute_toggle(id){
+        console.log(date + 'mute toggle')
+        socket.emit('muteToggle',id);
+        localMuteState = !localMuteState;
+        document.getElementById("muteState").innerHTML = ("Audio Muted: " + localMuteState);
+        
+    }
+
+    // toggle use of sensors for sound gestures
+    function gesture_toggle(id){
+        console.log(date + 'gesture toggle')
+        socket.emit('gestureToggle',id);
+        localGestureState = !localGestureState;
+        document.getElementById("gestureState").innerHTML = ("Use Sensors: " + localGestureState);
+        
+    }
+
+    // Send volume from slider
+    volumeSlider.oninput = function() {
+        console.log(date + 'volume: ' + this.value);
+        socket.emit('setVolume', (this.value));
+    }
+
+    function triggerGesture(id){
+        console.log(date + 'triggering gesture' + id);
+        socket.emit('triggerGesture',id);
+    }
+
+    function triggerLightGesture(id){
+        console.log(date + 'triggering Light gesture' + id);
+        var gesture = {"type": "cue", "id": id, "level": 1.0};
+        socket.emit('triggerLightGesture', gesture);
+    }
+
+    // Update the current slider value and emit to server
+    function toggleInterpDisplay(id) {
+        var value = 0;
+        if (id == 'pi1'){value = 1}
+        else if (id == 'pi2'){value = 2}
+        else if (id == 'pi3'){value = 3}
+        console.log(date + 'toggle pi : ' + value);
+        socket.emit('toggleInterpDisplay', (value));
+    }
+    
+    
+   
+</script> 

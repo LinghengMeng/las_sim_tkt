@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Log In</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" id="pagestyle" type="text/css" href="css/style.css">
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+        
+        <script src="libraries/common_utils.js"></script>
+    </head>
+    
+    <body onload = "onload()">
+
+        <div class = "card">
+            <div class="container">
+                <label for="uname"><b>Username</b></label>
+                <input type="bigtext" autocorrect=off autocapitalize=none autocomplete=off placeholder="Enter Username" id="uname" required>
+            </p>
+                <label for="psw"><b>Password</b></label>
+                <input type="password" autocorrect=off autocapitalize=none autocomplete=off placeholder="Enter Password" id="psw" required>
+            
+                <button onclick = "checkCredentials()" type="submit">Login</button>
+            </div>
+        </div>
+
+    </body>
+</html>
+
+<script type="text/javascript">
+
+
+    socket.on('checkedCredentials', recieveCredentials);
+
+    // Define Socket Messages and their Corresponding function
+
+
+    // Grab the values of sliders from sliderName into sliderVariableName
+
+
+    // Light handler functions
+    // Update the current slider value and emit to server
+    function checkCredentials(){
+        console.log('checking credentials');
+        var uname = document.getElementById("uname").value;
+        var psw = document.getElementById("psw").value;
+        var id = socket.id;
+        var uPid = [uname,psw,id];
+        console.log(uPid)
+        socket.emit('checkCredentials', uPid); 
+    }
+
+    function recieveCredentials(boolID){
+        console.log('recieving credential validation');
+        if (boolID[0]){
+            console.log('all good')
+            window.location= (boolID[2] + boolID[1]);
+        }
+        else{
+            console.log('thats a no from me')
+        }
+
+    }
+
+</script> 

@@ -1,0 +1,342 @@
+
+
+html, body {
+}
+
+:root {
+  --main-bg-color: #f1f1f1;
+  --main-card-color: white;
+  --accent-color:  #6494E4;
+  --secondary-color:  rgb(79, 119, 187);
+  --disabled-color: #cccccc;
+}
+
+
+body{
+  background:var(--main-bg-color);
+  font-family: roboto, Arial, Helvetica, sans-serif;
+  margin: 0px;
+  padding: 0px;
+}
+
+.header{
+  padding:10px;
+  text-align: left;
+  background: var(--main-card-color);
+  margin: 15px;
+}
+
+.card{
+  background: var(--main-card-color);
+  padding: 10px;
+  margin: 15px;
+}
+
+h1{
+  color: var(--accent-color);
+  font-size: 36px;
+  margin:10px;
+}
+
+h2{
+  color: var(--accent-color);
+  font-size: 28px;
+  margin:10px;
+}
+
+h3{
+  color:  var(--secondary-color);
+  font-size: 16px;
+  margin:10px;
+}
+
+
+.responsive-plan {
+  width: auto;
+  height: 85%;
+}
+
+.responsive-plan-background {
+  background-repeat:no-repeat;
+  background-size:contain;
+}
+
+button {
+  background-color:var(--accent-color); 
+  border-radius: 4px 4px 4px 4px;
+  border: 2px;
+  border-color: var(--accent-color);
+  color:  var(--main-card-color);
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-left: 12px;
+  margin-right: 2px;
+  margin-top: 4px;
+  width:200px;
+  
+}
+
+button:active {
+  background-color: var(--main-card-color); 
+  border: 2px solid var(--main-card-color);
+  color: var(--accent-color);
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+button:disabled {
+  background-color:  var(--disabled-color);
+  border-color:  var(--disabled-color);
+}
+
+/* When the checkbox is checked, add a var(--main-card-color) background */
+.button input:checked + label {
+  border: 2px;
+  border-color: var(--accent-color);
+  background-color: var(--main-card-color);
+  font-size: 18;
+  font-weight: bolder;
+  color:var(--accent-color);
+	box-shadow: none;
+}
+
+
+.slidecontainer {
+    width: 100%; /* Width of the outside container */
+    margin-top: 10px;
+  }
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 50px; /* Specified height */
+  background: var(--disabled-color); /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 50px; /* Slider handle height */
+  background:var(--accent-color); /*background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background:var(--accent-color); /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+/* Bordered form */
+form {
+  border: 3px solid #f1f1f1;
+}
+
+/* Full-width inputs */
+immmput[type=text], immmnput[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+
+input[type=bigtext], input[type=password] {
+  width: 80%;
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  /* -webkit-user-select: none; */
+  /* -moz-user-select: none;    */
+  -webkit-padding-end: 10px;
+  -moz-padding-end: 10px;
+  -webkit-padding-start: 10px;
+  -moz-padding-start: 10px;
+
+  background-color: var(--main-card-color); /* Fallback color if gradients are not supported */
+  border-color: 8pxvar(--accent-color);
+  border-radius: 4px;
+  color:var(--accent-color);
+  font-size: 24px;
+  margin: 4px;
+  margin-top: 4px;
+  overflow: auto;
+  text-overflow: ellipsis;
+  var(--main-card-color)-space: nowrap;
+}
+
+
+::-webkit-input-placeholder {font-style: italic;}
+:-moz-placeholder {font-style: italic;}
+::-moz-placeholder {font-style: italic;}
+:-ms-input-placeholder {font-style: italic;}
+
+label{
+  font-family: roboto, Arial, Helvetica, sans-serif;
+  color:  var(--secondary-color);
+  font-size: 16px;
+  margin:10px;
+}
+
+/* Add padding to containers */
+.container {
+  padding: 16px;
+}
+
+.dot {
+  width: 2px;
+  height: 2px;
+  background-color:var(--secondary-color);
+  position: absolute;
+}
+
+.wrapper { overscroll-behavior: none }
+
+.switch-field {
+  display: flex;
+  float:center;
+	overflow: hidden;
+}
+
+.switch-field input {
+	position: absolute !important;
+	clip: rect(0, 0, 0, 0);
+	height: 1px;
+	width: 1px;
+	border: 0;
+	overflow: hidden;
+}
+
+.switch-field label {
+  width:20%;
+	background-color: var(--main-card-color);
+	color: 6494e4;
+	text-align: center;
+  padding: 16px 8px;
+  margin-right: -10px;
+  border: 1px solid var(--accent-color);
+  display: inline-block;
+  font-size: 14px;
+	transition: all 0.1s ease-in-out;
+}
+
+.switch-field label:hover {
+	cursor: pointer;
+}
+
+.switch-field input:checked + label {
+  background-color: var(--accent-color);
+  color: var(--main-card-color);
+	box-shadow: none;
+}
+
+.switch-field label:first-of-type {
+	border-radius: 8px 0 0 8px;
+}
+
+.switch-field label:last-of-type {
+	border-radius: 0 8px 8px 0;
+}
+
+.switch-field label:only-of-type {
+  border-radius: 4px 4px 4px 4px;
+  border: 2px solid var(--accent-color);
+  padding: 16px 32px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  margin-left: 12px;
+  margin-right: 2px;
+  margin-top: 4px;
+  width:200px;
+}
+
+
+
+select[type=bigtext] {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -webkit-padding-end: 10px;
+  -moz-padding-end: 10px;
+  -webkit-padding-start: 10px;
+  -moz-padding-start: 10px;
+  background-color: var(--main-card-color); /* Fallback color if gradients are not supported */
+  border-color: 8px var(--accent-color);
+  border-radius: 4px;
+  color:var(--accent-color);
+  font-size: 24px;
+  margin: 4px;
+  margin-top: 4px;
+  overflow: auto;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-overflow: ellipsis;
+}
+
+.column datalist:first-of-type{
+  border-radius: 8px 0 0 8px;
+}
+
+.column datalist:last-of-type{
+  margin-left: -10px;
+  border-radius: 0 8px 8px 0;
+}
+
+.column select:first-of-type{
+  border-radius: 8px 0 0 8px;
+}
+
+.column select:last-of-type{
+  margin-left: -10px;
+  border-radius: 0 8px 8px 0;
+}
+
+.column select:only-of-type{
+  margin-left: -10px;
+  border-radius: 8px 8px 8px 8px;
+}
+
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: auto;
+  padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+canvas {
+  display: block;
+  margin: 10px;
+  padding: 5px;
+}
+

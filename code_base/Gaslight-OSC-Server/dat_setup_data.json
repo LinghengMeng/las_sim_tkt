@@ -1,0 +1,474 @@
+{
+  "preset": "sloshing",
+  "remembered": {
+    "Default": {
+      "0": {
+        "debug": false,
+        "debugopacity": 0.05,
+        "npartTotal": 800,
+        "npartPerFrame": 2,
+        "partSize": 30,
+        "maxspeed": 6,
+        "randomspeed": 0.4,
+        "yvelocity": 0,
+        "spread": 6.2832,
+        "heading": 0,
+        "onGridSteering": 1,
+        "offGridSteering": 0.05,
+        "onGridFriction": 1,
+        "offGridFriction": 1,
+        "lookahead": 50,
+        "segradius": 2,
+        "mouseSource": true,
+        "sourceStep": true,
+        "sourceCadence": 400
+      },
+      "1": {
+        "masterIntensity": 0.8,
+        "attractorAngleSpeed": 0.05,
+        "forceScalar": 1,
+        "excitorsInfluenceActive": true,
+        "showExcitors": false,
+        "backgroundBehaviourEnabled": true,
+        "showAttractors": false,
+        "maxExcitorAmount": 13
+      },
+      "2": {
+        "velocity": 0.1,
+        "period": 0.2,
+        "angle": 0.1,
+        "num_waves": 1,
+        "wave_influence_active": true,
+        "display": true
+      }
+    },
+    "rings": {
+      "0": {
+        "debug": true,
+        "debugopacity": 0.05,
+        "npartTotal": 800,
+        "npartPerFrame": 2,
+        "partSize": 30,
+        "maxspeed": 5,
+        "randomspeed": 0.5,
+        "yvelocity": 0,
+        "spread": 0.33,
+        "heading": 1.93,
+        "onGridSteering": 1,
+        "offGridSteering": 0.34,
+        "onGridFriction": 1,
+        "offGridFriction": 1,
+        "lookahead": 43,
+        "segradius": 2,
+        "mouseSource": false,
+        "sourceStep": false,
+        "sourceCadence": 400
+      },
+      "1": {
+        "masterIntensity": 0.8,
+        "attractorAngleSpeed": 0.05,
+        "forceScalar": 1,
+        "excitorsInfluenceActive": true,
+        "showExcitors": false,
+        "backgroundBehaviourEnabled": true,
+        "showAttractors": false,
+        "maxExcitorAmount": 13
+      },
+      "2": {
+        "velocity": 0.1,
+        "period": 0.2,
+        "angle": 0.1,
+        "num_waves": 1,
+        "wave_influence_active": true,
+        "display": true
+      }
+    },
+    "flows": {
+      "0": {
+        "debug": true,
+        "debugopacity": 0.63,
+        "npartTotal": 800,
+        "npartPerFrame": 2,
+        "partSize": 30,
+        "maxspeed": 1.5,
+        "randomspeed": 0.8500000000000001,
+        "yvelocity": 0,
+        "spread": 0.33,
+        "heading": 1.93,
+        "onGridSteering": 1,
+        "offGridSteering": 1,
+        "onGridFriction": 1,
+        "offGridFriction": 1,
+        "lookahead": 70,
+        "segradius": 2,
+        "mouseSource": false,
+        "sourceStep": false,
+        "sourceCadence": 400
+      },
+      "1": {
+        "masterIntensity": 0.8,
+        "attractorAngleSpeed": 0.05,
+        "forceScalar": 1,
+        "excitorsInfluenceActive": true,
+        "showExcitors": false,
+        "backgroundBehaviourEnabled": true,
+        "showAttractors": false,
+        "maxExcitorAmount": 13
+      },
+      "2": {
+        "velocity": 0.1,
+        "period": 0.2,
+        "angle": 0.1,
+        "num_waves": 1,
+        "wave_influence_active": true,
+        "display": true
+      }
+    },
+    "capture": {
+      "0": {
+        "debug": false,
+        "debugopacity": 0.36,
+        "npartTotal": 800,
+        "npartPerFrame": 1,
+        "partSize": 35,
+        "maxspeed": 7.5,
+        "randomspeed": 0.55,
+        "yvelocity": 0,
+        "spread": 6.28,
+        "heading": 0,
+        "onGridSteering": 1,
+        "offGridSteering": 0.06,
+        "onGridFriction": 1,
+        "offGridFriction": 1,
+        "lookahead": 76,
+        "segradius": 3,
+        "mouseSource": true,
+        "sourceStep": false,
+        "sourceCadence": 400
+      },
+      "1": {
+        "masterIntensity": 0.8,
+        "attractorAngleSpeed": 0.05,
+        "forceScalar": 1,
+        "excitorsInfluenceActive": true,
+        "showExcitors": false,
+        "backgroundBehaviourEnabled": true,
+        "showAttractors": false,
+        "maxExcitorAmount": 13
+      },
+      "2": {
+        "velocity": 0.1,
+        "period": 0.2,
+        "angle": 0.1,
+        "num_waves": 1,
+        "wave_influence_active": true,
+        "display": true
+      }
+    },
+    "chaos": {
+      "0": {
+        "debug": true,
+        "debugopacity": 0,
+        "npartTotal": 800,
+        "npartPerFrame": 3,
+        "partSize": 35,
+        "maxspeed": 10,
+        "randomspeed": 0.05,
+        "yvelocity": 0,
+        "spread": 6.28,
+        "heading": 0,
+        "onGridSteering": 0.89,
+        "offGridSteering": 0.1,
+        "onGridFriction": 1,
+        "offGridFriction": 1,
+        "lookahead": 22,
+        "segradius": 5,
+        "mouseSource": false,
+        "sourceStep": false,
+        "sourceCadence": 400
+      },
+      "1": {
+        "masterIntensity": 0.8,
+        "attractorAngleSpeed": 0.05,
+        "forceScalar": 1,
+        "excitorsInfluenceActive": true,
+        "showExcitors": false,
+        "backgroundBehaviourEnabled": true,
+        "showAttractors": false,
+        "maxExcitorAmount": 13
+      },
+      "2": {
+        "velocity": 0.1,
+        "period": 0.2,
+        "angle": 0.1,
+        "num_waves": 1,
+        "wave_influence_active": true,
+        "display": true
+      }
+    },
+    "shimmer": {
+      "0": {
+        "debug": true,
+        "debugopacity": 0,
+        "npartTotal": 800,
+        "npartPerFrame": 2,
+        "partSize": 30,
+        "maxspeed": 6.5,
+        "randomspeed": 0.9500000000000001,
+        "yvelocity": 0,
+        "spread": 0.33,
+        "heading": 1.93,
+        "onGridSteering": 1,
+        "offGridSteering": 1,
+        "onGridFriction": 1,
+        "offGridFriction": 1,
+        "lookahead": 70,
+        "segradius": 2,
+        "mouseSource": false,
+        "sourceStep": true,
+        "sourceCadence": 580
+      },
+      "1": {
+        "masterIntensity": 0.8,
+        "attractorAngleSpeed": 0.05,
+        "forceScalar": 1,
+        "excitorsInfluenceActive": true,
+        "showExcitors": false,
+        "backgroundBehaviourEnabled": true,
+        "showAttractors": false,
+        "maxExcitorAmount": 13
+      },
+      "2": {
+        "velocity": 0.1,
+        "period": 0.2,
+        "angle": 0.1,
+        "num_waves": 1,
+        "wave_influence_active": true,
+        "display": true
+      }
+    },
+    "geysers": {
+      "0": {
+        "debug": false,
+        "debugopacity": 0,
+        "npartTotal": 800,
+        "npartPerFrame": 2,
+        "partSize": 30,
+        "maxspeed": 6.5,
+        "randomspeed": 0.9500000000000001,
+        "yvelocity": 0.004,
+        "spread": 0.33,
+        "heading": 2.86,
+        "onGridSteering": 1,
+        "offGridSteering": 0.02,
+        "onGridFriction": 1,
+        "offGridFriction": 1,
+        "lookahead": 70,
+        "segradius": 2,
+        "mouseSource": false,
+        "sourceStep": true,
+        "sourceCadence": 580
+      },
+      "1": {
+        "masterIntensity": 0.8,
+        "attractorAngleSpeed": 0.05,
+        "forceScalar": 1,
+        "excitorsInfluenceActive": true,
+        "showExcitors": false,
+        "backgroundBehaviourEnabled": true,
+        "showAttractors": false,
+        "maxExcitorAmount": 13
+      },
+      "2": {
+        "velocity": 0.1,
+        "period": 0.2,
+        "angle": 0.1,
+        "num_waves": 1,
+        "wave_influence_active": true,
+        "display": true
+      }
+    },
+    "tristreams": {
+      "0": {
+        "debug": false,
+        "debugopacity": 0,
+        "npartTotal": 800,
+        "npartPerFrame": 2,
+        "partSize": 30,
+        "maxspeed": 6.5,
+        "randomspeed": 0.9500000000000001,
+        "yvelocity": 0.008,
+        "spread": 6.28,
+        "heading": 2.86,
+        "onGridSteering": 0,
+        "offGridSteering": 1,
+        "onGridFriction": 1,
+        "offGridFriction": 1,
+        "lookahead": 70,
+        "segradius": 2,
+        "mouseSource": true,
+        "sourceStep": true,
+        "sourceCadence": 580
+      },
+      "1": {
+        "masterIntensity": 0.8,
+        "attractorAngleSpeed": 0.05,
+        "forceScalar": 1,
+        "excitorsInfluenceActive": true,
+        "showExcitors": false,
+        "backgroundBehaviourEnabled": true,
+        "showAttractors": false,
+        "maxExcitorAmount": 13
+      },
+      "2": {
+        "velocity": 0.1,
+        "period": 0.2,
+        "angle": 0.1,
+        "num_waves": 1,
+        "wave_influence_active": true,
+        "display": true
+      }
+    },
+    "tendrils": {
+      "0": {
+        "debug": false,
+        "debugopacity": 0,
+        "npartTotal": 800,
+        "npartPerFrame": 2,
+        "partSize": 30,
+        "maxspeed": 6.5,
+        "randomspeed": 0.9500000000000001,
+        "yvelocity": 0.008,
+        "spread": 6.28,
+        "heading": 2.86,
+        "onGridSteering": 0.1,
+        "offGridSteering": 1,
+        "onGridFriction": 1,
+        "offGridFriction": 1,
+        "lookahead": 70,
+        "segradius": 2,
+        "mouseSource": true,
+        "sourceStep": true,
+        "sourceCadence": 580
+      },
+      "1": {
+        "masterIntensity": 0.8,
+        "attractorAngleSpeed": 0.05,
+        "forceScalar": 1,
+        "excitorsInfluenceActive": true,
+        "showExcitors": false,
+        "backgroundBehaviourEnabled": true,
+        "showAttractors": false,
+        "maxExcitorAmount": 13
+      },
+      "2": {
+        "velocity": 0.1,
+        "period": 0.2,
+        "angle": 0.1,
+        "num_waves": 1,
+        "wave_influence_active": true,
+        "display": true
+      }
+    },
+    "pump": {
+      "0": {
+        "debug": false,
+        "debugopacity": 0,
+        "npartTotal": 800,
+        "npartPerFrame": 2,
+        "partSize": 30,
+        "maxspeed": 10,
+        "randomspeed": 0.9500000000000001,
+        "yvelocity": 0.01,
+        "spread": 6.28,
+        "heading": 2.86,
+        "onGridSteering": 0.1,
+        "offGridSteering": 1,
+        "onGridFriction": 1,
+        "offGridFriction": 0.93,
+        "lookahead": 70,
+        "segradius": 2,
+        "mouseSource": false,
+        "sourceStep": true,
+        "sourceCadence": 2000
+      },
+      "1": {
+        "masterIntensity": 0.8,
+        "attractorAngleSpeed": 0.05,
+        "forceScalar": 1,
+        "excitorsInfluenceActive": true,
+        "showExcitors": false,
+        "backgroundBehaviourEnabled": true,
+        "showAttractors": false,
+        "maxExcitorAmount": 13
+      },
+      "2": {
+        "velocity": 0.1,
+        "period": 0.2,
+        "angle": 0.1,
+        "num_waves": 1,
+        "wave_influence_active": true,
+        "display": true
+      }
+    },
+    "sloshing": {
+      "0": {
+        "debug": true,
+        "debugopacity": 0,
+        "npartTotal": 800,
+        "npartPerFrame": 2,
+        "partSize": 30,
+        "maxspeed": 6.5,
+        "randomspeed": 0.9500000000000001,
+        "yvelocity": 0.01,
+        "spread": 0.33,
+        "heading": 1.93,
+        "onGridSteering": 0.19,
+        "offGridSteering": 1,
+        "onGridFriction": 1,
+        "offGridFriction": 1,
+        "lookahead": 9,
+        "segradius": 2,
+        "mouseSource": true,
+        "sourceStep": true,
+        "sourceCadence": 580
+      },
+      "1": {
+        "masterIntensity": 0.8,
+        "attractorAngleSpeed": 0.05,
+        "forceScalar": 1,
+        "excitorsInfluenceActive": true,
+        "showExcitors": false,
+        "backgroundBehaviourEnabled": true,
+        "showAttractors": false,
+        "maxExcitorAmount": 13
+      },
+      "2": {
+        "velocity": 0.1,
+        "period": 0.2,
+        "angle": 0.1,
+        "num_waves": 1,
+        "wave_influence_active": true,
+        "display": true
+      }
+    }
+  },
+  "closed": false,
+  "folders": {
+    "GridRunner": {
+      "preset": "Default",
+      "closed": false,
+      "folders": {}
+    },
+    "Excitors": {
+      "preset": "Default",
+      "closed": true,
+      "folders": {}
+    },
+    "Ambient_Waves": {
+      "preset": "Default",
+      "closed": true,
+      "folders": {}
+    }
+  }
+}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Meander Paint</title>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" id="pagestyle" type="text/css" href="css/style.css">
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+        <script src="libraries/common_utils.js"></script>
+    </head>
+
+    <body onload = "onload()">
+
+    <h3 id="coords"></h3>
+    <div>
+    <span style="display:inline-block;">
+    <img id="plan" src="assets/meander_simple_plan.png" width="auto" height="85%" draggable=false alt="meander_plan"> 
+    </span>
+    </div>
+    <div id ="brush" style="position: absolute; left: 0px; top: 0px;">
+        <img id="brush-img" src="assets/meander_brush.png" draggable=false>
+    </div>
+
+    <script>
+    // Handles the touch event and prints it in the page.
+    document.addEventListener("mousemove", updateMousePos);
+    document.addEventListener("mousedown", mouseDown);
+    document.addEventListener("mouseup", mouseUp);
+    document.addEventListener("touchstart", updateTouchPos);
+    document.addEventListener("touchend", mouseUp);
+    document.addEventListener("touchmove", updateTouchPos);
+    var mdown = false;
+    var brush = document.getElementById("brush");
+    var brushImg = document.getElementById("brush-img");
+    var pr = document.getElementById("plan").getBoundingClientRect();
+    var fx = 0;
+    var fy = 0;
+    brush.style.visibility = "hidden";
+
+    function mouseDown(event) {
+        mdown = true;
+    }
+
+    function mouseUp(event) {
+        mdown = false;
+        brush.style.visibility = "hidden";
+        coords = {x: -1.1, y: -1.1, d: -1.1};  // this is special case to tell it to stop painting
+        socket.emit("paintbrush", coords);
+    }
+
+    function updateMousePos(event) {
+        if(!mdown) return;
+        drawBrush(event.clientX-pr.x, event.clientY-pr.y);
+    }
+
+    function updateTouchPos(event) {
+        drawBrush(event.touches[0].clientX-pr.x, event.touches[0].clientY-pr.y);
+        
+    }
+
+    function drawBrush (x, y) {
+        
+        pr = document.getElementById("plan").getBoundingClientRect();
+        console.log(" PR is " + JSON.stringify(pr));
+
+
+        fx = Math.max(0, Math.min(1, x/pr.width));
+        fy = Math.max(0, Math.min(1, y/pr.height));
+
+        document.getElementById("coords").innerHTML = fx.toFixed(3) + ", " + fy.toFixed(3);
+        
+        if(fx < 0.05 || fy < 0.05 || fx > 0.95 || fy > 0.95) {
+            mouseUp(null);
+            return;
+        }
+        
+        brush.style.visibility = "visible";
+        x += pr.x;
+        y += pr.y;
+
+        brushImg.width = pr.width/5;
+        brush.style.top = (y-(brush.offsetHeight/2)) + "px";
+        brush.style.left = (x-(brush.offsetWidth/2)) + "px";
+
+        console.log("Emitting: paintbrush " + fx + " " + fy + " and pr.width is " + pr.width);
+        coords = {x: fx, y: fy, d: brushImg.width/pr.width};  // d is diameter as float
+        socket.emit("paintbrush", coords);
+
+    }
+
+
+
+    </script>
+    </body>
+</html>

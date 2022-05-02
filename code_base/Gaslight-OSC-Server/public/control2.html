@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Meander Performance (Venue)</title>
+            
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" id="pagestyle" type="text/css" href="css/style.css">
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+        <script src="libraries/common_utils.js"></script>
+    </head>
+
+    <body onload = "onload()">
+
+        <div class="card">
+            <h2>Meander Sleep/ Wake</h2>
+            <h3>Sleeping: <span class = "sleepState"></span></h3>
+            <div class="switch-field">
+                    <input class = "sleepState" type="radio" onclick = "radioHandler(this);" id="sleepState-true" name="sleepWake" value="sleepButton" checked/>
+                    <label for="sleepState-true">Sleep</label>
+                    <input class = "sleepState" type="radio" onclick = "radioHandler(this);" id="sleepState-false" name="sleepWake" value="wakeButton" />
+                    <label for="sleepState-false">Wake</label>
+            </div>
+        </div>
+
+        <div class = "card">
+            <h2>Behaviour Scene</h2>
+            <h3>Active Behaviour: <span class="behaviourScene"></span> </h3>
+            <div class="switch-field">
+                <input class = "behaviourScene" type="radio" onclick = "radioHandler(this);" id="behaviourScene-default" name="scene" value="default" checked/>
+                <label for="behaviourScene-default">Default</label>
+                <input class = "behaviourScene" type="radio" onclick = "radioHandler(this);" id="behaviourScene-calm" name="scene" value="calm" />
+                <label for="behaviourScene-calm">Calm</label>
+                <input class = "behaviourScene" type="radio" onclick = "radioHandler(this);" id="behaviourScene-active" name="scene" value="active" />
+                <label for="behaviourScene-active">Active</label>
+                <input class = "behaviourScene" type="radio" onclick = "radioHandler(this);" id="behaviourScene-hyperActive" name="scene" value="hyperActive" />
+                <label for="behaviourScene-hyperActive">Hyper Active</label>
+            </div>
+            <h3 id="switchingNote">Note: switching scenes too fast can cause the behaviour system to crash. If this happens, the sculpture will turn off 2 minutes and then restart. Wait at least 15 seconds in between switching scenes.</h3>
+            <h3 id="hyperActiveNote">Note: to preserve actuator life, please don't run the "Hyper Active" scene for more than about 30 minutes a day.</h3>
+        </div>
+
+        <div class = "card">
+            <h2> Audio Controls </h2>
+            <h3> Audio Muted: <span class="muteState"></span></h3>
+            <h3> Current Volume: <span class="masterVolume"></span></h3>
+            <div></div>
+            <button id="mute_toggle" onclick="mute_toggle(this.id)">Toggle Mute</button>
+            <div class="slidecontainer">
+                <input type="range" min="0.0" max="0.3" value="0.1" class="slider masterVolume" id="masterVolume" step=0.001>
+            </div>
+            <h3>Sensors trigger sound gestures: <span class="gestureState"></span></h3>
+            <button id="ir_gesture_toggle" onclick="gesture_toggle(this.id)">Toggle Sensors</button>
+        </div>
+
+        <div class = "card">
+            <h2>Lighting Controls</h2>
+            <button id="walk_out_look" onClick="triggerLightPreset(1)"> Default</button>
+            <button id="fade_to_black2" onClick="triggerLightPreset(2)"> Fade to Black</button>
+            </div>
+        </div>
+    
+        <div class = "card">
+        <h2>Performance Triggers</h2>
+        <div>
+        <button id="trigger3" onClick="triggerPerformance('8_min')">August 18 Performance</button>
+        </div>
+        <h3 id="performanceNote">Note: when the performance starts, you should hear the "Starkey" track start within a couple seconds, the house lights should fade to black, and the "Active Behaviour" should read "01_quiet_wip".</h3>
+        <button id="cancel1" onClick="cancelPerformance()">Cancel</button>
+        <h3 id="cancelNote">Note: if you hear sound start to play, press the "Performance" button in the "Audio Track Toggle" section.</h3>
+        </div>
+
+    <!-- <div class = "card">
+        <div>
+        <button id="cancel1" onClick="clearActiveTimeouts()">Cancel</button>
+        </div>
+    </div> -->
+
+    <div class = "card">
+        <h2>Audio Track Toggles</h2>
+        <div>
+        <button id="playSound1" onClick="toggleSoundFile('MeanderComp01')">Background</button>
+        <button id="playSound2" onClick="toggleSoundFile('Starkey')">Starkey</button>
+        <button id="playSound3" onClick="toggleSoundFile('Track8Min')">Performance</button>
+        </div>
+    </div>
+
+    
+    <div class = "card">
+        <h2>Troubleshooting Information</h2>
+        <div>
+            <h3 id="sculptureTroubleshoot">Sculpture behaviour isn't visible: (1) Check if sculpture is sleeping. (2) Try selecting a different scene (e.g. Default or Active).</h3>
+            <h3 id="soundTroubleshoot">Sound isn't playing: (1) Check if sculpture is muted. (2) Try changing the volume with the slider. (3) Try using the "Audio Track Toggles".</h3>
+            <h3 id="lightsTroubleshoot">House lights aren't working: (1) Try using the "Lighting Controls" buttons.</h3>
+        </div>
+        <h2>Documents</h2>
+        <div>
+            <div> <a href="https://public.3.basecamp.com/p/m5uaTn5Xovqow8caYSL3cQjE">Maintenance Manual</a> </div>
+            <div> <a href="https://public.3.basecamp.com/p/mCsHwdEQDJrAqUzE8jsTfzTH">Operator's Guide</a> </div>
+            <div> <a href="https://public.3.basecamp.com/p/PTp4JNk1cUxpBSuk5fdc111z">Password Key</a> </div>
+        </div>
+    </div>
+    
+    <div class = "card">
+        <h2>Contact Information</h2>
+        <div>
+            <h3 id="contactInfo">Please email engineering@lasg.ca and describe what isn't working.</h3>
+            <h3 id="contactExample">E.g. "I pressed the Performance button and the sculpture changes scenes but the sound and lights don't change with the scenes. I have also tried the steps in the "Troubleshooting Information" section.</h3>
+            <h3 id="phoneML">Michael Lancaster, Engineering Lead: 647 523 3524</h3>
+            <h3 id="phoneML">Matt Gorbet, Software Lead: 416 939 6544</h3>
+            <h3 id="phoneTB">Timothy Boll, Design Lead: 647 504 8331</h3>
+            <h3 id="phonePB">Philip Beesley, Principal: 416 824 8284</h3>
+        </div>
+
+    </div>
+
+
+    </body>
+</html>
+
+<script type="text/javascript">
+
+    var timeoutIDs = [];
+
+    var localMuteState = false;
+    var localGestureState = true;
+
+    // Grab the values of sliders from sliderName into sliderVariableName
+    // var lightSlider = document.getElementById("lightValue");
+    var volumeSlider = document.getElementById("masterVolume");
+
+    // Radio Button event handler
+    function radioHandler(radio){
+        console.log(date + radio.id)
+        console.log(date + radio.name);
+        console.log(date + radio.value);
+        //use radio ID to delegate message
+        if (radio.id.includes("light")){
+            socket.emit("radioLight", [radio.name,radio.value])
+        }
+        if (radio.id.includes("Scene")){
+            socket.emit("behaviourScene",radio.value)
+        }
+        if (radio.id.includes("sleep")){
+            socket.emit(radio.value)
+        }
+        if (radio.id.includes("timer")){
+            socket.emit(radio.name,radio.value)
+        }
+    }
+
+    // Volume handler functions
+    // toggle mute and emit to server
+    function mute_toggle(id){
+        console.log(date + 'mute toggle')
+        socket.emit('muteToggle',id);
+        localMuteState = !localMuteState;
+        document.getElementById("muteState").innerHTML = ("Audio Muted: " + localMuteState);
+        
+    }
+
+    // toggle use of sensors for sound gestures
+    function gesture_toggle(id){
+        console.log(date + 'gesture toggle')
+        socket.emit('gestureToggle',id);
+        localGestureState = !localGestureState;
+        document.getElementById("gestureState").innerHTML = ("Use Sensors: " + localGestureState);
+        
+    }
+
+    // Send volume from slider
+    volumeSlider.oninput = function() {
+        console.log(date + 'volume: ' + this.value);
+        socket.emit('setVolume', (this.value));
+    }
+
+    async function triggerLightPreset(id){
+        console.log(date + 'triggering Light gesture' + id);
+        // var gesture = {"type": "cue", "id": id, "level": 1.0};
+        // socket.emit('triggerLightGesture', gesture);
+        if (id == 1) { triggerLightGesture(lightingPresets["walk_out_look"]); }
+        if (id == 2) { triggerLightGesture(lightingPresets["fade_to_black2"]); }
+    }
+
+    useSensorsON = ["03_awake_wip", 
+                    "04_showers_wip", 
+                    "05_rh_grotto_wip", 
+                    "06_wake_centre_wip",
+                    "07_grotto_river_wip", 
+                    "08_surround_wip", 
+                    "09_climax_wip", 
+                    "10_recapit_wip", 
+                    "11_quiet_end_wip",
+                    ]
+   
+    useSensorsOFF = ["01_quiet_wip", 
+                    "02_tidal_wip", 
+                    "12_background_wip",]
+
+    backgroundScene = "default"; // default for when the performance is cancelled
+    backgroundLight = "walk_out_look";
+
+    var lightingPresets = {
+                                    "fade_to_black2": { 
+                                    "type": "cue",
+                                    "id": "11",
+                                    "level": 1.0,
+                                    "time": 580000
+                                    },
+                                    "walk_out_look": {
+                                    "type": "cue",
+                                    "id": "12",
+                                    "level": 1.0,
+                                    "time": 583000
+                                    },                                                                                        
+                            }
+
+    
+    var performance8MinScenes = {"01_quiet_wip": 0, 
+                               "02_tidal_wip": 73000,
+                               "03_awake_wip": 134000, 
+                               "04_showers_wip": 190000, 
+                               "05_rh_grotto_wip": 225000, 
+                               "06_wake_centre_wip": 300000,
+                               "07_grotto_river_wip": 361000, 
+                               "08_surround_wip": 392000, 
+                               "09_climax_wip": 505000, //10s earlier than actual cue
+                               "10_recapit_wip": 548000, 
+                               "11_quiet_end_wip": 578000,
+                               "12_background_wip": 581000,
+                               "default": 641000,
+                            }
+
+    var performance8MinSounds = {
+                                    "start": {
+                                        "track": "Track8Min",
+                                        "time": 0 //first call turns it on, second turns it off
+                                    },
+                                    "end": {
+                                        "track": "Track8Min",
+                                        "time": 582000
+                                    }
+                                }
+
+    // var performance8MinSounds = {"Track8Min": 0, //first call turns it on, second turns it off
+    //                            "Track8Min": 582000,
+    //                         }
+
+    var performance8MinLights = {
+                                    "fade_to_black0": { // copied from fade to black 2
+                                    "type": "cue",
+                                    "id": "11",
+                                    "level": 1.0,
+                                    "time": 0
+                                    },
+                                    "blue_breathing_perimeter": {
+                                    "type": "cue",
+                                    "id": "2", // not sure if this should be a string or float?
+                                    "level": 0.3,
+                                    "time": 60000
+                                    },
+                                    "red_fan_breathing": {
+                                    "type": "cue",
+                                    "id": "2.1",
+                                    "level": 0.3,
+                                    "time": 72000
+                                    },
+                                    "purple_fan_breathing": {
+                                    "type": "cue",
+                                    "id": "2.2",
+                                    "level": 0.3,
+                                    "time": 82000
+                                    },
+                                    "blue_fan_breathing_8count": {
+                                    "type": "cue",
+                                    "id": "2.3",
+                                    "level": 0.3,
+                                    "time": 92000
+                                    },
+                                    "blue_fan_breathing_5count": {
+                                    "type": "cue",
+                                    "id": "2.4",
+                                    "level": 0.3,
+                                    "time": 102000
+                                    },
+                                    "all_blue_breathing": {
+                                    "type": "cue",
+                                    "id": "2.5",
+                                    "level": 0.5,
+                                    "time": 110000
+                                    },
+                                    "fade_to_black1": {
+                                    "type": "cue",
+                                    "id": "3",
+                                    "level": 0.75,
+                                    "time": 120000
+                                    },
+                                    "river_showers": {
+                                    "type": "cue",
+                                    "id": "4",
+                                    "level": 0.75,
+                                    "time": 190000
+                                    },
+                                    "rivers_back_and_forth": {
+                                    "type": "cue",
+                                    "id": "4.1",
+                                    "level": 0.75,
+                                    "time": 204000
+                                    },
+                                    "river_heads": {
+                                    "type": "cue",
+                                    "id": "5",
+                                    "level": 0.75,
+                                    "time": 234000
+                                    },
+                                    "just_river_heads": {
+                                    "type": "cue",
+                                    "id": "5.1",
+                                    "level": 1.0,
+                                    "time": 250000
+                                    },
+                                    "grotto": {
+                                    "type": "cue",
+                                    "id": "6",
+                                    "level": 0.75,
+                                    "time": 300000
+                                    },
+                                    "all_grotto_breathing": {
+                                    "type": "cue",
+                                    "id": "6.1",
+                                    "level": 0.75,
+                                    "time": 315000
+                                    },
+                                    "grotto_and_river_breathing": {
+                                    "type": "cue",
+                                    "id": "7",
+                                    "level": 0.75,
+                                    "time": 372000
+                                    },
+                                    "all_lights_rolling": {
+                                    "type": "cue",
+                                    "id": "8",
+                                    "level": 0.75,
+                                    "time": 396000
+                                    },
+                                    "climax1": {
+                                    "type": "cue",
+                                    "id": "9",
+                                    "level": 1.0,
+                                    "time": 520000
+                                    },
+                                    "climax2": {
+                                    "type": "cue",
+                                    "id": "9.1",
+                                    "level": 1.0,
+                                    "time": 525000
+                                    },
+                                    "climax3": {
+                                    "type": "cue",
+                                    "id": "9.2",
+                                    "level": 1.0,
+                                    "time": 532000
+                                    },
+                                    "step_down1": {
+                                    "type": "cue",
+                                    "id": "9.3",
+                                    "level": 1.0,
+                                    "time": 535000
+                                    },
+                                    "step_down2": {
+                                    "type": "cue",
+                                    "id": "9.4",
+                                    "level": 1.0,
+                                    "time": 540000
+                                    },
+                                    "recapitulation": {
+                                    "type": "cue",
+                                    "id": "10",
+                                    "level": 1.0,
+                                    "time": 550000
+                                    },
+                                    "purple_fan_breath": {
+                                    "type": "cue",
+                                    "id": "10.1",
+                                    "level": 1.0,
+                                    "time": 560000
+                                    },
+                                    "red_fan_breath": {
+                                    "type": "cue",
+                                    "id": "10.2",
+                                    "level": 1.0,
+                                    "time": 570000
+                                    },
+                                    "blue_fan_breath": {
+                                    "type": "cue",
+                                    "id": "10.3",
+                                    "level": 1.0,
+                                    "time": 575000
+                                    },
+                                    "fade_to_black2": {
+                                    "type": "cue",
+                                    "id": "11",
+                                    "level": 1.0,
+                                    "time": 580000
+                                    },
+                                    "walk_out_look": {
+                                    "type": "cue",
+                                    "id": "12",
+                                    "level": 1.0,
+                                    "time": 583000
+                                    },                                                                                        
+                            }
+
+    
+    async function triggerScene(id){
+        console.log(date + 'triggering Scene' + id);
+        socket.emit("behaviourScene",id)
+        document.getElementById("lastScene").innerHTML = ("Last Scene Triggered: " + id);
+        var buttons = document.getElementsByTagName('button');
+        if (useSensorsON.includes(id)){
+            socket.emit('gestureToggle', true);
+        }
+        else {
+            socket.emit('gestureToggle', false);
+        }
+    }
+
+
+    async function triggerPerformance(id){
+        clearActiveTimeouts();
+        console.log(date + 'triggering performance' + id);
+        if (id == '8_min'){
+            for (let scene in performance8MinScenes){
+                var timeoutID = setTimeout(function() {triggerScene(scene);}, performance8MinScenes[scene]);
+                timeoutIDs.push(timeoutID);
+                if (useSensorsON.includes(scene)){
+                    timeoutID = setTimeout(function() {socket.emit('gestureToggle', true);}, performance8MinScenes[scene]);
+                    timeoutIDs.push(timeoutID);
+                }
+                else { 
+                    timeoutID = setTimeout(function() {socket.emit('gestureToggle', false);}, performance8MinScenes[scene]);
+                    timeoutIDs.push(timeoutID);
+                }
+            }
+            for (let soundCue in performance8MinSounds){
+                var timeoutID = setTimeout(function() {toggleSoundFile(performance8MinSounds[soundCue].track);}, performance8MinSounds[soundCue].time);
+                timeoutIDs.push(timeoutID);
+            }
+            for (let lightCue in performance8MinLights){
+                var timeoutID = setTimeout(function() {triggerLightGesture(performance8MinLights[lightCue]);}, performance8MinLights[lightCue].time);
+                timeoutIDs.push(timeoutID);
+            }
+        }
+    }
+
+    async function triggerLightGesture(gesture){
+        socket.emit('triggerLightGesture', gesture);
+    }
+    
+    async function cancelPerformance(){
+        clearActiveTimeouts();
+        toggleSoundFile('Track8Min');
+    }
+
+    async function clearActiveTimeouts(){
+        console.log(date + 'clearing active timeouts');
+        for(t in timeoutIDs){
+            clearTimeout(timeoutIDs[t]);
+        }
+        timeoutIDs.splice(0); // deletes all the elements of the array
+        triggerScene(backgroundScene);
+        triggerLightGesture(performance8MinLights[backgroundLight]);
+    }
+
+    async function toggleSoundFile(file){
+        console.log(date + 'toggling sound file: ' + file);
+        socket.emit('toggleSoundFile', file);
+    }
+
+    // async function turnOffSoundFiles(){
+    //     console.log(date + 'turning off any active sound files');
+    //     socket.emit('turnOffSoundFiles');
+    // }
+
+
+    //sleep function
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+
+</script> 
