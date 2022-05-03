@@ -1,0 +1,12 @@
+
+*.pyc
+
+pl/__pycache__/
+
+.idea/
+
+checkpoint.pt
+
+*.mp4
+
+*.sqlite3

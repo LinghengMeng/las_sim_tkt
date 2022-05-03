@@ -1,0 +1,43 @@
+{% extends "./base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="jumbotron text-center">
+    <h2>Thanks for participating our survey!  </h2>
+    <h3>Your feedback is extremely valuable. You provided {{provided_preference_label_num}} preference labels in total!</h3>
+    <h3>You can choose to participate in another part of the study
+        <a href="/survey_consent" ><span class="glyphicon glyphicon-hand-pointing-right"></span> <img src="{% static 'app_teacher_preference/images/click-hand-icon.png' %}" class="img-rounded" style="width:42px;height:42px;">Interactive Experience Survey</a>, which will take you approximately another 3 minutes.
+        Otherwise, You will be redirected to the homepage after <span id="countdown">20</span>s.</h3>
+</div>
+<div >
+    <p>This study has been reviewed and received ethics clearance through a University of Waterloo Research Ethics Committee (ORE#42436).
+    If you have questions for the Committee contact the Office of Research Ethics, at 1-519-888-4567 ext. 36005 or ore-ceo@uwaterloo.ca. </p>
+
+    <p>For all other questions or if you have general comments or questions related to this study, please contact:
+    <ul class="list-group">
+      <li class="list-group-item">Lingheng Meng, Electrical and Computer Engineering, lingheng.meng@uwaterloo.ca</li>
+      <li class="list-group-item">Dr. Dana Kulić,  Electrical and Computer Engineering, dkulic@uwaterloo.ca</li>
+      <li class="list-group-item">Dr. Rob Gorbet, Knowledge Integration, rbgorbet@uwaterloo.ca</li>
+    </ul>
+</div>
+
+<!-- JavaScript part -->
+    <script type="text/javascript">
+        // Total seconds to wait
+        var seconds = 20;
+        function countdown() {
+            seconds = seconds - 1;
+            if (seconds < 0) {
+                // Chnage your redirection link here
+                window.location = "/index";
+            } else {
+                // Update remaining seconds
+                document.getElementById("countdown").innerHTML = seconds;
+                // Count down using javascript
+                window.setTimeout("countdown()", 1000);
+            }
+        }
+        // Run countdown function
+        countdown();
+    </script>
+{% endblock %}

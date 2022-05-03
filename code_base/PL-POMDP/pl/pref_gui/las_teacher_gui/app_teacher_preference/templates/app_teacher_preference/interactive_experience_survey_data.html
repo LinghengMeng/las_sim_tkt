@@ -1,0 +1,374 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <div class="jumbotron text-center" style="padding-top: 4px; margin-top: 5px;">
+        <h2> Welcome Dear Participant: </h2>
+        <div class="alert alert-info text-center">
+            <h4><strong>Tip!</strong> For better visualization on small screen, please use portrait orientation.</h4>
+            The survey is anonymous, so please feel free to answer these questions honestly.
+        </div>
+    </div>
+
+    <form action={% url 'interactive_experience_survey_thanks'%} method="post"  id="consent_form">
+        {% csrf_token %}
+        <h3>Approximate time of your interaction with the sculpture:</h3>
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <div class="col-xs-4">
+                                <label for="experience_date">Date:</label>
+                                <input type="date" id="participant_experience_date" name="experience_date" value="{{current_date}}" max="{{current_date}}">
+                            </div>
+                            <div class="col-xs-4">
+                                <label for="experience_start_time">Start time:</label>
+                                <input type="time" style="width:135px" id="participant_experience_start_time" name="experience_start_time">
+                            </div>
+                            <div class="col-xs-4">
+                                <label for="experience_end_time">End time:</label>
+                                <input type="time" style="width:135px" id="participant_experience_end_time" name="experience_end_time">
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+
+        <div class="form-group">
+            <div class="alert alert-info text-center">
+                <h3><strong>Info!</strong> Please answer the following questions based on your experience with the sculpture.</h3>
+            </div>
+            <h4>Please rate your impression of the sculpture on these scales:</h4>
+            <table>
+            <tbody>
+            {% load djutils %}
+            {% for q_index, question in random_ordered_godspeed_questions.items %}
+                {% with question|split:"-" as question_tuple %}
+                <tr>
+                    <td>
+                        <div class="row">
+                            <div class="col-xs-12 text-center text-middle">
+                                    <label style="margin-right: .5em; font-weight: normal; vertical-align: top; text-align: right; width: 100px;"><strong>{{ question_tuple.1 }}</strong></label>
+                                    <label style="margin-right: .5em; font-weight: normal;"><input type="radio" name="{{ question_tuple.0.split|join:"_" }}_{{ question_tuple.1.split|join:"_" }}_{{ question_tuple.2.split|join:"_" }}" style="display: block; margin: 0 auto;" value="1"/>1</label>
+                                    <label style="margin-left: .5em; margin-right: .5em; font-weight: normal;"><input type="radio" name="{{ question_tuple.0.split|join:"_" }}_{{ question_tuple.1.split|join:"_" }}_{{ question_tuple.2.split|join:"_" }}" style="display: block; margin: 0 auto;" value="2" />2</label>
+                                    <label style="margin-left: .5em; margin-right: .5em; font-weight: normal;"><input type="radio" name="{{ question_tuple.0.split|join:"_" }}_{{ question_tuple.1.split|join:"_" }}_{{ question_tuple.2.split|join:"_" }}" style="display: block; margin: 0 auto;" value="3" />3</label>
+                                    <label style="margin-left: .5em; margin-right: .5em; font-weight: normal;"><input type="radio" name="{{ question_tuple.0.split|join:"_" }}_{{ question_tuple.1.split|join:"_" }}_{{ question_tuple.2.split|join:"_" }}" style="display: block; margin: 0 auto;" value="4" />4</label>
+                                    <label style="margin-left: .5em; font-weight: normal;"><input type="radio" name="{{ question_tuple.0.split|join:"_" }}_{{ question_tuple.1.split|join:"_" }}_{{ question_tuple.2.split|join:"_" }}" style="display: block; margin: 0 auto;" value="5" />5</label>
+                                    <label style="margin-left: .5em; font-weight: normal; vertical-align: top; text-align: left; width: 100px;"><strong>{{ question_tuple.2 }}</strong></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endwith %}
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class="form-group">
+            <h3>Please rate your experience with the sculpture on these scales:</h3>
+            <table>
+            <tbody>
+            {% load djutils %}
+            {% for q_index, question in random_ordered_incentives_questions.items %}
+                <tr>
+                    <td>
+                        <p>{{question}}</p>
+                        <div class="row">
+                            <div class="col-xs-12 text-center text-top">
+                                <label style="margin-right: .5em; font-weight: normal; vertical-align: top; text-align: right; width: 100px;"><strong>Not at all</strong></label>
+                                {% for i in 10_Likert_scale %}
+                                    <label style="margin-left: .5em; margin-right: .5em; vertical-align: top; font-weight: normal;"><input type="radio" name="{{q_index}}" style="display: block; margin: 0 auto;" value="{{i}}" />{{i}}</label>
+                                {% endfor %}
+                                <label style="margin-left: .5em; font-weight: normal; vertical-align: top; text-align: left; width: 100px;"><strong>Definitely</strong></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class="form-group">
+            <h3>How confident are you that you can do the following with this sculpture:</h3>
+            <table>
+            <tbody>
+            {% load djutils %}
+            {% for q_index, question in random_ordered_self_efficacy_questions.items %}
+                <tr>
+                    <td>
+                        <p>{{question}}</p>
+                        <div class="row">
+                            <div class="col-xs-12 text-center text-top">
+                                <label style="margin-right: .5em; font-weight: normal; vertical-align: top; text-align: right; width: 100px;"><strong>Sure I can’t</strong></label>
+                                {% for i in 10_Likert_scale %}
+                                    <label style="margin-left: .5em; margin-right: .5em; vertical-align: top; font-weight: normal;"><input type="radio" name="{{q_index}}" style="display: block; margin: 0 auto;" value="{{i}}" />{{i}}</label>
+                                {% endfor %}
+                                <label style="margin-left: .5em; font-weight: normal; vertical-align: top; text-align: left; width: 100px;"><strong>Sure I can</strong></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class="form-group">
+            <h3>If this sculpture was readily available…</h3>
+            <table>
+            <tbody>
+            {% load djutils %}
+            {% for q_index, question in random_ordered_usage_intention_questions.items %}
+                <tr>
+                    <td>
+                        <p>{{question}}</p>
+                        <div class="row">
+                            <div class="col-xs-12 text-center text-top">
+                                <label style="margin-right: .5em; font-weight: normal; vertical-align: top; text-align: right; width: 100px;"><strong>Not at all</strong></label>
+                                {% for i in 10_Likert_scale %}
+                                    <label style="margin-left: .5em; margin-right: .5em; vertical-align: top; font-weight: normal;"><input type="radio" name="{{q_index}}" style="display: block; margin: 0 auto;" value="{{i}}" />{{i}}</label>
+                                {% endfor %}
+                                <label style="margin-left: .5em; font-weight: normal; vertical-align: top; text-align: left; width: 100px;"><strong>Definitely</strong></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class="form-group">
+            <label for="comment">If you have any additional comments about your interactions with the sculpture please provide them below.</label>
+            <textarea class="form-control" rows="5" id="comment" name="participant_general_comments" placeholder="Feel free to enter any comment you would like us to know"></textarea>
+        </div>
+        <hr>
+        <h3>Demographic Data</h3>
+        <p>Demographic data will be used to analyze the relationship between the participants' perception of the sculpture and their social characteristics,
+            e.g. educational background.</p>
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <label for="participant_age" class="col-sm-3 text-right" >What is your age in years? </label>
+                            <div class="col-sm-5">
+                                <label class="radio-inline">
+<!--                                    <input type="radio" name="participant_age" id="participant_age_input_radio" value="18_20" >18-20-->
+<!--                                    <input type="radio" name="participant_age" id="participant_age_input_radio" value="21_29" >21-29-->
+<!--                                    <input type="radio" name="participant_age" id="participant_age_input_radio" value="30_39" >30-39-->
+<!--                                    <input type="radio" name="participant_age" id="participant_age_input_radio" value="40_49" >40-49-->
+<!--                                    <input type="radio" name="participant_age" id="participant_age_input_radio" value="50_59" > 50-59-->
+<!--                                    <input type="radio" name="participant_age" id="participant_age_input_radio" value="60_or_older" > 60 or older-->
+                                    <input type="radio" name="participant_age" id="participant_age_input_radio" value="" >Please specify:
+                                    <input type="text" name="participant_age_input_text" id="participant_age_input_text" value="" onclick="checkAgeRadioBtn();" onchange="addAgeValueToRadioBtn();"/>
+                                </label>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="radio-inline">
+                                    <input type="radio" name="participant_age" id="participant_age_not_answer" value="prefer not to answer" onclick="checkAgeNotToAnswerBtn();">I prefer not to answer.
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <label for="participant_gender" class="col-sm-3 text-right" >How do you currently describe your gender identity?</label>
+                            <div class="col-sm-5">
+                                <label class="radio-inline">
+                                    <input type="radio" name="participant_gender" id="participant_gender_input_radio" value="" >Please specify:
+                                    <input type="text" name="participant_gender_input_text" id="participant_gender_input_text" value="" onclick="checkGenderRadioBtn();" onchange="addGenderValueToRadioBtn();"/>
+                                </label>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="radio-inline">
+                                    <input type="radio" name="participant_gender" id="participant_gender_not_answer" value="prefer not to answer" onclick="checkGenderNotToAnswerBtn();">I prefer not to answer.
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <label for="participant_edu_bg" class="col-sm-3 text-right" >What is your educational background? Select all that apply to you:</label>
+                            <div class="col-sm-5">
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="participant_edu_bg_1" value="Arts & Humanities">Arts & Humanities</label>
+                                </div>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="participant_edu_bg_2" value="Engineering & Technology">Engineering & Technology</label>
+                                </div>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="participant_edu_bg_3" value="Natural Sciences">Natural Sciences</label>
+                                </div>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="participant_edu_bg_4" value="Social Sciences">Social Sciences</label>
+                                </div>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="participant_edu_bg_5" value="Business & Economics">Business & Economics</label>
+                                </div>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="participant_edu_bg_6" value="Health">Health</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" name="participant_edu_bg_7" id="participant_edu_bg_input_checkbox" onchange="clearTextWhenUncheck();" >Other, please specify:</label>
+                                    <input type="text" name="" id="participant_edu_bg_input_text" onclick="checkEduGBValueToCheckboxBtn();" onchange="addEduGBValueToCheckboxBtn();"/>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <label for="participant_prior_exp_robot" class="col-sm-3 text-right" >Do you have any experience with robots?</label>
+                            <div class="col-sm-8">
+                                <label class="radio-inline">
+                                    <input type="radio" name="participant_prior_exp_robot" id="participant_prior_exp_robot_yes_radio" value="Yes" >Yes. If yes, when
+                                    <input type="text"  id="participant_prior_exp_robot_when" value="" onclick="checkPriorExpRobotRadioBtn();" onchange="addPriorExpRobotWhenToRadioBtn();"/>
+                                    and where
+                                    <input type="text" id="participant_prior_exp_robot_where" value="" onclick="checkPriorExpRobotRadioBtn();" onchange="addPriorExpRobotWhereToRadioBtn();"/>
+                                </label>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="radio-inline">
+                                    <input type="radio" name="participant_prior_exp_robot" id="participant_prior_exp_robot_no_radio" value="No" onclick="checkNoPriorExpRobotRadioBtn();" >No.
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <label for="participant_prior_exp_interactive_art" class="col-sm-3 text-right" >Do you have any experience with interactive art?</label>
+                            <div class="col-sm-8">
+                                <label class="radio-inline">
+                                    <input type="radio" name="participant_prior_exp_interactive_art" id="participant_prior_exp_interactive_art_yes_radio" value="Yes" >Yes. If yes, when
+                                    <input type="text" id="participant_prior_exp_interactive_art_when" value="" onclick="checkPriorExpInteractiveArtRadioBtn();" onchange="addPriorExpInteractiveArtWhenToRadioBtn();"/>
+                                    and where
+                                    <input type="text" id="participant_prior_exp_interactive_art_where" value="" onclick="checkPriorExpInteractiveArtRadioBtn();" onchange="addPriorExpInteractiveArtWhereToRadioBtn();"/>
+                                </label>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="radio-inline">
+                                    <input type="radio" name="participant_prior_exp_interactive_art" id="participant_prior_exp_interactive_art_no_radio" value="No" onclick="checkNoPriorExpInteractiveArtRadioBtn();">No.
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <label for="participant_perceive_interactive_art_as_robot" class="col-sm-3 text-right" >Do you perceive interactive art as a type of robot?</label>
+                            <div class="col-sm-4">
+                                <label class="radio-inline">
+                                    <input type="radio" name="participant_perceive_interactive_art_as_robot"  value="Yes" >Yes.
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="participant_perceive_interactive_art_as_robot" value="No">No.
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr>
+        <input id="consent_anonymous_quotations" name="consent_anonymous_quotations" type="hidden" value={{ consent_anonymous_quotations }}>
+        <div class="text-center"><button type="submit" class="btn btn-primary btn-lg" onclick="checkNull()">Submit Survey</button></div>
+        <br>
+    </form>
+
+<script type="text/javascript">
+    // Age
+    function checkAgeRadioBtn(){
+        document.getElementById("participant_age_input_radio").checked = true;
+    }
+    function addAgeValueToRadioBtn(){
+        if (document.getElementById("participant_age_input_radio").checked == true){
+            document.getElementById("participant_age_input_radio").value = document.getElementById("participant_age_input_text").value;
+        }
+    }
+    function checkAgeNotToAnswerBtn(){
+        document.getElementById("participant_age_input_text").value = "";
+    }
+    // Gender
+    function checkGenderRadioBtn(){
+        document.getElementById("participant_gender_input_radio").checked = true;
+    }
+    function addGenderValueToRadioBtn(){
+        if (document.getElementById("participant_gender_input_radio").checked == true){
+            document.getElementById("participant_gender_input_radio").value = document.getElementById("participant_gender_input_text").value;
+        }
+    }
+    function checkGenderNotToAnswerBtn(){
+        document.getElementById("participant_gender_input_text").value = "";
+    }
+    // Education background
+    function checkEduGBValueToCheckboxBtn(){
+        document.getElementById("participant_edu_bg_input_checkbox").checked = true;
+    }
+    function addEduGBValueToCheckboxBtn(){
+        if (document.getElementById("participant_edu_bg_input_checkbox").checked == true){
+            document.getElementById("participant_edu_bg_input_checkbox").value = document.getElementById("participant_edu_bg_input_text").value;
+        }
+    }
+    function clearTextWhenUncheck(){
+        if (document.getElementById("participant_edu_bg_input_checkbox").checked != true){
+            document.getElementById("participant_edu_bg_input_text").value = "";
+        }
+    }
+    // Prior experience with robot
+    function checkPriorExpRobotRadioBtn(){
+        document.getElementById("participant_prior_exp_robot_yes_radio").checked = true;
+    }
+    function addPriorExpRobotWhenToRadioBtn(){
+        if (document.getElementById("participant_prior_exp_robot_yes_radio").checked == true){
+            document.getElementById("participant_prior_exp_robot_yes_radio").value += "_" + document.getElementById("participant_prior_exp_robot_when").value;
+        }
+    }
+    function addPriorExpRobotWhereToRadioBtn(){
+        if (document.getElementById("participant_prior_exp_robot_yes_radio").checked == true){
+            document.getElementById("participant_prior_exp_robot_yes_radio").value += "_" + document.getElementById("participant_prior_exp_robot_where").value;
+        }
+    }
+    function checkNoPriorExpRobotRadioBtn(){
+        document.getElementById("participant_prior_exp_robot_yes_radio").value = "Yes";
+        document.getElementById("participant_prior_exp_robot_when").value = "";
+        document.getElementById("participant_prior_exp_robot_where").value = "";
+    }
+    // Prior experience with interactive robot
+    function checkPriorExpInteractiveArtRadioBtn(){
+        document.getElementById("participant_prior_exp_interactive_art_yes_radio").checked = true;
+    }
+    function addPriorExpInteractiveArtWhenToRadioBtn(){
+        if (document.getElementById("participant_prior_exp_interactive_art_yes_radio").checked == true){
+            document.getElementById("participant_prior_exp_interactive_art_yes_radio").value += "_" + document.getElementById("participant_prior_exp_interactive_art_when").value;
+        }
+    }
+    function addPriorExpInteractiveArtWhereToRadioBtn(){
+        if (document.getElementById("participant_prior_exp_interactive_art_yes_radio").checked == true){
+            document.getElementById("participant_prior_exp_interactive_art_yes_radio").value += "_" + document.getElementById("participant_prior_exp_interactive_art_where").value;
+        }
+    }
+    function checkNoPriorExpInteractiveArtRadioBtn(){
+        document.getElementById("participant_prior_exp_interactive_art_yes_radio").value = "Yes";
+        document.getElementById("participant_prior_exp_interactive_art_when").value = "";
+        document.getElementById("participant_prior_exp_interactive_art_where").value = "";
+    }
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+    <div class="container col-xs-12" >
+        <div class="jumbotron">
+            <h3 align="center">Preference Teaching Interface</h3>
+            <h5 class="text-left">Below is a preference teaching interface that the researchers are using to collect human preference.
+                Please choose the video clip where you think that the sculpture's behaviour is more engaging.
+                Another pair of video clips will automatically show up, after you compared the current pair by clicking one of the Five buttons under the
+                video clips. You can compare as many pairs of video clips as you like.
+                When you are ready to answer the survey questions about your experience with this interface click <em><strong>Go To Survey</strong></em> button.</h5>
+        </div>
+        <div class="alert alert-info text-left" role="alert">
+            <p align="left"><strong>Tips!</strong> <br>
+                <ul>
+                    <li>For better visualization on small screen, please pivot your cellphone.</li>
+                    <li>If no response when you click a button, click that button again. Refresh this page, if an error popped up.</li>
+                </ul>
+            </p>
+        </div>
+    </div>
+
+    <div class="container ">
+
+        <div class="row text-center col-xs-12">
+
+            <h5 style="color:#000000;" align="center">You have compared <strong> {{ provided_preference_label_num }} </strong> pairs of video clips.</h5>
+            <div class="col-xs-6 text-center">
+                <h3>Left</h3>
+                {% if ".mp4" in video_clip_1.video_clip_url %}
+                    <video width="100%" autoplay loop  playsinline controls>
+                        <source src="{{ video_clip_1.video_clip_url }}" type="video/mp4">
+                    </video>
+                {% else %}
+                    <img style="width:400px" src="{{ video_clip_1.video_clip_url }}">
+                {% endif %}
+            </div>
+
+            <div class="col-xs-6 text-center">
+                <h3>Right</h3>
+                {% if ".mp4" in video_clip_2.video_clip_url %}
+                    <video width="100%" autoplay loop  playsinline controls>
+                        <source src="{{ video_clip_2.video_clip_url  }}" type="video/mp4">
+                    </video>
+                {% else %}
+                    <img style="width:400px" src="{{ video_clip_2.video_clip_url }}">
+                {% endif %}
+            </div>
+        </div> <!-- row -->
+
+        <form style="padding-top:50px" action="{% url 'teach_data_collect' %}" method="post">
+        {% csrf_token %}
+            <input type="hidden" name="teacher_id" value="{{ teacher.id }}">
+            <input type="hidden" name="video_clip_1_id" value="{{ video_clip_1.id }}">
+            <input type="hidden" name="video_clip_2_id" value="{{ video_clip_2.id }}">
+            <input type="hidden" name="labeling_start_time" value="{{ labeling_start_time }}">
+            <div class="row">
+                <div class="col-xs-6 text-center align-items-center">
+                    <input class="btn btn-default choice-left" type="submit" name="preference_label_btn" value="Left is better">
+                </div>
+
+                <div class="col-xs-6 text-center align-items-center" >
+                    <input class="btn btn-default choice-right" type="submit" name="preference_label_btn" value="Right is better">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4 text-right align-items-center">
+                        <button class="btn btn-default" type="submit" name="preference_label_btn" value="Can't tell, equally good!">Equally good! </button>
+                </div>
+                <div class="col-xs-4 text-center align-items-center">
+                        <button class="btn btn-default" type="submit" name="preference_label_btn" value="Can't tell, equally so-so!">Equally so-so! </button>
+                </div>
+                <div class="col-xs-4 text-left align-items-center">
+                        <button class="btn btn-default" type="submit" name="preference_label_btn" value="Can't tell, equally bad!">Equally bad! </i></button>
+                </div>
+            </div>
+<!--            <div class="row">-->
+<!--                <div class="col-xs-4 text-right align-items-center">-->
+<!--                        <button class="btn btn-default" type="submit" name="preference_label_btn" value="Can't tell, equally good!">Can't tell, equally good! </button>-->
+<!--                </div>-->
+<!--                <div class="col-xs-4 text-center align-items-center">-->
+<!--                        <button class="btn btn-default" type="submit" name="preference_label_btn" value="Can't tell, equally so-so!">Can't tell, equally so-so! </button>-->
+<!--                </div>-->
+<!--                <div class="col-xs-4 text-left align-items-center">-->
+<!--                        <button class="btn btn-default" type="submit" name="preference_label_btn" value="Can't tell, equally bad!">Can't tell, equally bad! </i></button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="row">-->
+<!--                <div class="col-xs-4 text-right align-items-center">-->
+<!--                </div>-->
+<!--                <div class="col-xs-4 text-center align-items-center">-->
+<!--                    <button class="btn btn-default" type="submit" name="preference_label_btn" value="Can't tell, equally bad!">Can't tell, equally bad! </i></button>-->
+<!--                </div>-->
+<!--                <div class="col-xs-4 text-left align-items-center">-->
+<!--                </div>-->
+<!--            </div>-->
+        </form>
+        
+        <div style="text-align:center">
+            <form action="{% url 'teach_questionnaire' %}" style="padding-top:30px; padding-bottom: 30px" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="teacher_id" value="{{ teacher.id }}">
+                <input type="hidden" name="video_clip_1_id" value="{{ video_clip_1.id }}">
+                <input type="hidden" name="video_clip_2_id" value="{{ video_clip_2.id }}">
+                <input type="submit" class="btn btn-lg btn-danger" value="Go To Survey">
+            </form>
+        </div>
+
+
+    </div>
+{% endblock %}

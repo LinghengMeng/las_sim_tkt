@@ -1,0 +1,18 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block content %}
+<!--    <div class="jumbotron text-center" style="margin-top: 10px; background-image: url({% static 'app_teacher_preference/images/banner-for-web.jpg' %}) ; background-size: cover; background-position: center 60%; height: 400px;">-->
+<!--        <a href="http://livingarchitecturesystems.com/" >-->
+<!--            <img src="{% static 'app_teacher_preference/images/Capture.PNG' %}" class="img-rounded" width="30%">-->
+<!--        </a>-->
+<!--        <h1>LAS Teacher</h1>-->
+<!--    </div>-->
+    <div class="row">
+        <div class="col-sm-12" >
+            <iframe src="{% static 'app_teacher_preference/pdfs/Information_Letter_General_Visitor_Participant.pdf'%} "
+                    frameBorder="0" scrolling="auto" height="800px" width="100%">
+            </iframe>
+        </div>
+    </div>
+{% endblock %}

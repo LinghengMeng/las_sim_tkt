@@ -1,0 +1,184 @@
+{% extends "./base.html" %}
+{% load static %}
+<script>
+
+</script>
+{% block content %}
+    <div class="jumbotron text-center">
+        <h3>Thanks for participating in our research. Please provide the following anonymous information and proceed. </h3>
+    </div>
+    <form action="{% url 'teach_data' %}" method="post"  id="consent_form">
+        {% csrf_token %}
+        <h3>Demographic Data</h3>
+        <p>Demographic data will be used to analyze the relationship between the participants' answer and their social characteristics,
+            e.g. educational background.</p>
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <label for="teacher_age" class="col-sm-3 text-right" >What is your age in years? </label>
+                            <div class="col-sm-5">
+                                <label class="radio-inline">
+                                    <input type="radio" name="teacher_age" id="teacher_age_input_radio" value="" >Please specify:
+                                    <input type="text" name="teacher_age_input_text" id="teacher_age_input_text" value="" onclick="checkAgeRadioBtn();" onchange="addAgeValueToRadioBtn();"/>
+                                </label>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="radio-inline">
+                                    <input type="radio" name="teacher_age" id="teacher_age_not_answer" value="prefer not to answer" onclick="checkAgeNotToAnswerBtn();">I prefer not to answer.
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <label for="teacher_gender" class="col-sm-3 text-right" >How do you currently describe your gender identity?</label>
+                            <div class="col-sm-5">
+                                <label class="radio-inline">
+                                    <input type="radio" name="teacher_gender" id="teacher_gender_input_radio" value="" >Please specify:
+                                    <input type="text" name="teacher_gender_input_text" id="teacher_gender_input_text" value="" onclick="checkGenderRadioBtn();" onchange="addGenderValueToRadioBtn();"/>
+                                </label>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="radio-inline">
+                                    <input type="radio" name="teacher_gender" id="teacher_gender_not_answer" value="prefer not to answer" onclick="checkGenderNotToAnswerBtn();">I prefer not to answer.
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <label for="teacher_edu_bg" class="col-sm-3 text-right" >What is your educational background? Select all that apply to you:</label>
+                            <div class="col-sm-5">
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="teacher_edu_bg_1" value="Arts & Humanities">Arts & Humanities</label>
+                                </div>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="teacher_edu_bg_2" value="Engineering & Technology">Engineering & Technology</label>
+                                </div>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="teacher_edu_bg_3" value="Natural Sciences">Natural Sciences</label>
+                                </div>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="teacher_edu_bg_4" value="Social Sciences">Social Sciences</label>
+                                </div>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="teacher_edu_bg_5" value="Business & Economics">Business & Economics</label>
+                                </div>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="teacher_edu_bg_6" value="Health">Health</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" name="teacher_edu_bg_7" id="teacher_edu_bg_input_checkbox" onchange="clearTextWhenUncheck();" >Other, please specify:</label>
+                                    <input type="text" name="" id="teacher_edu_bg_input_text" onclick="checkEduGBValueToCheckboxBtn();" onchange="addEduGBValueToCheckboxBtn();"/>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Date of the interaction you have with the sculpture:</h3>
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <label for="teacher_experienced_the_installation" class="col-sm-4 text-right" >Have you interacted with the sculpture:</label>
+                            <div class="col-sm-8">
+                                <label class="radio-inline"><input type="radio" onclick="Check();" id="teacher_experienced_the_installation_yesCheck" required="required" name="teacher_experienced_the_installation" value=1 >Yes</label>
+                                <label class="radio-inline"><input type="radio" onclick="Check();" name="teacher_experienced_the_installation" required="required" value=0 >No</label>
+                            </div>
+                        </div>
+                        <div id="experience_time_div" style="display:none" >
+                            <label class="col-sm-12">If yes, what is the approximate time of your interaction?</label><br>
+                            <div class="col-xs-4">
+                                <label for="teacher_experience_date" class="col-sm-4 text-right">Date:</label>
+                                <div class="col-sm-8">
+                                    <input type="date" id="teacher_experience_date" name="teacher_experience_date" value="{{current_date}}" max="{{current_date}}">
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <label for="teacher_experience_start_time" class="col-sm-4 text-right" >Start time:</label>
+                                <div class="col-sm-8">
+                                    <input type="time" style="width:135px" id="teacher_experience_start_time" name="teacher_experience_start_time" >
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <label for="teacher_experience_end_time" class="col-sm-4 text-right" >End time:</label>
+                                <div class="col-sm-8">
+                                    <input type="time" style="width:135px" id="teacher_experience_end_time" name="teacher_experience_end_time" >
+                                </div>
+                            </div>
+                        </div>
+                   </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr>
+        <div class="text-center">
+            <input id="consent_anonymous_quotations" name="consent_anonymous_quotations" type="hidden" value={{ consent_anonymous_quotations }}>
+            <button type="submit" class="btn btn-primary btn-lg">Start Teaching</button>
+        </div>
+        <br>
+    </form>
+
+<script type="text/javascript">
+    // Age
+    function checkAgeRadioBtn(){
+        document.getElementById("teacher_age_input_radio").checked = true;
+    }
+    function addAgeValueToRadioBtn(){
+        if (document.getElementById("teacher_age_input_radio").checked == true){
+            document.getElementById("teacher_age_input_radio").value = document.getElementById("teacher_age_input_text").value;
+        }
+    }
+    function checkAgeNotToAnswerBtn(){
+        document.getElementById("teacher_age_input_text").value = "";
+    }
+    // Gender
+    function checkGenderRadioBtn(){
+        document.getElementById("teacher_gender_input_radio").checked = true;
+    }
+    function addGenderValueToRadioBtn(){
+        if (document.getElementById("teacher_gender_input_radio").checked == true){
+            document.getElementById("teacher_gender_input_radio").value = document.getElementById("teacher_gender_input_text").value;
+        }
+    }
+    function checkGenderNotToAnswerBtn(){
+        document.getElementById("teacher_gender_input_text").value = "";
+    }
+    // Education background
+    function checkEduGBValueToCheckboxBtn(){
+        document.getElementById("teacher_edu_bg_input_checkbox").checked = true;
+    }
+    function addEduGBValueToCheckboxBtn(){
+        if (document.getElementById("teacher_edu_bg_input_checkbox").checked == true){
+            document.getElementById("teacher_edu_bg_input_checkbox").value = document.getElementById("teacher_edu_bg_input_text").value;
+        }
+    }
+    function clearTextWhenUncheck(){
+        if (document.getElementById("teacher_edu_bg_input_checkbox").checked != true){
+            document.getElementById("teacher_edu_bg_input_text").value = "";
+        }
+    }
+    // Experience time
+    function Check() {
+        if (document.getElementById('teacher_experienced_the_installation_yesCheck').checked) {
+            document.getElementById('experience_time_div').style.display = 'block';
+        }
+        else {
+            document.getElementById('experience_time_div').style.display = 'none';
+       }
+    }
+
+</script>
+
+{% endblock %}
+

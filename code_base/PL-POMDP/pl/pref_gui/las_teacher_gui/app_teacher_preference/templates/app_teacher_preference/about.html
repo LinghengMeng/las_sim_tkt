@@ -1,0 +1,15 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="jumbotron text-center" style="margin-top: 10px; background-image: url({% static 'app_teacher_preference/images/banner-for-web.jpg' %}) ; background-size: cover; background-position: center 60%; height: 400px;">
+        <a href="http://livingarchitecturesystems.com/" target="_blank">
+            <img src="{% static 'app_teacher_preference/images/Capture.PNG' %}" class="img-rounded" width="30%">
+        </a>
+        <h2><strong>Generate Engaging Behavior from Human Preferences</strong></h2>
+    </div>
+    <div class="jumbotron text-center" >
+        <p>This research is a collaboration between <br>
+            <a href="https://uwaterloo.ca/adaptive-systems/" target="_blank">Adaptive Systems Lab</a> and <a href="http://livingarchitecturesystems.com/" target="_blank">Living Architecture System Group</a></p>
+    </div>
+{% endblock %}

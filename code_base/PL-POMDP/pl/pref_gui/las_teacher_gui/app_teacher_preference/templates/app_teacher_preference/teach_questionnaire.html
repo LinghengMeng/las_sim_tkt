@@ -1,0 +1,156 @@
+{% extends "./base.html" %}
+{% load static %}
+<style type="text/css">
+    input[type=radio] {
+        display: block;
+        margin: 0 auto;
+    }
+    label{
+        display: inline-block;
+        margin-left: 2.5em;
+    }
+</style>
+
+
+{% block content %}
+
+    <div class="jumbotron text-center" style="padding-top: 4px; margin-top: 5px; height: 100px;">
+        <h2> Welcome to the survey: </h2>
+    </div>
+
+    <form action={% url 'teach_thanks'%} method="post"  id="consent_form">
+        {% csrf_token %}
+        <div class="form-group">
+            <h3>Please answer the following questions about your experience with the preference teaching interface that
+                allows you to choose the video clip that you prefer:</h3>
+            <table>
+            <tbody>
+            {% load djutils %}
+            {% for q_index, question in random_ordered_system_usability_scale.items %}
+                <tr>
+                    <td>
+                        <p>{{question}}</p>
+                        <div class="row">
+                            <div class="col-xs-12 text-center text-top">
+                                <label style="margin-right: 0.5em; font-weight: normal; vertical-align: top; text-align: right; width: 120px;"><strong>Strongly Disagree</strong></label>
+                                {% for i in system_usability_scale_likert_scale %}
+                                    <label style="margin-left: 0.5em; margin-right: 0.5em; vertical-align: top; font-weight: normal;"><input type="radio" name="{{q_index}}" style="display: block; margin: 0 auto;" value="{{i}}" />{{i}}</label>
+                                {% endfor %}
+                                <label style="margin-left: 0.5em; font-weight: normal; vertical-align: top; text-align: left; width: 120px;"><strong>Strongly Agree</strong></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class="form-group">
+            <h3>Please rate your feeling of teaching the sculpture how to engage through the interface on these scales:</h3>
+            <table>
+            <tbody>
+            {% load djutils %}
+            {% for q_index, question in random_ordered_custom_questions.items %}
+                <tr>
+                    <td>
+                        <p>{{question}}</p>
+                        <div class="row">
+                            <div class="col-xs-12 text-center text-top">
+                                <label style="margin-right: 0.5em; font-weight: normal; vertical-align: top; text-align: right; width: 120px;"><strong>Strongly Disagree</strong></label>
+                                {% for i in custom_questions_likert_scale %}
+                                    <label style="margin-left: 0.5em; margin-right: 0.5em; vertical-align: top; font-weight: normal;"><input type="radio" name="{{q_index}}" style="display: block; margin: 0 auto;" value="{{i}}" />{{i}}</label>
+                                {% endfor %}
+                                <label style="margin-left: 0.5em; font-weight: normal; vertical-align: top; text-align: left; width: 120px;"><strong>Strongly Agree</strong></label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        <hr>
+
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <h4>What do you think is the best way to teach an interactive system engaging behavior?</h4>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="best_way_to_teach_1" value="Arts & Humanities">Selecting from alternatives (as in this system)</label>
+                                </div>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="best_way_to_teach_2" value="Engineering & Technology">Correcting  the sculpture’s Actions</label>
+                                </div>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="best_way_to_teach_3" value="Natural Sciences">Demonstrating actions for the sculpture</label>
+                                </div>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="best_way_to_teach_4" value="Social Sciences">Programming the sculpture</label>
+                                </div>
+                                <div class="checkbox">
+                                  <label><input type="checkbox" name="best_way_to_teach_5" value="Business & Economics">Combination of the above options</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" name="best_way_to_teach_6" id="best_way_to_teach_input_checkbox" onchange="clearTextWhenUncheck();" >Other, please comment in detail:</label>
+                                    <input type="text" class="form-control" name="" id="best_way_to_teach_input_text" onclick="checkOtherBestWayToTeachCheckboxBtn();" onchange="addOtherBestWayToTeachValueToCheckboxBtn();"/>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group ">
+                            <h4>What was your reasoning for your choice between two video clips? </h4>
+                            <div class="row">
+                                <div class="col-sm-12" >
+                                    <input type="text" name="reason_for_choice" placeholder="Please enter the criteria of your preference." class="form-control">
+                                </div>
+                             </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <div class="col-sm-12" >
+                                <h4>General Comments: </h4>
+                                <textarea class="form-control" rows="5" id="comment" name="general_comment" placeholder="Feel free to enter any comment you would like us to know"></textarea>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <hr>
+
+        <div class="text-center">
+            <input type="hidden" name="teacher_id" value="{{ teacher.id }}">
+            <button type="submit" class="btn btn-primary btn-lg">Submit Survey</button>
+        </div>
+        <br>
+    </form>
+<script type="text/javascript">
+    // Best way to teach an interactive system engaging behavior
+    function checkOtherBestWayToTeachCheckboxBtn(){
+        document.getElementById("best_way_to_teach_input_checkbox").checked = true;
+    }
+    function addOtherBestWayToTeachValueToCheckboxBtn(){
+        if (document.getElementById("best_way_to_teach_input_checkbox").checked == true){
+            document.getElementById("best_way_to_teach_input_checkbox").value = document.getElementById("best_way_to_teach_input_text").value;
+        }
+    }
+    function clearTextWhenUncheck(){
+        if (document.getElementById("best_way_to_teach_input_checkbox").checked != true){
+            document.getElementById("best_way_to_teach_input_text").value = "";
+        }
+    }
+
+</script>
+{% endblock %}

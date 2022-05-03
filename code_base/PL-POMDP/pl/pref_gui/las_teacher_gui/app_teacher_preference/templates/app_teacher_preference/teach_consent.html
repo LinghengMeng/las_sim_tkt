@@ -1,0 +1,100 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="lightSeperator">
+    <h1 class="text-center">Information Letter for Anonymous Survey</h1>
+    <h2 class="text-center">(Preference Teaching Survey Potential Participant)</h2>
+    <p> University of Waterloo </p>
+    <div>
+        <p class="infoText">
+        <b>Title of the study</b>: Generate Engaging Behavior from Human Preferences <br>
+            <br>
+        <b>Faculty Supervisors</b>:<br>
+            <a href="https://uwaterloo.ca/electrical-computer-engineering/profile/dkulic">Dana Kulić </a> <br>
+            Monash University, Electrical and Computer System Engineering<br>
+            University of Waterloo, Department of Electrical and Computer Engineering<br>
+            <a href="https://uwaterloo.ca/knowledge-integration/people-profiles/rob-gorbet">Rob Gorbet</a><br>
+            University of Waterloo, Department of Knowledge Integration<br>
+            <br>
+        <b>Student Investigator</b>:<br>
+            Lingheng Meng<br>
+            University of Waterloo, Department of Electrical and Computer Engineering, <a href="mailto:lingheng.meng@uwaterloo.ca"><span class="glyphicon glyphicon-envelope"></span> lingheng.meng@uwaterloo.ca</a><br>
+        </p>
+        <hr>
+        <p class="infoText">Dear Potential Participant,<br><br>
+            You are invited to participate in a research study about Human-Robot Interaction
+            conducted by Lingheng Meng. It will be used as part of Lingheng's PhD study. This
+            project is supervised by Dr. Dana Kulić at the Department of Electrical and Computer
+            Engineering and Dr. Rob Gorbet at the Department of Knowledge Integration at the
+            University of Waterloo, Canada. This study aims to study how users can guide
+            interactive system behaviour by indicating their preferences of which one of two video
+            clips of the interactions between the visitors and the sculpture they prefer.
+        </p>
+
+        <p><b>Study details</b>: If you decide to participate, your participation would involve one on-line
+            session. Firstly, you will be shown pairs of short videos and, for
+            each pair, asked to choose which one you prefer. You can view as many pairs of videos
+            as you wish and go to the survey anytime by clicking the “Go to Survey” button. Each video is approximately 5 seconds. In the 2<sup>nd</sup> part of the session, you will be
+            asked to complete a <b>2 minute</b> questionnaire about your experience of providing your
+            preference of the video clip and you may decline to answer any question(s) you prefer not to answer.
+            There are no known or anticipated risks to participation in this study. Your participation in
+            this study is voluntary and anonymous.   </p>
+
+        <p><b>Location and Date</b>: The study will take place online at
+            <a href="https://las-ai.uk.r.appspot.com"><span class="glyphicon glyphicon-link"></span> https://las-ai.uk.r.appspot.com</a>,
+            anytime from <b>[XXX date placeholder will be filled after approved]</b> to
+            <b>[XXX date placeholder will be filled after approved]</b> .</p>
+
+        <p><b>Eligibility Requirements for Participation</b>: Potential participants must be over 18 to participate. </p>
+
+        <p><b>Confidentiality and Data Retention</b>: No names or other identifying information will be collected on
+            the surveys. While aggregated results may be used in theses or publications, only researchers will have
+            access to the data. Your name will not appear in any publication resulting from this study. However,
+            with your permission, anonymous quotations may be used in the thesis or any publications. You will be
+            completing the study by an online survey deployed on Google Cloud. When information is transmitted over
+            the internet privacy cannot be guaranteed. There is always a risk your responses may be intercepted by
+            a third party (e.g., government agencies, hackers). University of Waterloo researchers will not collect
+            or use internet protocol (IP) addresses or other information which could link your participation to your
+            computer or electronic device without first informing you. The data collected from this study will be downloaded
+            from Google Cloud and maintained on a password protected, disk encrypted laptop. All the data will be
+            electronically archived after completion of the study and maintained for a minimum of 8 years. Once your data is submitted, you cannot withdraw your consent to participate as the researchers
+            have no way of identifying which data is yours. </p>
+
+        <p><b>Ethic Review and Clearance</b>: This study has been reviewed and received ethics clearance through a University of Waterloo Research Ethics Committee (ORE#42436).
+            If you have questions for the Committee contact the Office of Research Ethics, at <span class="glyphicon glyphicon-phone"></span> 1-519-888-4567 ext. 36005 or ohrac@uwaterloo.ca. </p>
+
+        <p><b>Questions and Contact</b>: If you have any questions or would like additional information regarding this study,
+            please contact Lingheng via email. Also, if you prefer, you may contact my faculty supervisors Dr. Dana Kulić
+            and Dr. Rob Gorbet, who are professors at the University of Waterloo, via their emails and/or phone numbers.</p>
+    </div>
+    <div>
+        <div class="alert alert-info text-center">
+            <h4>If you are interested in participating in this survey, please confirm you are
+                above 18 and click I Agree To Participate to complete the survey.</h4>
+        </div>
+    </div>
+    <form action={% url 'teach_welcome' %} method="post"  id="consent_form">
+        {% csrf_token %}
+        <div class="list-group">
+            <div class="list-group-item active" >
+                 I confirm I am above 18 years old:<br>
+                <label class="radio-inline"><input type="radio" name="above_18" value="True" checked>Yes</label>
+                <label class="radio-inline"><input type="radio" name="above_18" value="False">No</label>
+            </div>
+            <div class="list-group-item active" >
+                 I agree to the use of my anonymous quotations in any presentation, thesis or publication that comes of this research:<br>
+                <label class="radio-inline"><input type="radio" name="consent_anonymous_quotations" value="True" checked>Yes</label>
+                <label class="radio-inline"><input type="radio" name="consent_anonymous_quotations" value="False">No</label>
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary" name="submit_and_start_survey" value="True">I Agree To Participate</button>
+            <button type="submit" class="btn btn-primary" name="submit_and_start_survey" value="False">Leave Survey</button>
+        </div>
+
+    </form>
+    <p><br></p>
+</div>
+
+{% endblock %}
