@@ -1,17 +1,11 @@
 #!/bin/bash
 #SBATCH --account=def-someuser
 #SBATCH --gres=gpu:1             # Number of GPU(s) per node
+#SBATCH --nodes=1                # When requesting GPUs per node the number of nodes must be specified.
 #SBATCH --ntasks=4               # number of MPI processes
 #SBATCH --mem-per-cpu=1024M      # memory; default unit is megabytes
 #SBATCH --time=0-00:05           # time (DD-HH:MM)
 
-# Load modules on host computer
-module load python/3.7  # (Note: 1. the host is assumed to have python3-pip installed, so we can use pip to download python requirements. 2. python3.7 is required to match the python used within the container, as pip will download mismatched package wheels if the host computer’s python version is different from that in the container.)
-module load singularity
-
-######################################################################################
-#                                   Define Variables                                 #
-######################################################################################
 # Define exp_run_time, which will be used by sleep command in exp_run.sh. Make sure to set it to the time 
 # deducted by the time needed for all operations before running the experiment in order to neatly kill 
 # the processes running different modules. For example, if the time for the job is 12 hours and the estimated 
@@ -19,26 +13,47 @@ module load singularity
 exp_run_time="0m"
 
 # Setup related directories
+# Note: '.' directory corresponds to the path where you will submit this job.
 las_sim_tkt_dir=./las_sim_tkt
 las_sim_tkt_pkg_dir=./las_sim_tkt_pkg    # saving packages for offline installation
 las_sim_tkt_dep_dir=./las_sim_tkt_dep    # saving installed shared softwares such as Processing, Node, Miniconda, Mujoco
 las_sim_tkt_data_dir=./las_sim_tkt_data  # saving experiment data
 
-# Define unique ID for the experiment run (add timestamp to name to make it unique)
-resume_exp_run=true
-if $resume_exp_run
-then
-    exp_run_uid=1_2022-04-24_22-16-53-80  # Provide exp_run_uid if resuming an experiment run
-    echo "Resume experiment run: $exp_run_uid"
-else
-    exp_run_uid=1_"$(date +"%Y-%m-%d_%H-%M-%S-%2N")"   
-    echo "Start new experiment run: $exp_run_uid" 
-fi
-
 ##########################################################################################
 #                     Note: No need to change the rest of the script                     #
 ##########################################################################################
+# Load modules on host computer
+module load python/3.7  # (Note: 1. the host is assumed to have python3-pip installed, so we can use pip to download python requirements. 2. python3.7 is required to match the python used within the container, as pip will download mismatched package wheels if the host computer’s python version is different from that in the container.)
+module load singularity
 
+# The exp_job script must be run with "bash exp_job.sh" on a login node, in case there is no Internet access on compute node. 
+# Once the environment setup is done for a given job, either a new experiment after environment setup or a resumed experiment, 
+# this script will recursively submit itself to compute node and setup the flag to stop recursive calling.
+if [ $# -eq 0 ]
+then
+    exp_run_uid=1_"$(date +"%Y-%m-%d_%H-%M-%S-%2N")"    # Define unique ID for the experiment run (add timestamp to name to make it unique) 
+    resume_exp_run=false
+    stop_recursive_submission=false
+    echo "Starting new experiment: $exp_run_uid"  
+elif [ $# -eq 1 ]
+then
+    exp_run_uid=$1
+    resume_exp_run=true
+    stop_recursive_submission=false
+    echo "Resuming the experiment: $1"                  # Provide exp_run_uid with format "1_2022-04-24_22-16-53-80" if resuming an experiment run
+elif [ $# -eq 2 ]
+then
+    exp_run_uid=$1
+    resume_exp_run=true
+    stop_recursive_submission=true
+    echo "Resuming the experiment: $1"                  # Provide exp_run_uid with format "1_2022-04-24_22-16-53-80" if resuming an experiment run
+else
+    echo "Error: Only one argument 'exp_run_uid' is required!"
+    exit
+fi
+######################################################################################
+#                                   Define Variables                                 #
+######################################################################################
 online_instance_name=online_instance_$exp_run_uid    # 
 offline_instance_name=offline_instance_$exp_run_uid  #
 exp_run_name=exp_run_"$exp_run_uid"
@@ -49,6 +64,9 @@ then
     if [ ! -d $exp_run_root_dir ]; then
         echo "Resume directory: $exp_run_root_dir does not exist! Please double-check!" && exit
     fi
+    # If resume_exp_run and exists $exp_run_root_dir, this means environment setup is done.
+    env_setup_done=true
+    echo "Environment setup for the experiment $exp_run_uid is done!"
 else
     mkdir -p $las_sim_tkt_dep_dir $las_sim_tkt_data_dir $exp_run_root_dir
     echo "Save experiment run data to '$exp_run_root_dir'" 
@@ -57,10 +75,14 @@ else
     cp -a $(dirname "$BASH_SOURCE")/exp_run.sh $exp_run_root_dir  # Copy the exp_run.sh within the same directory of the current job script to $exp_run_root_dir
     chmod +x $exp_run_root_dir/exp_env.sh
     chmod +x $exp_run_root_dir/exp_run.sh
+    # If start a new experiment, environment setup is not done.
+    env_setup_done=false
+    echo "Environment setup for the experiment $exp_run_uid is ongoing!"
 fi
 
-# Skip environment setup, if resuming experiment run
-if [ ! resume_exp_run ]; then
+# Skip environment setup, if environment setup is done.
+if [ ! $env_setup_done ]; then
+    echo "I am setting up experiment environemnt on login node!"
     ######################################################################################
     #                    Download Requirements Shared by all Experiment Runs             #
     # The host has access to Internet, so download dependent softwares on host computer: #
@@ -160,19 +182,27 @@ if [ ! resume_exp_run ]; then
     singularity exec instance://$online_instance_name bash /exp_run_root/exp_env.sh
 fi
 
-#######################################################################################
-#            Start Singularity Container Instance Without Internet Access             #
-# Since the communication among the Processing-Simulator, Gaslight-OSC-Server and     #
-# Learning Agent are through the OSC message protocol based on UDP, if we want to run #
-# multiple experiments with Singularity container on the same computer node, they can #
-# only work with localhost within each container with the parameters                  #
-# "--net --network=none".                                                             #
-#######################################################################################
-# Start container instance and run shell in the instance to run experiment
-singularity instance start --net --network=none --bind $las_sim_tkt_dir:/las_sim_tkt,$las_sim_tkt_pkg_dir:/las_sim_tkt_pkg,$las_sim_tkt_dep_dir:/las_sim_tkt_dep,$exp_run_root_dir:/exp_run_root $las_sim_tkt_pkg_dir/las_sim_tkt.sif $offline_instance_name
+if [ ! $stop_recursive_submission ]
+then
+    echo "I am submitting myself to compute node!"
+    stop_recursive_submission=true
+    sbatch $0 $exp_run_uid $stop_recursive_submission
+else
+    echo "Finally! I am running experiment on compute node!"
+    #######################################################################################
+    #            Start Singularity Container Instance Without Internet Access             #
+    # Since the communication among the Processing-Simulator, Gaslight-OSC-Server and     #
+    # Learning Agent are through the OSC message protocol based on UDP, if we want to run #
+    # multiple experiments with Singularity container on the same computer node, they can #
+    # only work with localhost within each container with the parameters                  #
+    # "--net --network=none".                                                             #
+    #######################################################################################
+    # Start container instance and run shell in the instance to run experiment
+    singularity instance start --net --network=none --bind $las_sim_tkt_dir:/las_sim_tkt,$las_sim_tkt_pkg_dir:/las_sim_tkt_pkg,$las_sim_tkt_dep_dir:/las_sim_tkt_dep,$exp_run_root_dir:/exp_run_root $las_sim_tkt_pkg_dir/las_sim_tkt.sif $offline_instance_name
 
-# Run experiment script
-# # For interactive command running (only used for testing)
-# singularity shell instance://$offline_instance_name
-# For automatic command running
-singularity exec instance://$offline_instance_name bash /exp_run_root/exp_run.sh $exp_run_time 
+    # Run experiment script
+    # # For interactive command running (only used for testing)
+    # singularity shell instance://$offline_instance_name
+    # For automatic command running
+    singularity exec instance://$offline_instance_name bash /exp_run_root/exp_run.sh $exp_run_time 
+fi
