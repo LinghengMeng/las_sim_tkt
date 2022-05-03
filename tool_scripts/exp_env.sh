@@ -28,9 +28,9 @@ then
 fi
 
 # 2. Nodejs
-if [ ! -d /las_sim_tkt_dep/node-v14.17.6-linux-x64 ] 
+if [ ! -d /las_sim_tkt_dep/node-v16.13.1-linux-x64 ] 
 then
-    tar -xvf /las_sim_tkt_pkg/node-v14.17.6-linux-x64.tar.xz -C /las_sim_tkt_dep
+    tar -xvf /las_sim_tkt_pkg/node-v16.13.1-linux-x64.tar.xz -C /las_sim_tkt_dep
 fi
 # Install puppeteer to using headless browsing
 export PATH=/las_sim_tkt_dep/node-v16.13.1-linux-x64/bin:$PATH
