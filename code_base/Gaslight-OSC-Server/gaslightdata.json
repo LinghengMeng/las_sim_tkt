@@ -1,0 +1,15 @@
+{
+  "muteState": true,
+  "manualMute": false,
+  "sleepState": false,
+  "useControlWatchdog": false,
+  "sleepTimes": [
+    "00",
+    "00",
+    "00",
+    "00"
+  ],
+  "behaviourScene": "default",
+  "gestureState": false,
+  "behaviourIntensity": 0.75
+}
