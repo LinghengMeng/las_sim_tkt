@@ -9,13 +9,12 @@ export exp_run_video_dir=/exp_run_root/exp_run_video
   
 # Add softwares to environment variables
 export PATH=/las_sim_tkt_dep/processing-4.0b2:$PATH   
-export PATH=/las_sim_tkt_dep/node-v16.13.1-linux-x64/bin:$PATH
+export PATH=/las_sim_tkt_dep/node-v14.17.6-linux-x64/bin:$PATH
 export PATH=/las_sim_tkt_dep/miniconda3/bin:$PATH
 export PATH=/las_sim_tkt_dep/miniconda3/envs:$PATH
 export MUJOCO_PY_MUJOCO_PATH=/las_sim_tkt_dep/mujoco/mujoco210
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/las_sim_tkt_dep/mujoco/mujoco210/bin
-export PATH=/las_sim_tkt_dep/nvdriver:$PATH
-export LD_LIBRARY_PATH=/las_sim_tkt_dep/nvdriver:$LD_LIBRARY_PATH
+
 # Add nvdriver to PATH
 export PATH=/las_sim_tkt_dep/nvdriver:$PATH
 export LD_LIBRARY_PATH=/las_sim_tkt_dep/nvdriver:$LD_LIBRARY_PATH
@@ -28,13 +27,13 @@ export LD_LIBRARY_PATH=/las_sim_tkt_dep/nvdriver:$LD_LIBRARY_PATH
 #         as it defaultly opens a web-based GUI within a broswer. If not run with xvfb-run server.js, comment out line 124 “opn("http://" + masterClientIp + ":" + guiServerPort);” 
 
 cd $exp_run_code_dir/Gaslight-OSC-Server   
-nohup xvfb-run  --server-num 201 --auth-file /tmp/xvfb.auth -s '-nocursor -ac -screen 0 1200x800x24' node ./server.js &>$exp_run_data_dir/console_osc_server_$(date '+%Y-%m-%d_%H-%M-%S').out &
+nohup xvfb-run  --server-num 201 --auth-file /tmp/xvfb.auth -e /dev/stdout -s '-nocursor -ac -screen 0 1200x800x24' node ./server.js &>$exp_run_data_dir/console_osc_server_$(date '+%Y-%m-%d_%H-%M-%S').out &
 pid_osc_server=$!    # Save PID for later use
 echo "Running Gaslight-OSC-Server";
 
 # 2. Start Processing-Simulator
 # Run Processing-Simulator within X virtual framebuffer using xvfb-run rather than Xvfb, as the xvfb-run closes the server once it's terminated.
-nohup xvfb-run  --server-num 200 --auth-file /tmp/xvfb.auth -s '-nocursor -ac -screen 0 1200x800x24' processing-java --sketch=$exp_run_code_dir/Processing-Simulator/Control_World --run &>$exp_run_data_dir/console_pro_sim__$(date '+%Y-%m-%d_%H-%M-%S').out &
+nohup xvfb-run  --server-num 200 --auth-file /tmp/xvfb.auth -e /dev/stdout -s '-nocursor -ac -screen 0 1200x800x24' processing-java --sketch=$exp_run_code_dir/Processing-Simulator/Control_World --run &>$exp_run_data_dir/console_pro_sim__$(date '+%Y-%m-%d_%H-%M-%S').out &
 pid_pro_sim=$!    # Save PID for later use
 echo "Running Processing-Simulator";
 sleep 2m  # Sleep 2m to allow Processing-Simulator to initialize and start. Otherwise, Gaslight-OSC-Server will produce “Hm... seems like someone is sending a patchable command but doesn't exist yet”
