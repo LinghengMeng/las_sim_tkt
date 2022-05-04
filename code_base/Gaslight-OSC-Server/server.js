@@ -122,6 +122,7 @@ setInterval(checkTimers, 30*60*1000) // every half hour
 
 // launch browser window:
 // opens the url in the default browser 
+// Note: puppeteer requires GPU to run
 if(process.platform!='linux'){
     console.log( Date(Date.now()) + 'launching gui page... ');
     opn("http://" + masterClientIp + ":" + guiServerPort);
@@ -131,7 +132,8 @@ if(process.platform!='linux'){
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         await page.goto("Http://" + masterClientIp + ":" + guiServerPort);
-        await page.screenshot({path: 'screenshot.png'});
+        // Uncomment the following line to take a screenshot
+        // await page.screenshot({path: 'screenshot.png'});
         await page.waitFor(50000);
         browser.close();
     }
