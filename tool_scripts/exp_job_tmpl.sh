@@ -19,6 +19,11 @@ las_sim_tkt_pkg_dir=./las_sim_tkt_pkg    # saving packages for offline installat
 las_sim_tkt_dep_dir=./las_sim_tkt_dep    # saving installed shared softwares such as Processing, Node, Miniconda, Mujoco
 las_sim_tkt_data_dir=./las_sim_tkt_data  # saving experiment data
 
+# Setup nvidia GPU driver version. To find the driver version, on a compute node, use nvidia-smi to query gpu deriver version:
+#   output_nv_driver_version=($(nvidia-smi --query-gpu=driver_version --format=csv))    # Turn return as array with ()
+#   nv_driver_version=${output_nv_driver_version[1]}    # Retrieve driver version
+nv_driver_version=470.103.01             # 
+
 ##########################################################################################
 #                     Note: No need to change the rest of the script                     #
 ##########################################################################################
@@ -81,7 +86,8 @@ else
 fi
 
 # Skip environment setup, if environment setup is done.
-if [ ! $env_setup_done ]; then
+if ! $env_setup_done 
+then
     echo "I am setting up experiment environemnt on login node!"
     ######################################################################################
     #                    Download Requirements Shared by all Experiment Runs             #
@@ -98,23 +104,17 @@ if [ ! $env_setup_done ]; then
     #                                             Install Nvidia Driver
     # TODO: modification may be needed for check driver version for different platform/High Performance Computation (HPC)
     ########################################################################################################################
-    # Query nvidia driver version
-    output_driver_version=($(nvidia-smi --query-gpu=driver_version --format=csv))    # Turn return as array with ()
-    driver_version=${output_driver_version[1]}    # Retrieve driver version
-    # driver_version=470.103.01    # If only login node has access to internet, manually set driver version
-    
-    
     # Download nvdriver
-    if [ ! -f "$las_sim_tkt_pkg_dir/NVIDIA-Linux-x86_64-$driver_version.run" ]; then
-        echo “Downloading nvidia-driver: NVIDIA-Linux-x86_64-$driver_version.run”
-        wget -c https://us.download.nvidia.com/XFree86/Linux-x86_64/$driver_version/NVIDIA-Linux-x86_64-$driver_version.run -P $las_sim_tkt_pkg_dir
+    if [ ! -f "$las_sim_tkt_pkg_dir/NVIDIA-Linux-x86_64-$nv_driver_version.run" ]; then
+        echo “Downloading nvidia-driver: NVIDIA-Linux-x86_64-${nv_driver_version}.run”
+        wget -c https://us.download.nvidia.com/XFree86/Linux-x86_64/${nv_driver_version}/NVIDIA-Linux-x86_64-${nv_driver_version}.run -P $las_sim_tkt_pkg_dir
     fi
     
     # Extract nvdriver
     if [ ! -d $las_sim_tkt_dep_dir/nvdriver ]; then
         # Check if driver is downloaded
-        if [ ! -f "$las_sim_tkt_pkg_dir/NVIDIA-Linux-x86_64-${NVID_VER}.run" ]; then
-            echo "Driver installer file NVIDIA-Linux-x86_64-${NVID_VER}.run not found"
+        if [ ! -f "$las_sim_tkt_pkg_dir/NVIDIA-Linux-x86_64-${nv_driver_version}.run" ]; then
+            echo "Driver installer file NVIDIA-Linux-x86_64-${nv_driver_version}.run not found"
             exit 1
         fi
         
@@ -126,10 +126,10 @@ if [ ! $env_setup_done ]; then
             exit 1
         fi
         
-        chmod 755 $las_sim_tkt_pkg_dir/NVIDIA-Linux-x86_64-${NVID_VER}.run
+        chmod 755 $las_sim_tkt_pkg_dir/NVIDIA-Linux-x86_64-${nv_driver_version}.run
         
         # extract nvidia files
-        if $las_sim_tkt_pkg_dir/NVIDIA-Linux-x86_64-${NVID_VER}.run --extract-only ; then
+        if $las_sim_tkt_pkg_dir/NVIDIA-Linux-x86_64-${nv_driver_version}.run --extract-only --target $las_sim_tkt_pkg_dir/NVIDIA-Linux-x86_64-${nv_driver_version}; then
           echo "Extracted driver"
         else
           echo "Could not extract driver"
@@ -137,8 +137,7 @@ if [ ! $env_setup_done ]; then
         fi
         
         # move into place (overwrite old if exist)
-        cd ..
-        if mv $las_sim_tkt_pkg_dir/NVIDIA-Linux-x86_64-${NVID_VER}/* $las_sim_tkt_dep_dir/nvdriver ; then
+        if mv $las_sim_tkt_pkg_dir/NVIDIA-Linux-x86_64-${nv_driver_version}/* $las_sim_tkt_dep_dir/nvdriver ; then
           echo "Successfully installed to $las_sim_tkt_dep_dir/nvdriver"
         else
           echo "Cannot install drivers to $las_sim_tkt_dep_dir/nvdriver"
@@ -147,26 +146,26 @@ if [ ! $env_setup_done ]; then
         
         # Make link within singularity instance
         cd $las_sim_tkt_dep_dir/nvdriver
-        ln -s libGL.so.${driver_version}                 libGL.so.1
-        ln -s libEGL_nvidia.so.${driver_version}         libEGL_nvidia.so.0
-        ln -s libGLESv1_CM_nvidia.so.${driver_version}   libGLESv1_CM_nvidia.so.1
-        ln -s libGLESv2_nvidia.so.${driver_version}      libGLESv2_nvidia.so.2
-        ln -s libGLX_nvidia.so.${driver_version}         libGLX_indirect.so.0
-        ln -s libGLX_nvidia.so.${driver_version}         libGLX_nvidia.so.0
+        ln -s libGL.so.${nv_driver_version}                 libGL.so.1
+        ln -s libEGL_nvidia.so.${nv_driver_version}         libEGL_nvidia.so.0
+        ln -s libGLESv1_CM_nvidia.so.${nv_driver_version}   libGLESv1_CM_nvidia.so.1
+        ln -s libGLESv2_nvidia.so.${nv_driver_version}      libGLESv2_nvidia.so.2
+        ln -s libGLX_nvidia.so.${nv_driver_version}         libGLX_indirect.so.0
+        ln -s libGLX_nvidia.so.${nv_driver_version}         libGLX_nvidia.so.0
         ln -s libnvidia-cfg.so.1                         libnvidia-cfg.so
-        ln -s libnvidia-cfg.so.${driver_version}         libnvidia-cfg.so.1
+        ln -s libnvidia-cfg.so.${nv_driver_version}         libnvidia-cfg.so.1
         ln -s libnvidia-encode.so.1                      libnvidia-encode.so
-        ln -s libnvidia-encode.so.${driver_version}      libnvidia-encode.so.1
+        ln -s libnvidia-encode.so.${nv_driver_version}      libnvidia-encode.so.1
         ln -s libnvidia-fbc.so.1                         libnvidia-fbc.so
-        ln -s libnvidia-fbc.so.${driver_version}         libnvidia-fbc.so.1
+        ln -s libnvidia-fbc.so.${nv_driver_version}         libnvidia-fbc.so.1
         ln -s libnvidia-ifr.so.1                         libnvidia-ifr.so
-        ln -s libnvidia-ifr.so.${driver_version}         libnvidia-ifr.so.1
+        ln -s libnvidia-ifr.so.${nv_driver_version}         libnvidia-ifr.so.1
         ln -s libnvidia-ml.so.1                          libnvidia-ml.so
-        ln -s libnvidia-ml.so.${driver_version}          libnvidia-ml.so.1
-        ln -s libnvidia-opencl.so.${driver_version}      libnvidia-opencl.so.1
-        ln -s vdpau/libvdpau_nvidia.so.${driver_version} libvdpau_nvidia.so
-        ln -s libcuda.so.${driver_version}               libcuda.so
-        ln -s libcuda.so.${driver_version}               libcuda.so.1
+        ln -s libnvidia-ml.so.${nv_driver_version}          libnvidia-ml.so.1
+        ln -s libnvidia-opencl.so.${nv_driver_version}      libnvidia-opencl.so.1
+        ln -s vdpau/libvdpau_nvidia.so.${nv_driver_version} libvdpau_nvidia.so
+        ln -s libcuda.so.${nv_driver_version}               libcuda.so
+        ln -s libcuda.so.${nv_driver_version}               libcuda.so.1
 
     fi
     
@@ -182,7 +181,7 @@ if [ ! $env_setup_done ]; then
     singularity exec instance://$online_instance_name bash /exp_run_root/exp_env.sh
 fi
 
-if [ ! $stop_recursive_submission ]
+if ! $stop_recursive_submission
 then
     echo "I am submitting myself to compute node!"
     stop_recursive_submission=true
