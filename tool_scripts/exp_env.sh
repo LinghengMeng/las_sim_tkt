@@ -34,8 +34,8 @@ then
 fi
 # Install puppeteer to using headless browsing
 export PATH=/las_sim_tkt_dep/node-v14.17.6-linux-x64/bin:$PATH
-npm i puppeteer --save
-npm ci
+
+npm ci                    # Install required nodejs packages according to package-lock.json
 
 # 3. Miniconda3 (optional, only for creating python environment)
 if [ ! -d /las_sim_tkt_dep/miniconda3 ] 
