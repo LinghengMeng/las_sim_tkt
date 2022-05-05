@@ -16,8 +16,25 @@ export MUJOCO_PY_MUJOCO_PATH=/las_sim_tkt_dep/mujoco/mujoco210
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/las_sim_tkt_dep/mujoco/mujoco210/bin
 
 # Add nvdriver to PATH
-export PATH=/las_sim_tkt_dep/nvdriver:$PATH
-export LD_LIBRARY_PATH=/las_sim_tkt_dep/nvdriver:$LD_LIBRARY_PATH
+# If run without physical GPU, do not added nvdriver to PATH and LD_LIBRARY_PATH
+
+add_nvdriver=$1
+exp_run_time=$2
+echo "add_nvdriver=$add_nvdriver, exp_run_time=$exp_run_time"
+
+if [ $# -ne 2 ]
+then
+  echo "Error! Please provide two arguments to indicate (1) if add nvdriver: (true or false), (2) expriment run time" & exit
+else
+  if [ "$add_nvdriver" == true ]
+  then
+    echo "Add nvdriver"
+    export PATH=/las_sim_tkt_dep/nvdriver:$PATH
+    export LD_LIBRARY_PATH=/las_sim_tkt_dep/nvdriver:$LD_LIBRARY_PATH
+  else
+    echo "Not add nvdriver"
+  fi
+fi
 
 #############################################################################
 #                       Start simulation components                         #
@@ -27,13 +44,13 @@ export LD_LIBRARY_PATH=/las_sim_tkt_dep/nvdriver:$LD_LIBRARY_PATH
 #         as it defaultly opens a web-based GUI within a broswer. If not run with xvfb-run server.js, comment out line 124 “opn("http://" + masterClientIp + ":" + guiServerPort);” 
 
 cd $exp_run_code_dir/Gaslight-OSC-Server   
-nohup xvfb-run  --server-num 201 --auth-file /tmp/xvfb.auth -e /dev/stdout -s '-nocursor -ac -screen 0 1200x800x24' node ./server.js &>$exp_run_data_dir/console_osc_server_$(date '+%Y-%m-%d_%H-%M-%S').out &
+nohup xvfb-run  --server-num 201  -e /dev/stdout -s '-nocursor -ac -screen 0 1200x800x24' node ./server.js &>$exp_run_data_dir/console_osc_server_$(date '+%Y-%m-%d_%H-%M-%S').out &
 pid_osc_server=$!    # Save PID for later use
 echo "Running Gaslight-OSC-Server";
 
 # 2. Start Processing-Simulator
 # Run Processing-Simulator within X virtual framebuffer using xvfb-run rather than Xvfb, as the xvfb-run closes the server once it's terminated.
-nohup xvfb-run  --server-num 200 --auth-file /tmp/xvfb.auth -e /dev/stdout -s '-nocursor -ac -screen 0 1200x800x24' processing-java --sketch=$exp_run_code_dir/Processing-Simulator/Control_World --run &>$exp_run_data_dir/console_pro_sim__$(date '+%Y-%m-%d_%H-%M-%S').out &
+nohup xvfb-run  --server-num 200  -e /dev/stdout -s '-nocursor -ac -screen 0 1200x800x24' processing-java --sketch=$exp_run_code_dir/Processing-Simulator/Control_World --run &>$exp_run_data_dir/console_pro_sim__$(date '+%Y-%m-%d_%H-%M-%S').out &
 pid_pro_sim=$!    # Save PID for later use
 echo "Running Processing-Simulator";
 sleep 2m  # Sleep 2m to allow Processing-Simulator to initialize and start. Otherwise, Gaslight-OSC-Server will produce “Hm... seems like someone is sending a patchable command but doesn't exist yet”
@@ -51,7 +68,11 @@ fi
 source $exp_run_dep_dir/pl_env/bin/activate    # Activate python environment
 ulimit -n 50000    # Set ulimit to avoid “Too many open files” error when using Multiprocessing Queue
 # Run python script （Note: this is the part need to be changed for different experiment runs.）
-nohup python $exp_run_code_dir/PL-POMDP/pl/teach.py --env_id LAS-Meander --rl_reward_type hc_reward &>$exp_run_data_dir/console_python.out &
+if [ -d "$exp_run_data_dir/PL-Teaching-Data" ]; then
+  nohup python $exp_run_code_dir/PL-POMDP/pl/teach.py --resume_exp_dir $exp_run_data_dir/PL-Teaching-Data/exp_name &>$exp_run_data_dir/console_python.out &
+else
+  nohup python $exp_run_code_dir/PL-POMDP/pl/teach.py --env_id LAS-Meander --rl_reward_type hc_reward &>$exp_run_data_dir/console_python.out &
+fi
 pid_python=$!    # Save PID for later use
 
 #############################################################################
@@ -60,7 +81,6 @@ pid_python=$!    # Save PID for later use
 # Stop processes inversely with kill before the timeout of the allocated job time. 
 # Check 'kill -l' to see kill signals.
 # Setup timer
-exp_run_time=$1
 sleep $exp_run_time
 # 1. Stop Learning
 kill -2 $pid_python
