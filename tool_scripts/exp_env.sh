@@ -32,10 +32,6 @@ if [ ! -d /las_sim_tkt_dep/node-v14.17.6-linux-x64 ]
 then
     tar -xvf /las_sim_tkt_pkg/node-v14.17.6-linux-x64.tar.xz -C /las_sim_tkt_dep
 fi
-# Install puppeteer to using headless browsing
-export PATH=/las_sim_tkt_dep/node-v14.17.6-linux-x64/bin:$PATH
-
-npm ci                    # Install required nodejs packages according to package-lock.json
 
 # 3. Miniconda3 (optional, only for creating python environment)
 if [ ! -d /las_sim_tkt_dep/miniconda3 ] 
@@ -71,6 +67,9 @@ else
     rm -rf ./behaviour_settings_simulator
   fi
   ln -s $exp_run_code_dir/Processing-Simulator/Control_World/data/Meander_AUG15 behaviour_settings_simulator
+  # Install required nodejs packages according to package-lock.json
+  export PATH=/las_sim_tkt_dep/node-v14.17.6-linux-x64/bin:$PATH
+  npm ci    # Install specific version of the packages
 fi
 
 #############################################################################
