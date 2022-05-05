@@ -70,6 +70,7 @@ else
   # Install required nodejs packages according to package-lock.json
   export PATH=/las_sim_tkt_dep/node-v14.17.6-linux-x64/bin:$PATH
   npm ci    # Install specific version of the packages
+  npm i puppeteer
 fi
 
 #############################################################################
