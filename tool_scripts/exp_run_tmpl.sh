@@ -18,8 +18,8 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/las_sim_tkt_dep/mujoco/mujoco210/bin
 # Add nvdriver to PATH
 # If run without physical GPU, do not added nvdriver to PATH and LD_LIBRARY_PATH
 
-add_nvdriver=$1
-exp_run_time=$2
+add_nvdriver=$1    # Indicate if add nvidia driver to path
+exp_run_time=$2    # Estimated experiment run time
 echo "add_nvdriver=$add_nvdriver, exp_run_time=$exp_run_time"
 
 if [ $# -ne 2 ]

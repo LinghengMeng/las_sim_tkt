@@ -25,7 +25,7 @@ las_sim_tkt_data_dir=./las_sim_tkt_data  # saving experiment data
 #   nv_driver_version=${output_nv_driver_version[1]}    # Retrieve driver version
 nv_driver_version=             # Graham: 470.103.01, Cedar: 510.47.03
 if [ -z "${nv_driver_version}" ]; then
-    echo "$nv_driver_version is unset or set to the empty string"
+    echo "nv_driver_version is unset or set to the empty string"
     add_nvdriver=false
 else
     add_nvdriver=true
@@ -194,7 +194,7 @@ if ! $stop_recursive_submission
 then
     echo "I am submitting myself to compute node!"
     stop_recursive_submission=true
-    sbatch $(dirname "$BASH_SOURCE")/$0 $exp_run_uid $stop_recursive_submission
+    sbatch $0 $exp_run_uid $stop_recursive_submission
 else
     echo "Finally! I am running experiment on compute node!"
     #######################################################################################
