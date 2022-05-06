@@ -726,8 +726,7 @@ class LASIntlEnv(object):
         while info["obs_missing_data"]:
             new_obs, info = self._collect_and_construct_obs()
             missing_data_count += 1
-            if missing_data_count >= 5:
-                raise ValueError('missing_data_count={}'.format(missing_data_count))
+            print('Warning! missing_data_count={}'.format(missing_data_count))
         self.obs, self.info = new_obs, info
         self.info = {'obs_datetime': new_obs_ts}
         return new_obs, self.info
@@ -1221,8 +1220,7 @@ class LASIntlEnv(object):
         while info["obs_missing_data"]:
             new_obs, info = self._collect_and_construct_obs()
             missing_data_count += 1
-            # if missing_data_count >= 5:
-            raise Warning('missing_data_count={}'.format(missing_data_count))
+            print('Warning! missing_data_count={}'.format(missing_data_count))
 
         # Add local trajectory
         self.obs_traj.append(self.obs.reshape(1, -1))
