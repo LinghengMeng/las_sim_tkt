@@ -11,7 +11,7 @@
 # the processes running different modules. For example, if the time for the job is 12 hours and the estimated 
 # all other operations is 10 minutes, then we should set exp_run_time=(12*60-10)m
 exp_run_time="0m"
-
+exp_run_readable_name=''
 
 # Setup related directories
 # Note: '.' directory corresponds to the path where you will submit this job.
@@ -48,9 +48,9 @@ module load singularity
 # 1. exp_run_uid, 2. stop_recursive_submission
 if [ $# -eq 0 ]
 then
-    # If no argument was given, env_setup_only is false by default, setup environment only. Otherwise, submit job after setting up environment.
+    # If no argument was given, env_setup_only is false by default, setup environment and submit job after setting up environment.
     env_setup_only=false
-    exp_run_uid="$(date +"%Y-%m-%d_%H-%M-%S-%2N")"    # Define unique ID for the experiment run (add timestamp to name to make it unique) 
+    exp_run_uid="$exp_run_readable_name_$(date +"%Y-%m-%d_%H-%M-%S-%2N")"    # Define unique ID for the experiment run (add timestamp to name to make it unique) 
     resume_exp_run=false
     stop_recursive_submission=false
     echo "Starting new experiment: $exp_run_uid"
@@ -58,7 +58,7 @@ elif [ $# -eq 1 ]
 then
     # If env_setup_only is true, setup environment only. Otherwise, submit job after setting up environment.
     env_setup_only=$1
-    exp_run_uid="$(date +"%Y-%m-%d_%H-%M-%S-%2N")"    # Define unique ID for the experiment run (add timestamp to name to make it unique) 
+    exp_run_uid="$exp_run_readable_name_$(date +"%Y-%m-%d_%H-%M-%S-%2N")"    # Define unique ID for the experiment run (add timestamp to name to make it unique) 
     resume_exp_run=false
     stop_recursive_submission=false
     echo "Starting new experiment: $exp_run_uid"  
