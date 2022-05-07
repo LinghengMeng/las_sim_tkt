@@ -895,12 +895,33 @@ class DatabaseManager:
 
         #
         if self.local_db_config['database'] is None:
+            # Restore In-memory database
             self.local_db_config['database'] = None
             self._init_local_db_connection()
+
             # Connect to disk database and backup it to in-memory database
             disk_db_conn = sqlite3.connect(disk_db_file)
             disk_db_conn.backup(self.local_db_engine.raw_connection().connection)
+
+            # Init local db connection again, because for the first initialization an empty database is created and used to initialize some variables.
+            # Create db tables if not exist
+            if self.local_db_engine is not None:
+                Base.metadata.create_all(self.local_db_engine)
+
+            # Init local database table operators
+            if self.local_db_engine is not None:
+                self.local_db_session_maker = sessionmaker(bind=self.local_db_engine)
+                self.local_db_session = self.local_db_session_maker()
+
+                self.local_db_exp_table_op = ExperienceTableOperator(self.local_db_session)
+                self.local_db_seg_table_op = SegmentTableOperator(self.local_db_session)
+                self.local_db_pref_table_op = PreferenceTableOperator(self.local_db_session)
+                self.local_db_seg_pair_dist_table_op = SegmentPairDistanceTableOperator(self.local_db_session)
+
+            self.local_db_meta = sqla.MetaData()
+            self.local_db_meta.reflect(bind=self.local_db_engine)
         else:
+            # Restore Disk database
             self.local_db_config['database'] = disk_db_file
             self._init_local_db_connection()
 
