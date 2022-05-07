@@ -45,24 +45,39 @@ module load singularity
 # The exp_job script must be run with "bash exp_job.sh" on a login node, in case there is no Internet access on compute node. 
 # Once the environment setup is done for a given job, either a new experiment after environment setup or a resumed experiment, 
 # this script will recursively submit itself to compute node and setup the flag to stop recursive calling.
+# 1. exp_run_uid, 2. stop_recursive_submission
 if [ $# -eq 0 ]
 then
-    exp_run_uid=1_"$(date +"%Y-%m-%d_%H-%M-%S-%2N")"    # Define unique ID for the experiment run (add timestamp to name to make it unique) 
+    # If no argument was given, env_setup_only is false by default, setup environment only. Otherwise, submit job after setting up environment.
+    env_setup_only=false
+    exp_run_uid="$(date +"%Y-%m-%d_%H-%M-%S-%2N")"    # Define unique ID for the experiment run (add timestamp to name to make it unique) 
+    resume_exp_run=false
+    stop_recursive_submission=false
+    echo "Starting new experiment: $exp_run_uid"
+elif [ $# -eq 1 ]
+then
+    # If env_setup_only is true, setup environment only. Otherwise, submit job after setting up environment.
+    env_setup_only=$1
+    exp_run_uid="$(date +"%Y-%m-%d_%H-%M-%S-%2N")"    # Define unique ID for the experiment run (add timestamp to name to make it unique) 
     resume_exp_run=false
     stop_recursive_submission=false
     echo "Starting new experiment: $exp_run_uid"  
-elif [ $# -eq 1 ]
-then
-    exp_run_uid=$1
-    resume_exp_run=true
-    stop_recursive_submission=false
-    echo "Resuming the experiment: $1"                  # Provide exp_run_uid with format "1_2022-04-24_22-16-53-80" if resuming an experiment run
 elif [ $# -eq 2 ]
 then
-    exp_run_uid=$1
+    # If resume exp_run_uid is provided, no matter what env_setup_only is, resume experiment.
+    env_setup_only=false
+    exp_run_uid=$2
+    resume_exp_run=true
+    stop_recursive_submission=false
+    echo "Resuming the experiment: $2"                  # Provide exp_run_uid with format "1_2022-04-24_22-16-53-80" if resuming an experiment run
+elif [ $# -eq 3 ]
+then  
+    # This case is used for calling itself and stoping recursive calling.
+    env_setup_only=false
+    exp_run_uid=$2
     resume_exp_run=true
     stop_recursive_submission=true
-    echo "Resuming the experiment: $1"                  # Provide exp_run_uid with format "1_2022-04-24_22-16-53-80" if resuming an experiment run
+    echo "Resuming the experiment: $2"                  # Provide exp_run_uid with format "1_2022-04-24_22-16-53-80" if resuming an experiment run
 else
     echo "Error: Only one argument 'exp_run_uid' is required!"
     exit
@@ -72,13 +87,28 @@ fi
 ######################################################################################
 online_instance_name=online_instance_$exp_run_uid    # 
 offline_instance_name=offline_instance_$exp_run_uid  #
-exp_run_name=exp_run_"$exp_run_uid"
-exp_run_root_dir=$las_sim_tkt_data_dir/$exp_run_name # saving files related to the current experiment run 
+exp_run_root_dir=$las_sim_tkt_data_dir/$exp_run_uid # saving files related to the current experiment run 
 
 if $resume_exp_run
 then
     if [ ! -d "$exp_run_root_dir" ]; then
         echo "Resume directory: $exp_run_root_dir does not exist! Please double-check!" && exit
+    fi
+    # 
+    if [ "$stop_recursive_submission" == false ]
+    then
+      # 
+      if [ -f "$exp_run_root_dir/exp_run.sh" ]
+      then
+          mv $exp_run_root_dir/exp_run.sh $exp_run_root_dir/exp_run_old_$(date '+%Y-%m-%d_%H-%M-%S').sh
+      fi
+      if [ -f "$exp_run_root_dir/exp_job.sh" ]
+      then
+          mv $exp_run_root_dir/exp_job.sh $exp_run_root_dir/exp_job_old_$(date '+%Y-%m-%d_%H-%M-%S').sh
+      fi
+      cp -a $(dirname "$BASH_SOURCE")/exp_run.sh $exp_run_root_dir  # Copy the exp_run.sh within the same directory of the current job script to $exp_run_root_dir
+      chmod +x $exp_run_root_dir/exp_run.sh
+      cp -a  "$0" $exp_run_root_dir                                 # Copy the current job script to $exp_run_root_dir
     fi
     # If resume_exp_run and exists $exp_run_root_dir, this means environment setup is done.
     env_setup_done=true
@@ -194,11 +224,17 @@ then
     singularity exec instance://$online_instance_name bash /exp_run_root/exp_env.sh
 fi
 
+# If only do environment setup, exit. This is applicable to case where hardcoded design choices in exp_runcode are investigated. 
+if $env_setup_only
+then
+    echo "Only set up environment. Exiting..." & exit
+fi
+
 if ! $stop_recursive_submission
 then
     echo "I am submitting myself to compute node!"
     stop_recursive_submission=true
-    sbatch $0 $exp_run_uid $stop_recursive_submission
+    sbatch $0 false $exp_run_uid $stop_recursive_submission
 else
     echo "Finally! I am running experiment on compute node!"
     #######################################################################################
