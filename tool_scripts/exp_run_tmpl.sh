@@ -18,13 +18,14 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/las_sim_tkt_dep/mujoco/mujoco210/bin
 # Add nvdriver to PATH
 # If run without physical GPU, do not added nvdriver to PATH and LD_LIBRARY_PATH
 
-add_nvdriver=$1    # Indicate if add nvidia driver to path
+add_nvdriver=$1    # Indicate if add nvidia driver to path (true or false)
 exp_run_time=$2    # Estimated experiment run time
+save_processing_simulator_video=$3    # Indicate if save processing simulator video (true or false)
 echo "add_nvdriver=$add_nvdriver, exp_run_time=$exp_run_time"
 
-if [ $# -ne 2 ]
+if [ $# -ne 3 ]
 then
-  echo "Error! Please provide two arguments to indicate (1) if add nvdriver: (true or false), (2) expriment run time" & exit
+  echo "Error! Please provide three arguments to indicate (1) if add nvdriver: (true or false), (2) expriment run time, (3) if save processing simulator video (true or false)" & exit
 else
   if [ "$add_nvdriver" == true ]
   then
@@ -56,12 +57,11 @@ echo "Running Processing-Simulator";
 sleep 2m  # Sleep 2m to allow Processing-Simulator to initialize and start. Otherwise, Gaslight-OSC-Server will produce “Hm... seems like someone is sending a patchable command but doesn't exist yet”
 
 # Save Processing-Simulator video
-save_processing_simulator_video=1
-if [ $save_processing_simulator_video ]
+if $save_processing_simulator_video
 then
   nohup ffmpeg -f x11grab -video_size 1200x800 -i :200 -draw_mouse 0 -codec:v libx264 -r 12 -y $exp_run_video_dir/processing_simulator_$(date '+%Y-%m-%d_%H-%M-%S').mp4 &>$exp_run_data_dir/console_pro_sim_ffmpeg_$(date '+%Y-%m-%d_%H-%M-%S').out &
   pid_pro_sim_ffmpeg=$!    # Save PID for later use
-  echo "Running ffmpeg on Processing-Simulator";
+  echo "Running ffmpeg on Processing-Simulator to saving video";
 fi
 
 # 3. Start Learning
@@ -69,9 +69,9 @@ source $exp_run_dep_dir/pl_env/bin/activate    # Activate python environment
 ulimit -n 50000    # Set ulimit to avoid “Too many open files” error when using Multiprocessing Queue
 # Run python script （Note: this is the part need to be changed for different experiment runs.）
 if [ -d "$exp_run_data_dir/PL-Teaching-Data" ]; then
-  nohup python $exp_run_code_dir/PL-POMDP/pl/teach.py --resume_exp_dir $exp_run_data_dir/PL-Teaching-Data/exp_name &>$exp_run_data_dir/console_python.out &
+  nohup python $exp_run_code_dir/PL-POMDP/pl/teach.py --resume_exp_dir $exp_run_data_dir/PL-Teaching-Data/exp_name &>$exp_run_data_dir/console_python_$(date '+%Y-%m-%d_%H-%M-%S').out &
 else
-  nohup python $exp_run_code_dir/PL-POMDP/pl/teach.py --env_id LAS-Meander --rl_reward_type hc_reward &>$exp_run_data_dir/console_python.out &
+  nohup python $exp_run_code_dir/PL-POMDP/pl/teach.py --env_id LAS-Meander --rl_reward_type hc_reward &>$exp_run_data_dir/console_python_$(date '+%Y-%m-%d_%H-%M-%S').out &
 fi
 pid_python=$!    # Save PID for later use
 

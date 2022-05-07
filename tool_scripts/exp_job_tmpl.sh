@@ -31,6 +31,10 @@ else
     add_nvdriver=true
 fi
 
+# Indicate if save processing simulator video (true or false). Set this to true, only when using video is necessary, becuase saving 
+#   video is computation expensive.
+save_processing_simulator_video=false
+
 ##########################################################################################
 #                     Note: No need to change the rest of the script                     #
 ##########################################################################################
@@ -73,7 +77,7 @@ exp_run_root_dir=$las_sim_tkt_data_dir/$exp_run_name # saving files related to t
 
 if $resume_exp_run
 then
-    if [ ! -d $exp_run_root_dir ]; then
+    if [ ! -d "$exp_run_root_dir" ]; then
         echo "Resume directory: $exp_run_root_dir does not exist! Please double-check!" && exit
     fi
     # If resume_exp_run and exists $exp_run_root_dir, this means environment setup is done.
@@ -212,5 +216,5 @@ else
     # # For interactive command running (only used for testing)
     # singularity shell instance://$offline_instance_name
     # For automatic command running
-    singularity exec instance://$offline_instance_name bash /exp_run_root/exp_run.sh $add_nvdriver $exp_run_time 
+    singularity exec instance://$offline_instance_name bash /exp_run_root/exp_run.sh $add_nvdriver $exp_run_time $save_processing_simulator_video
 fi
