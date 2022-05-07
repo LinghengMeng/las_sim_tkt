@@ -50,7 +50,7 @@ if [ $# -eq 0 ]
 then
     # If no argument was given, env_setup_only is false by default, setup environment and submit job after setting up environment.
     env_setup_only=false
-    exp_run_uid="$exp_run_readable_name_$(date +"%Y-%m-%d_%H-%M-%S-%2N")"    # Define unique ID for the experiment run (add timestamp to name to make it unique) 
+    exp_run_uid="${exp_run_readable_name}_$(date +"%Y-%m-%d_%H-%M-%S-%2N")"    # Define unique ID for the experiment run (add timestamp to name to make it unique) 
     resume_exp_run=false
     stop_recursive_submission=false
     echo "Starting new experiment: $exp_run_uid"
@@ -58,7 +58,7 @@ elif [ $# -eq 1 ]
 then
     # If env_setup_only is true, setup environment only. Otherwise, submit job after setting up environment.
     env_setup_only=$1
-    exp_run_uid="$exp_run_readable_name_$(date +"%Y-%m-%d_%H-%M-%S-%2N")"    # Define unique ID for the experiment run (add timestamp to name to make it unique) 
+    exp_run_uid="${exp_run_readable_name}_$(date +"%Y-%m-%d_%H-%M-%S-%2N")"    # Define unique ID for the experiment run (add timestamp to name to make it unique) 
     resume_exp_run=false
     stop_recursive_submission=false
     echo "Starting new experiment: $exp_run_uid"  
