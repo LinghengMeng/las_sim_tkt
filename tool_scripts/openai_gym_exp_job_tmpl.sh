@@ -116,10 +116,10 @@ then
 else
     mkdir -p $las_sim_tkt_dep_dir $las_sim_tkt_data_dir $exp_run_root_dir
     echo "Save experiment run data to '$exp_run_root_dir'" 
-    cp -a $las_sim_tkt_dir/tool_scripts/exp_env.sh $exp_run_root_dir
+    cp -a $las_sim_tkt_dir/tool_scripts/openai_gym_exp_env.sh $exp_run_root_dir
     cp -a  "$0" $exp_run_root_dir                                 # Copy the current job script to $exp_run_root_dir
     cp -a $(dirname "$BASH_SOURCE")/exp_run.sh $exp_run_root_dir  # Copy the exp_run.sh within the same directory of the current job script to $exp_run_root_dir
-    chmod +x $exp_run_root_dir/exp_env.sh
+    chmod +x $exp_run_root_dir/openai_gym_exp_env.sh
     chmod +x $exp_run_root_dir/exp_run.sh
     # If start a new experiment, environment setup is not done.
     env_setup_done=false
@@ -221,7 +221,7 @@ then
     # # For interactive command running (only used for testing)
     # singularity shell instance://$online_instance_name
     # For automatic command running: environment_setup_script.sh
-    singularity exec instance://$online_instance_name bash /exp_run_root/exp_env.sh
+    singularity exec instance://$online_instance_name bash /exp_run_root/openai_gym_exp_env.sh
 fi
 
 # If only do environment setup, exit. This is applicable to case where hardcoded design choices in exp_runcode are investigated. 
