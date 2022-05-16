@@ -87,7 +87,7 @@ echo "Preparing python environment"
 if [ ! -d /las_sim_tkt_dep/pl_env ]
 then
     mkdir -p /las_sim_tkt_dep/pl_env
-    cd /las_sim_tkt_dep/pl_env
+    cd /las_sim_tkt_dep
     tar -xzf /las_sim_tkt_pkg/pl_env.tar.gz -C pl_env
 fi
 # Activate the environment, which will add `/las_sim_tkt_dep/pl_env/bin` to your path
