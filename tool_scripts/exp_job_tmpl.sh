@@ -119,6 +119,7 @@ else
     cp -a $las_sim_tkt_dir/tool_scripts/exp_env.sh $exp_run_root_dir
     cp -a  "$0" $exp_run_root_dir                                 # Copy the current job script to $exp_run_root_dir
     cp -a $(dirname "$BASH_SOURCE")/exp_run.sh $exp_run_root_dir  # Copy the exp_run.sh within the same directory of the current job script to $exp_run_root_dir
+    cp -a $(dirname "$BASH_SOURCE")/las_config.py $exp_run_root_dir  # Copy the las_intl_env_config.py within the same directory of the current job script to $exp_run_root_dir
     chmod +x $exp_run_root_dir/exp_env.sh
     chmod +x $exp_run_root_dir/exp_run.sh
     # If start a new experiment, environment setup is not done.
