@@ -137,82 +137,84 @@ internal_env_config = {
         #    Important: check data_behaviours_2.html in Gaslight-OSC-Server to confirm the value range and data type of each parameter.
         "para_act_space": {
             # GridRunner related parameters
-            "GridRunner": {
-                "gridScale": {"type": "float", "min": 0.5, "max": 5},
-                "nParticles": {"type": "int", "min": 5, "max": 2000}
-            },
-            "GridRunner/Source_523": {
-                "active": {"type": "bool", "min": False, "max": True},
-                "sourceRotation": {"type": "int", "min": 0, "max": 2},
-                "spread": {"type": "float", "min": 0, "max": 6.2832},
-                "heading": {"type": "float", "min": 0, "max": 6.2832},
-                "burstFreq": {"type": "int", "min": 10, "max": 5000},
-                "burstQty": {"type": "int", "min": 1, "max": 250},
-                "yvelocity": {"type": "float", "min": 0, "max": 1},
-                "influenceSize": {"type": "int", "min": 0, "max": 1500},
-                "influenceIntensity": {"type": "float", "min": 0, "max": 1},
-                "maxspeed": {"type": "float", "min": 0.5, "max": 10}
-            },
-            "GridRunner/Source_522": {
-                "active": {"type": "bool", "min": False, "max": True},
-                "sourceRotation": {"type": "int", "min": 0, "max": 2},
-                "spread": {"type": "float", "min": 0, "max": 6.2832},
-                "heading": {"type": "float", "min": 0, "max": 6.2832},
-                "burstFreq": {"type": "int", "min": 10, "max": 5000},
-                "burstQty": {"type": "int", "min": 1, "max": 250},
-                "yvelocity": {"type": "float", "min": 0, "max": 1},
-                "influenceSize": {"type": "int", "min": 0, "max": 1500},
-                "influenceIntensity": {"type": "float", "min": 0, "max": 1},
-                "maxspeed": {"type": "float", "min": 0.5, "max": 10}
-            },
-            "GridRunner/Source_520": {
-                "active": {"type": "bool", "min": False, "max": True},
-                "sourceRotation": {"type": "int", "min": 0, "max": 2},
-                "spread": {"type": "float", "min": 0, "max": 6.2832},
-                "heading": {"type": "float", "min": 0, "max": 6.2832},
-                "burstFreq": {"type": "int", "min": 10, "max": 5000},
-                "burstQty": {"type": "int", "min": 1, "max": 250},
-                "yvelocity": {"type": "float", "min": 0, "max": 1},
-                "influenceSize": {"type": "int", "min": 0, "max": 1500},
-                "influenceIntensity": {"type": "float", "min": 0, "max": 1},
-                "maxspeed": {"type": "float", "min": 0.5, "max": 10}
-            },
-            "GridRunner/Source_530": {
-                "active": {"type": "bool", "min": False, "max": True},
-                "sourceRotation": {"type": "int", "min": 0, "max": 2},
-                "spread": {"type": "float", "min": 0, "max": 6.2832},
-                "heading": {"type": "float", "min": 0, "max": 6.2832},
-                "burstFreq": {"type": "int", "min": 10, "max": 5000},
-                "burstQty": {"type": "int", "min": 1, "max": 250},
-                "yvelocity": {"type": "float", "min": 0, "max": 1},
-                "influenceSize": {"type": "int", "min": 0, "max": 1500},
-                "influenceIntensity": {"type": "float", "min": 0, "max": 1},
-                "maxspeed": {"type": "float", "min": 0.5, "max": 10}
-            },
-            "GridRunner/Source_528": {
-                "active": {"type": "bool", "min": False, "max": True},
-                "sourceRotation": {"type": "int", "min": 0, "max": 2},
-                "spread": {"type": "float", "min": 0, "max": 6.2832},
-                "heading": {"type": "float", "min": 0, "max": 6.2832},
-                "burstFreq": {"type": "int", "min": 10, "max": 5000},
-                "burstQty": {"type": "int", "min": 1, "max": 250},
-                "yvelocity": {"type": "float", "min": 0, "max": 1},
-                "influenceSize": {"type": "int", "min": 0, "max": 1500},
-                "influenceIntensity": {"type": "float", "min": 0, "max": 1},
-                "maxspeed": {"type": "float", "min": 0.5, "max": 10}
-            },
-            "GridRunner/Source_525": {
-                "active": {"type": "bool", "min": False, "max": True},
-                "sourceRotation": {"type": "int", "min": 0, "max": 2},
-                "spread": {"type": "float", "min": 0, "max": 6.2832},
-                "heading": {"type": "float", "min": 0, "max": 6.2832},
-                "burstFreq": {"type": "int", "min": 10, "max": 5000},
-                "burstQty": {"type": "int", "min": 1, "max": 250},
-                "yvelocity": {"type": "float", "min": 0, "max": 1},
-                "influenceSize": {"type": "int", "min": 0, "max": 1500},
-                "influenceIntensity": {"type": "float", "min": 0, "max": 1},
-                "maxspeed": {"type": "float", "min": 0.5, "max": 10}
-            },
+            # "GridRunner": {
+            #     "gridScale": {"type": "float", "min": 0.5, "max": 5},
+            #     "nParticles": {"type": "int", "min": 5, "max": 2000}
+            # },
+            # GridRunner in SR
+            # "GridRunner/Source_523": {
+            #     "active": {"type": "bool", "min": False, "max": True},
+            #     "sourceRotation": {"type": "int", "min": 0, "max": 2},
+            #     "spread": {"type": "float", "min": 0, "max": 6.2832},
+            #     "heading": {"type": "float", "min": 0, "max": 6.2832},
+            #     "burstFreq": {"type": "int", "min": 10, "max": 5000},
+            #     "burstQty": {"type": "int", "min": 1, "max": 250},
+            #     "yvelocity": {"type": "float", "min": 0, "max": 1},
+            #     "influenceSize": {"type": "int", "min": 0, "max": 1500},
+            #     "influenceIntensity": {"type": "float", "min": 0, "max": 1},
+            #     "maxspeed": {"type": "float", "min": 0.5, "max": 10}
+            # },
+            # "GridRunner/Source_522": {
+            #     "active": {"type": "bool", "min": False, "max": True},
+            #     "sourceRotation": {"type": "int", "min": 0, "max": 2},
+            #     "spread": {"type": "float", "min": 0, "max": 6.2832},
+            #     "heading": {"type": "float", "min": 0, "max": 6.2832},
+            #     "burstFreq": {"type": "int", "min": 10, "max": 5000},
+            #     "burstQty": {"type": "int", "min": 1, "max": 250},
+            #     "yvelocity": {"type": "float", "min": 0, "max": 1},
+            #     "influenceSize": {"type": "int", "min": 0, "max": 1500},
+            #     "influenceIntensity": {"type": "float", "min": 0, "max": 1},
+            #     "maxspeed": {"type": "float", "min": 0.5, "max": 10}
+            # },
+            # "GridRunner/Source_520": {
+            #     "active": {"type": "bool", "min": False, "max": True},
+            #     "sourceRotation": {"type": "int", "min": 0, "max": 2},
+            #     "spread": {"type": "float", "min": 0, "max": 6.2832},
+            #     "heading": {"type": "float", "min": 0, "max": 6.2832},
+            #     "burstFreq": {"type": "int", "min": 10, "max": 5000},
+            #     "burstQty": {"type": "int", "min": 1, "max": 250},
+            #     "yvelocity": {"type": "float", "min": 0, "max": 1},
+            #     "influenceSize": {"type": "int", "min": 0, "max": 1500},
+            #     "influenceIntensity": {"type": "float", "min": 0, "max": 1},
+            #     "maxspeed": {"type": "float", "min": 0.5, "max": 10}
+            # },
+            # GridRunner in NR
+            # "GridRunner/Source_530": {
+            #     "active": {"type": "bool", "min": False, "max": True},
+            #     "sourceRotation": {"type": "int", "min": 0, "max": 2},
+            #     "spread": {"type": "float", "min": 0, "max": 6.2832},
+            #     "heading": {"type": "float", "min": 0, "max": 6.2832},
+            #     "burstFreq": {"type": "int", "min": 10, "max": 5000},
+            #     "burstQty": {"type": "int", "min": 1, "max": 250},
+            #     "yvelocity": {"type": "float", "min": 0, "max": 1},
+            #     "influenceSize": {"type": "int", "min": 0, "max": 1500},
+            #     "influenceIntensity": {"type": "float", "min": 0, "max": 1},
+            #     "maxspeed": {"type": "float", "min": 0.5, "max": 10}
+            # },
+            # "GridRunner/Source_528": {
+            #     "active": {"type": "bool", "min": False, "max": True},
+            #     "sourceRotation": {"type": "int", "min": 0, "max": 2},
+            #     "spread": {"type": "float", "min": 0, "max": 6.2832},
+            #     "heading": {"type": "float", "min": 0, "max": 6.2832},
+            #     "burstFreq": {"type": "int", "min": 10, "max": 5000},
+            #     "burstQty": {"type": "int", "min": 1, "max": 250},
+            #     "yvelocity": {"type": "float", "min": 0, "max": 1},
+            #     "influenceSize": {"type": "int", "min": 0, "max": 1500},
+            #     "influenceIntensity": {"type": "float", "min": 0, "max": 1},
+            #     "maxspeed": {"type": "float", "min": 0.5, "max": 10}
+            # },
+            # "GridRunner/Source_525": {
+            #     "active": {"type": "bool", "min": False, "max": True},
+            #     "sourceRotation": {"type": "int", "min": 0, "max": 2},
+            #     "spread": {"type": "float", "min": 0, "max": 6.2832},
+            #     "heading": {"type": "float", "min": 0, "max": 6.2832},
+            #     "burstFreq": {"type": "int", "min": 10, "max": 5000},
+            #     "burstQty": {"type": "int", "min": 1, "max": 250},
+            #     "yvelocity": {"type": "float", "min": 0, "max": 1},
+            #     "influenceSize": {"type": "int", "min": 0, "max": 1500},
+            #     "influenceIntensity": {"type": "float", "min": 0, "max": 1},
+            #     "maxspeed": {"type": "float", "min": 0.5, "max": 10}
+            # },
             # AmbientWaves related parameters: both North River and South River share the same set of parameters.l
             # "AmbientWaves": {
             #     "waveActive": {"type": "bool", "min": False, "max": True},
@@ -253,32 +255,42 @@ internal_env_config = {
     },
     # Observation space configuration
     #   obs_construction_method in ["concatenate", "average"]
-    "time_window_for_obs_collection": 1,  # 2 # TODO: need to be tuned (ceil(time_window_for_obs_collection*obs_frequency))
+    "time_window_for_obs_collection": 5,  # 2 # TODO: need to be tuned (ceil(time_window_for_obs_collection*obs_frequency))
     "obs_space": {"proprioception": {
-                                     "device_group": ["NR"],
-                                     # "device_group": ["NR", "SR", "MG", "TG"],
+                                     # "device_group": ["NR"],
+                                     "device_group": ["NR", "SR", "MG", "TG"],
+                                     # "device_group": ["NR", "SR"],
+                                     # "device_group": ["NR"],
                                      "actuator_type": {"SM": {"size": 1, "min": 0, "max": 1},
                                                        "MO": {"size": 1, "min": 0, "max": 1},
                                                        "RS": {"size": 1, "min": 0, "max": 1},
                                                        "DR": {"size": 1, "min": 0, "max": 1},  # DR is treated as two separate acutoators corresponding to both top and bottom pin.
                                                        "PC": {"size": 1, "min": 0, "max": 1}},
+                                     # "actuator_type": {"MO": {"size": 1, "min": 0, "max": 1},
+                                     #                   "RS": {"size": 1, "min": 0, "max": 1}},
                                      "obs_frequency": 1,
-                                     "obs_construction_method": "average",  # "concatenate", "average"
+                                     "obs_construction_method": "concatenate",  # "concatenate", "average"
                                      "obs_source_server": 'Pro_Sim'         # 'Pro_Sim', 'Uni_Sim'
                                      },
-                  "exteroception": {#"device_group": ["NR"],
+                  "exteroception": {# "device_group": ["NR"],
+                                    # "device_group": [],
                                     "device_group": ["NR", "SR", "MG", "TG"],
                                     "sensor_type": {"IR": {"size": 1, "min": 0, "max": 1},
                                                     "GE": {"size": 5, "min": 0, "max": 1},
                                                     "SD": {"size": 1, "min": 0, "max": 1}},
                                     "obs_frequency": 1,
-                                    "obs_construction_method": "average",# "concatenate", "average"
-                                    "obs_source_server": 'Pro_Sim'}},
+                                    "obs_construction_method": "concatenate",# "concatenate", "average"
+                                    "obs_source_server": 'Pro_Sim'},
+                  "add_velocity_to_obs": False,
+                  "add_past_obs_to_obs": False,
+                  "add_act_to_obs": False},
     "reward_function": {
         # learned or handcrafted
         #    1. "handcrafted_reward_component", 2. "mlp_reward_component", 3. "lstm_reward_component"
         "reward_type": "handcrafted_reward_component",
-        "hc_reward_range": "reward_range_0_pos_1"  # "reward_range_0_pos_1", "reward_range_neg_1_pos_1", "reward_range_0_pos_2" reward_range_neg_2_pos_2
+        "handcrafted_reward_type": "active_all",   # active_all, calm_all, active_NR_calm_SR, active_SR_calm_NR
+        # "reward_range_0_pos_1", "reward_range_neg_1_pos_1", "reward_range_0_pos_2", "reward_range_neg_2_pos_2", "reward_range_0_pos_10","reward_range_0_pos_100"
+        "hc_reward_range": "reward_range_0_pos_1"  #
     }
 }
 

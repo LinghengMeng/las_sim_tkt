@@ -274,7 +274,7 @@ class CommunicationManager(object):
             Different from actuators, each node only has one sensor.)
         Example address format:
             "/{Pro_Sim or Uni_Sim}/Observation/Sensors/{device_node_id}"
-            (PIN, float, float, ...) for Pro_Sim and "PIN float float ..." for Uni_Sim (PIN: int, float: range defined in config.py)
+            (PIN, float, float, ...) for Pro_Sim and "PIN float float ..." for Uni_Sim (PIN: int, float: range defined in las_config.py)
         :param address:
         :param sensor_states:
         :return:
@@ -673,7 +673,11 @@ class LASIntlEnv(object):
                                            np.array([self.act_val_max for i in range(self.act_dim)], dtype="float32"))
 
         # Init obsservation space
-        self.obs_space_dict, self.obs_space_list, self.obs_space_dim, \
+        self.add_velocity_to_obs = self.internal_env_config['obs_space']['add_velocity_to_obs']
+        self.add_act_to_obs = self.internal_env_config['obs_space']['add_act_to_obs']
+        self.add_past_obs_to_obs = self.internal_env_config['obs_space']['add_past_obs_to_obs']
+
+        self.proprio_and_extero_obs_space_dict, self.proprio_and_extero_obs_space_list, self.proprio_and_extero_obs_space_dim, \
         self.extero_obs_space_dict, self.extero_obs_space_list, self.extero_obs_space_dim, \
         self.proprio_obs_space_dict, self.proprio_obs_space_list, self.proprio_obs_space_dim = self._init_observation_space()
         # Save index of proprioceptor in NorthRiver and SouthRiver separately for a new reward function
@@ -691,14 +695,24 @@ class LASIntlEnv(object):
             if 'TG' in obs_item:
                 self.tg_proprio_idx.append(obs_idx)
 
-        self.obs_dim = self.obs_space_dim
+        self.obs_dim = self.proprio_and_extero_obs_space_dim
+        # Determine if add velocity to observation
+        if self.add_velocity_to_obs:
+            self.obs_dim = self.obs_dim + self.proprio_and_extero_obs_space_dim
+        # Determine if add action to observation
+        if self.add_act_to_obs:
+            self.obs_dim = self.obs_dim + self.act_dim
+        # Determine if add past observation to new observation (Note: setup this after add_velocity_to_obs and add_act_to_obs)
+        if self.add_past_obs_to_obs:
+            self.obs_dim = self.obs_dim*2
         self.observation_space = gym.spaces.Box(np.array([0 for i in range(self.obs_dim)], dtype="float32"),
                                                 np.array([1 for i in range(self.obs_dim)], dtype="float32"))
 
         # Init reward function
         self.reward_type = self.internal_env_config['reward_function']['reward_type']
+        self.handcrafted_reward_type = self.internal_env_config['reward_function']['handcrafted_reward_type']
         self.hc_reward_range = self.internal_env_config['reward_function']['hc_reward_range']
-        self.reward_comp = rew_comp
+        self.reward_comp = None  # rew_comp  # TODO: load reward component
 
         # Variables used to save past obs and info
         self.obs, self.info = None, None
@@ -719,15 +733,27 @@ class LASIntlEnv(object):
         self.comm_manager.excitor_client.send_message("/Excitor/Enable", "false")
         # TODO: Start video capture and set behavior mode to RL policy
 
-        # Collect current observation
-        new_obs, info = self._collect_and_construct_obs()
+        # Collect current proprioception and exteroception observation
+        new_proprio_and_extero_obs, info = self._collect_and_construct_proprio_and_extero_obs()
         new_obs_ts = datetime.now()  # new_obs timestamp
         missing_data_count = 0
         while info["obs_missing_data"]:
-            new_obs, info = self._collect_and_construct_obs()
+            new_proprio_and_extero_obs, info = self._collect_and_construct_proprio_and_extero_obs()
             missing_data_count += 1
             print('Warning! missing_data_count={}'.format(missing_data_count))
-        self.obs, self.info = new_obs, info
+
+        new_obs = new_proprio_and_extero_obs
+        # Determine if add velocity to observation
+        if self.add_velocity_to_obs:
+            new_obs = np.concatenate((new_obs, np.zeros(len(new_proprio_and_extero_obs))))  # Add zero for the initial observation
+        # Determine if add action to observation
+        if self.add_act_to_obs:
+            new_obs = np.concatenate((new_obs, np.zeros(self.act_dim)))  # Add zero for the initial observation
+        # Determine if add past observation to new observation (Note: setup this after add_velocity_to_obs and add_act_to_obs)
+        if self.add_past_obs_to_obs:
+            new_obs = np.concatenate((new_obs, np.zeros(len(new_obs))))
+
+        self.obs, self.proprio_and_extero_obs, self.info = new_obs, new_proprio_and_extero_obs, info
         self.info = {'obs_datetime': new_obs_ts}
         return new_obs, self.info
 
@@ -929,12 +955,12 @@ class LASIntlEnv(object):
                             else:
                                 raise ValueError("Please choose proper obs_construction_method!")
 
-        obs_space_dict = {**extero_obs_space_dict, **proprio_obs_space_dict}
-        obs_space_list = extero_obs_space_list + proprio_obs_space_list
+        proprio_and_extero_obs_space_dict = {**extero_obs_space_dict, **proprio_obs_space_dict}
+        proprio_and_extero_obs_space_list = extero_obs_space_list + proprio_obs_space_list
         extero_obs_space_dim = len(extero_obs_space_list)
         proprio_obs_space_dim = len(proprio_obs_space_list)
-        obs_space_dim = len(obs_space_list)
-        return obs_space_dict, obs_space_list, obs_space_dim, \
+        proprio_and_extero_obs_space_dim = len(proprio_and_extero_obs_space_list)
+        return proprio_and_extero_obs_space_dict, proprio_and_extero_obs_space_list, proprio_and_extero_obs_space_dim, \
                extero_obs_space_dict, extero_obs_space_list, extero_obs_space_dim, \
                proprio_obs_space_dict, proprio_obs_space_list, proprio_obs_space_dim
 
@@ -1007,7 +1033,7 @@ class LASIntlEnv(object):
                 raw_act_confirm.append(act_confirm_buff.get())
         return raw_act_received_flag, raw_act_confirm
 
-    def _collect_and_construct_obs(self):
+    def _collect_and_construct_proprio_and_extero_obs(self):
         """Construct observation."""
         extero_obs_source_server = self.internal_env_config['obs_space']['exteroception']['obs_source_server']
         proprio_obs_source_server = self.internal_env_config['obs_space']['proprioception']['obs_source_server']
@@ -1055,7 +1081,7 @@ class LASIntlEnv(object):
                         raise ValueError("Please check obs_construction_type.")
                 else:
                     # Because message sending is not exactly at a fixed frequency, we need to down sample received
-                    #   message to a fixed length.
+                    #   message to a fixed length by evenly splitting the range to sub-windows, and pick the last one in each sub-window.
                     downsample_index = []
                     for sub_window in np.array_split(np.arange(size), sample_size):
                         downsample_index.append(sub_window[-1])
@@ -1151,34 +1177,40 @@ class LASIntlEnv(object):
                                     raise ValueError("Please check obs_construction_type.")
                 proprio_obs_list.extend(tmp_integrated_obs)
         # Combine observation for exterp- and proprioception
-        obs_array = np.asarray(extero_obs_list + proprio_obs_list)
+        proprio_and_extero_obs = np.asarray(proprio_obs_list + extero_obs_list)
         info = {"obs_missing_data": obs_missing_data,
                 "extero_obs_list": extero_obs_list, "proprio_obs_list": proprio_obs_list}
 
-        return obs_array, info
+        return proprio_and_extero_obs, info
 
-    def _calculate_handcrafted_reward(self, obs, act, new_obs):
-        # The handcrafted reward function rewards active intensity of actuators.
-        # Note: Obs is a concatenation of exteroception and proprioception
-        # Reward active behavior in NorthRiver and calm behavior in SouthRiver
-        ########################################################################################
-        # reward = -np.mean(new_obs[self.nr_proprio_idx]) + np.mean(new_obs[self.sr_proprio_idx])
-        # # print("nr: {} sr: {}".format(np.sum(new_obs[self.nr_proprio_idx]), np.sum(new_obs[self.sr_proprio_idx])))
-        # # import pdb; pdb.set_trace()
-        ########################################################################################
-        # reward = -np.mean(new_obs[-len(self.proprio_obs_space_list):])
-        ########################################################################################
-        reward = np.mean(new_obs[-len(self.proprio_obs_space_list):])
-        ########################################################################################
+    def _calculate_handcrafted_reward(self, obs, act, new_obs, info):
+        """Define handcrafted reward function"""
+        extero_obs = np.asarray(info['extero_obs_list'])
+        proprio_obs = np.asarray(info['proprio_obs_list'])
+        # Calculate reward
+        if self.handcrafted_reward_type == 'active_all':
+            # Reward active behavior in the whole sculpture
+            reward = np.mean(proprio_obs)
+        elif self.handcrafted_reward_type == 'calm_all':
+            # Reward calm behavior in the whole sculpture
+            reward = -np.mean(proprio_obs)
+        elif self.handcrafted_reward_type == 'active_NR_calm_SR':
+            # Reward active behavior in NorthRiver and calm behavior in SouthRiver
+            reward = np.mean(proprio_obs[self.nr_proprio_idx]) - np.mean(proprio_obs[self.sr_proprio_idx])
+        elif self.handcrafted_reward_type == 'active_SR_calm_NR':
+            # Reward active behavior in SouthRiver and calm behavior in NorthRiver
+            reward = -np.mean(proprio_obs[self.nr_proprio_idx]) + np.mean(proprio_obs[self.sr_proprio_idx])
+        else:
+            raise ValueError("handcrafted_reward_type: {} is not defined!".format(self.handcrafted_reward_type))
+
+        # Shift the reward to different value ranges
         reward_range_0_pos_1 = reward
-        # # TODO:
         reward_range_neg_1_pos_1 = reward*2-1
-
-        # # TODO:
         reward_range_0_pos_2 = reward*2
-        #
         reward_range_neg_2_pos_2 = reward * 4 - 2
-        return reward_range_0_pos_1, reward_range_neg_1_pos_1, reward_range_0_pos_2, reward_range_neg_2_pos_2
+        reward_range_0_pos_10 = reward * 10
+        reward_range_0_pos_100 = reward * 100
+        return reward_range_0_pos_1, reward_range_neg_1_pos_1, reward_range_0_pos_2, reward_range_neg_2_pos_2, reward_range_0_pos_10, reward_range_0_pos_100
 
     def step(self, action):
         """
@@ -1214,13 +1246,25 @@ class LASIntlEnv(object):
         time.sleep(self.wait_time_for_action_execution)
 
         # 5. Collect and construct observation
-        new_obs, info = self._collect_and_construct_obs()
+        # Collect current proprioception and exteroception observation
+        new_proprio_and_extero_obs, info = self._collect_and_construct_proprio_and_extero_obs()
         new_obs_ts = datetime.now()  # new_obs timestamp
         missing_data_count = 0
         while info["obs_missing_data"]:
-            new_obs, info = self._collect_and_construct_obs()
+            new_proprio_and_extero_obs, info = self._collect_and_construct_proprio_and_extero_obs()
             missing_data_count += 1
             print('Warning! missing_data_count={}'.format(missing_data_count))
+
+        new_obs = new_proprio_and_extero_obs
+        # Determine if add velocity to observation
+        if self.add_velocity_to_obs:
+            new_obs = np.concatenate((new_obs, new_proprio_and_extero_obs-self.proprio_and_extero_obs))  # Add zero for the initial observation
+        # Determine if add action to observation
+        if self.add_act_to_obs:
+            new_obs = np.concatenate((new_obs, action))  # Add zero for the initial observation
+        # Determine if add past observation to new observation (Note: setup this after add_velocity_to_obs and add_act_to_obs)
+        if self.add_past_obs_to_obs:
+            new_obs = np.concatenate((new_obs, self.obs[-int(len(self.obs)/2):]))  # Note: only add the second half of the past observation
 
         # Add local trajectory
         self.obs_traj.append(self.obs.reshape(1, -1))
@@ -1238,10 +1282,14 @@ class LASIntlEnv(object):
         # if not info["obs_missing_data"] and raw_act_received_flag:
         if not info["obs_missing_data"]:
             # 6. Calculate reward
-            reward_range_0_pos_1, reward_range_neg_1_pos_1, reward_range_0_pos_2, reward_range_neg_2_pos_2 = self._calculate_handcrafted_reward(self.obs, action, new_obs)
-            info['reward_range_0_pos_1'], info['reward_range_neg_1_pos_1'], info[
-                'reward_range_0_pos_2'], info[
-                'reward_range_neg_2_pos_2'] = reward_range_0_pos_1, reward_range_neg_1_pos_1, reward_range_0_pos_2, reward_range_neg_2_pos_2
+            reward_range_0_pos_1, reward_range_neg_1_pos_1, \
+            reward_range_0_pos_2, reward_range_neg_2_pos_2, \
+            reward_range_0_pos_10, reward_range_0_pos_100 = self._calculate_handcrafted_reward(self.obs, action, new_obs, info)
+            info['reward_range_0_pos_1'], info['reward_range_neg_1_pos_1'], \
+            info['reward_range_0_pos_2'], info['reward_range_neg_2_pos_2'], \
+            info['reward_range_0_pos_10'], info[
+                'reward_range_0_pos_100'] = reward_range_0_pos_1, reward_range_neg_1_pos_1, reward_range_0_pos_2, reward_range_neg_2_pos_2, reward_range_0_pos_10, reward_range_0_pos_100
+
             if self.hc_reward_range == 'reward_range_0_pos_1':
                 extl_rew = reward_range_0_pos_1
             elif self.hc_reward_range == 'reward_range_neg_1_pos_1':
@@ -1250,6 +1298,10 @@ class LASIntlEnv(object):
                 extl_rew = reward_range_0_pos_2
             elif self.hc_reward_range == 'reward_range_neg_2_pos_2':
                 extl_rew = reward_range_neg_2_pos_2
+            elif self.hc_reward_range == 'reward_range_0_pos_10':
+                extl_rew = reward_range_0_pos_10
+            elif self.hc_reward_range == 'reward_range_0_pos_100':
+                extl_rew = reward_range_0_pos_100
             else:
                 raise ValueError("Wrong reward_range: {}".format(self.hc_reward_range))
             if self.rew_comp is None:
@@ -1279,14 +1331,10 @@ class LASIntlEnv(object):
             #                                            list(obs), obs_time, list(act), act_time,
             #                                            rew, list(new_obs), new_obs_time, datetime.now())
         else:
-            print("Missing data")
-            new_obs = np.zeros(self.obs_dim)
-            extl_rew = 0
-            done = False
-
+            raise ValueError("Missing data!")
 
         # Crucial note: Update current observation after reward computation.
-        self.obs, self.info = new_obs, info
+        self.obs, self.proprio_and_extero_obs, self.info = new_obs, new_proprio_and_extero_obs, info
         # Store extl_env to info for diagnostic purpose
         info['extl_rew'] = extl_rew
         info['act_datetime'] = act_ts
@@ -1294,245 +1342,245 @@ class LASIntlEnv(object):
 
         return new_obs, rew, done, info
 
-    def _excitor_elicited_raw_act_collection(self, sample_size=30, act_interval=0.5):
-        """
-        Function used to collect raw actions elicited by excitor.
-        :param sample_size: the the number of action is going to collect
-        :param act_interval: the interval between two sampled actions
-        :return:
-        """
-        excitor_raw_act_source_server = self.internal_env_config['action_space']['raw_act_space']['LAS_for_action_execution']
-        excitor_raw_act_trajectory = []
-        sample_i = 0
-        while sample_i < sample_size:
-            time.sleep(act_interval)  # Adjust time for excitor raw action collection frequency
-            # Start receiving and then pause
-            self.comm_manager.empty_excitor_raw_act_buffer()
-            self.comm_manager.serve_excitor_raw_act_server(serve_time = 0.1)
-
-            # Construct raw action elicited by excitor
-            excitor_raw_act = []
-            for device_group in self.raw_act_space_dict:
-                for device_node_id in self.raw_act_space_dict[device_group]:
-                    # Only consider node with actuators and construct message in format: "pin float pin float ..."
-                    if len(self.raw_act_space_dict[device_group][device_node_id]) != 0:
-                        for device_name in self.raw_act_space_dict[device_group][device_node_id]:
-                            _, _, device, device_num, device_pin = device_name.split('_')
-                            device_id = '{}_{}_{}_{}'.format(device_node_id, device, device_num, device_pin)
-                            raw_act = 0
-                            if self.comm_manager.excitor_raw_act_buffer[excitor_raw_act_source_server][device][
-                                device_id].empty():
-                                # if no raw action, action = 0
-                                # print("Empty: {}".format(device_id))
-                                pass
-                            else:
-                                # Get the last action and empty other
-                                while not \
-                                        self.comm_manager.excitor_raw_act_buffer[excitor_raw_act_source_server][device][
-                                            device_id].empty():
-                                    raw_act = \
-                                    self.comm_manager.excitor_raw_act_buffer[excitor_raw_act_source_server][device][
-                                        device_id].get()
-                            # Transform from [0,1] to [-1,1]
-                            raw_act = raw_act * (self.act_val_max - self.act_val_min) + self.act_val_min
-                            excitor_raw_act.append(raw_act)
-            # Add act to sampled trajectory
-            excitor_raw_act_trajectory.append(excitor_raw_act)
-            sample_i += 1
-
-        excitor_raw_act_trajectory = np.asarray(excitor_raw_act_trajectory)
-        return excitor_raw_act_trajectory
-
-    def collect_excitor_based_experiences(self, sample_size=30, act_interval=1):
-        """
-        This function is used for collecting excitor based experiences
-        :param sample_size: the number of samples going to collect
-        :param act_interval: interval of actions when collecting from excitor
-        :return:
-        """
-        behaviour_mode = "Excitor"
-        # 1. Enable excitor
-        self.comm_manager.excitor_client.send_message("/Excitor/Enable", "true")
-
-        # 2 Collect actions elicited by excitor.
-        excitor_raw_act_trajectory = self._excitor_elicited_raw_act_collection(sample_size=sample_size,
-                                                                               act_interval=act_interval)
-        # If no actuator is activated for the whole trajectory, it's probably the excitor is unenabled.
-        if not np.any(excitor_raw_act_trajectory > 0):
-            return excitor_raw_act_trajectory
-            raise ValueError(
-                "Something wrong with excitor_elicited_raw_act_collection! Please check if Excitor is enabled?")
-
-        # 3. Disable excitor
-        self.comm_manager.excitor_client.send_message("/Excitor/Enable", "false")
-
-        # 4. Start recording video
-        self.comm_manager.video_capture_client.send_message("/Video_Capture", "Start")
-
-        # 5. Collect (action, observation) trajectories
-        #    Get initial observation
-        print("Start collecting experiences...")
-        while True:
-            print("Get initial observation")
-            obs, info = self._collect_and_construct_obs()
-            obs_time = datetime.now()
-            if not info['obs_missing_data']:
-                break
-            else:
-                print("info['obs_missing_data']={}".format(info['obs_missing_data']))
-        print("Collecting experiences...")
-        excitor_i = 0
-        while excitor_i < len(excitor_raw_act_trajectory):
-            act = excitor_raw_act_trajectory[excitor_i]
-
-            # 5.1. Start act_confirm_server
-            self.comm_manager.start_act_confirm_server()
-            # 5.2. Execute action
-            self._execute_raw_action(act)
-            act_time = datetime.now()
-            # 5.3. Collect and construct observation
-            new_obs, info = self._collect_and_construct_obs()
-            new_obs_time = datetime.now()
-            # 5.4. Collect action confirmation after observation to earn enough time for receiving them.
-            self.comm_manager.pause_act_confirm_server()
-            raw_act_received_flag, raw_act_confirm = self._collect_raw_action_execution_confirmation()
-            info["raw_act_received_flag"] = raw_act_received_flag
-            info["raw_act_confirm"] = raw_act_confirm
-
-            # 5.5 Store (action, observation) trajectory if no data missing
-            if not info['obs_missing_data'] and info["raw_act_received_flag"]:
-                self.local_db.store_experience(behaviour_mode,
-                                               list(obs), obs_time, list(act), act_time,
-                                               0, list(new_obs), new_obs_time)
-                obs = new_obs
-                obs_time = new_obs_time
-                excitor_i += 1
-        # 6. Stop recording video
-        self.comm_manager.video_capture_client.send_message("/Video_Capture", "Stop")
-        time.sleep(5)  # Add an idle time after stopping video capture to allow video encoding completion.
-        return excitor_raw_act_trajectory
-
-    def collect_random_experiences(self, sample_size=30):
-        behaviour_mode = "Random"
-        act_trajectory = []
-        # 1. Disable excitor
-        self.comm_manager.excitor_client.send_message("/Excitor/Enable", "false")
-
-        # 2. Start recording video
-        self.comm_manager.video_capture_client.send_message("/Video_Capture", "Start")
-
-        # 3. Collect (action, observation) trajectories
-        #    Get initial observation
-        print("Start collecting experiences...")
-        while True:
-            print("Get initial observation")
-            obs, info = self._collect_and_construct_obs()
-            obs_time = datetime.now()
-            if not info['obs_missing_data']:
-                break
-            else:
-                print("info['obs_missing_data']={}".format(info['obs_missing_data']))
-        random_act_i = 0
-        while random_act_i < sample_size:
-            act = np.random.uniform(-1, 1, self.raw_act_space_dim)
-            # 3.1. Start act_confirm_server
-            self.comm_manager.start_act_confirm_server()
-            # 3.2. Execute action
-            self._execute_raw_action(act)
-            act_time = datetime.now()
-            # 3.3. Collect and construct observation
-            new_obs, info = self._collect_and_construct_obs()
-            new_obs_time = datetime.now()
-            # 3.4. Collect action confirmation after observation to earn enough time for receiving them.
-            self.comm_manager.pause_act_confirm_server()
-            raw_act_received_flag, raw_act_confirm = self._collect_raw_action_execution_confirmation()
-            info["raw_act_received_flag"] = raw_act_received_flag
-            info["raw_act_confirm"] = raw_act_confirm
-
-            # 3.5 Store (action, observation) trajectory if no data missing
-            # if not info['obs_missing_data'] and info["raw_act_received_flag"]:
-            if not info['obs_missing_data']:
-                act_trajectory.append(act)
-                # proprio_obs_active = len(np.where(np.array(info['proprio_obs_list']) != 0)[0])
-                # act_active = len(np.where(act != -1)[0]) * self.internal_env_config['obs_space']['proprioception'][
-                #     'obs_frequency']
-                # print("\t act_active:{}".format(act_active))
-                # print("\t proprio_obs_active:{}".format(proprio_obs_active))
-                # behaviour_mode, obs, obs_time, act, act_time, rew, obs2, obs2_time, create_time
-                self.local_db.store_experience(behaviour_mode,
-                                               list(obs), obs_time, list(act), act_time,
-                                               0, list(new_obs), new_obs_time)
-                obs = new_obs
-                obs_time = new_obs_time
-                random_act_i += 1
-            else:
-                print("info['obs_missing_data']={}, info['raw_act_received_flag']={}".format(info['obs_missing_data'],
-                                                                                             info["raw_act_received_flag"]))
-        # 4. Stop recording video
-        self.comm_manager.video_capture_client.send_message("/Video_Capture", "Stop")
-        time.sleep(5)  # Add an idle time after stopping video capture to allow video encoding completion.
-        return np.array(act_trajectory)
-
-    def collect_silence_experiences(self, sample_size=30):
-        behaviour_mode = "Silence"
-        act_trajectory = []
-        # 1. Disable excitor
-        self.comm_manager.excitor_client.send_message("/Excitor/Enable", "false")
-
-        # 2. Start recording video
-        self.comm_manager.video_capture_client.send_message("/Video_Capture", "Start")
-
-        # 3. Collect (action, observation) trajectories
-        #    Get initial observation
-        print("Start collecting experiences...")
-        while True:
-            print("Get initial observation")
-            obs, info = self._collect_and_construct_obs()
-            obs_time = datetime.now()
-            if not info['obs_missing_data']:
-                break
-            else:
-                print("info['obs_missing_data']={}".format(info['obs_missing_data']))
-        random_act_i = 0
-        while random_act_i < sample_size:
-            act = np.random.uniform(-1, 0, self.raw_act_space_dim)
-            # 3.1. Start act_confirm_server
-            self.comm_manager.start_act_confirm_server()
-            # 3.2. Execute action
-            self._execute_raw_action(act)
-            act_time = datetime.now()
-            # 3.3. Collect and construct observation
-            new_obs, info = self._collect_and_construct_obs()
-            new_obs_time = datetime.now()
-            # 3.4. Collect action confirmation after observation to earn enough time for receiving them.
-            self.comm_manager.pause_act_confirm_server()
-            raw_act_received_flag, raw_act_confirm = self._collect_raw_action_execution_confirmation()
-            info["raw_act_received_flag"] = raw_act_received_flag
-            info["raw_act_confirm"] = raw_act_confirm
-
-            # 3.5 Store (action, observation) trajectory if no data missing
-            # if not info['obs_missing_data'] and info["raw_act_received_flag"]:
-            if not info['obs_missing_data']:
-                act_trajectory.append(act)
-                # proprio_obs_active = len(np.where(np.array(info['proprio_obs_list']) != 0)[0])
-                # act_active = len(np.where(act != -1)[0]) * self.internal_env_config['obs_space']['proprioception'][
-                #     'obs_frequency']
-                # print("\t act_active:{}".format(act_active))
-                # print("\t proprio_obs_active:{}".format(proprio_obs_active))
-                # behaviour_mode, obs, obs_time, act, act_time, rew, obs2, obs2_time, create_time
-                self.local_db.store_experience(behaviour_mode,
-                                               list(obs), obs_time, list(act), act_time,
-                                               0, list(new_obs), new_obs_time)
-                obs = new_obs
-                obs_time = new_obs_time
-                random_act_i += 1
-            else:
-                print("info['obs_missing_data']={}, info['raw_act_received_flag']={}".format(info['obs_missing_data'],
-                                                                                             info["raw_act_received_flag"]))
-        # 4. Stop recording video
-        self.comm_manager.video_capture_client.send_message("/Video_Capture", "Stop")
-        time.sleep(5)  # Add an idle time after stopping video capture to allow video encoding completion.
-        return np.array(act_trajectory)
+    # def _excitor_elicited_raw_act_collection(self, sample_size=30, act_interval=0.5):
+    #     """
+    #     Function used to collect raw actions elicited by excitor.
+    #     :param sample_size: the the number of action is going to collect
+    #     :param act_interval: the interval between two sampled actions
+    #     :return:
+    #     """
+    #     excitor_raw_act_source_server = self.internal_env_config['action_space']['raw_act_space']['LAS_for_action_execution']
+    #     excitor_raw_act_trajectory = []
+    #     sample_i = 0
+    #     while sample_i < sample_size:
+    #         time.sleep(act_interval)  # Adjust time for excitor raw action collection frequency
+    #         # Start receiving and then pause
+    #         self.comm_manager.empty_excitor_raw_act_buffer()
+    #         self.comm_manager.serve_excitor_raw_act_server(serve_time = 0.1)
+    #
+    #         # Construct raw action elicited by excitor
+    #         excitor_raw_act = []
+    #         for device_group in self.raw_act_space_dict:
+    #             for device_node_id in self.raw_act_space_dict[device_group]:
+    #                 # Only consider node with actuators and construct message in format: "pin float pin float ..."
+    #                 if len(self.raw_act_space_dict[device_group][device_node_id]) != 0:
+    #                     for device_name in self.raw_act_space_dict[device_group][device_node_id]:
+    #                         _, _, device, device_num, device_pin = device_name.split('_')
+    #                         device_id = '{}_{}_{}_{}'.format(device_node_id, device, device_num, device_pin)
+    #                         raw_act = 0
+    #                         if self.comm_manager.excitor_raw_act_buffer[excitor_raw_act_source_server][device][
+    #                             device_id].empty():
+    #                             # if no raw action, action = 0
+    #                             # print("Empty: {}".format(device_id))
+    #                             pass
+    #                         else:
+    #                             # Get the last action and empty other
+    #                             while not \
+    #                                     self.comm_manager.excitor_raw_act_buffer[excitor_raw_act_source_server][device][
+    #                                         device_id].empty():
+    #                                 raw_act = \
+    #                                 self.comm_manager.excitor_raw_act_buffer[excitor_raw_act_source_server][device][
+    #                                     device_id].get()
+    #                         # Transform from [0,1] to [-1,1]
+    #                         raw_act = raw_act * (self.act_val_max - self.act_val_min) + self.act_val_min
+    #                         excitor_raw_act.append(raw_act)
+    #         # Add act to sampled trajectory
+    #         excitor_raw_act_trajectory.append(excitor_raw_act)
+    #         sample_i += 1
+    #
+    #     excitor_raw_act_trajectory = np.asarray(excitor_raw_act_trajectory)
+    #     return excitor_raw_act_trajectory
+    #
+    # def collect_excitor_based_experiences(self, sample_size=30, act_interval=1):
+    #     """
+    #     This function is used for collecting excitor based experiences
+    #     :param sample_size: the number of samples going to collect
+    #     :param act_interval: interval of actions when collecting from excitor
+    #     :return:
+    #     """
+    #     behaviour_mode = "Excitor"
+    #     # 1. Enable excitor
+    #     self.comm_manager.excitor_client.send_message("/Excitor/Enable", "true")
+    #
+    #     # 2 Collect actions elicited by excitor.
+    #     excitor_raw_act_trajectory = self._excitor_elicited_raw_act_collection(sample_size=sample_size,
+    #                                                                            act_interval=act_interval)
+    #     # If no actuator is activated for the whole trajectory, it's probably the excitor is unenabled.
+    #     if not np.any(excitor_raw_act_trajectory > 0):
+    #         return excitor_raw_act_trajectory
+    #         raise ValueError(
+    #             "Something wrong with excitor_elicited_raw_act_collection! Please check if Excitor is enabled?")
+    #
+    #     # 3. Disable excitor
+    #     self.comm_manager.excitor_client.send_message("/Excitor/Enable", "false")
+    #
+    #     # 4. Start recording video
+    #     self.comm_manager.video_capture_client.send_message("/Video_Capture", "Start")
+    #
+    #     # 5. Collect (action, observation) trajectories
+    #     #    Get initial observation
+    #     print("Start collecting experiences...")
+    #     while True:
+    #         print("Get initial observation")
+    #         obs, info = self._collect_and_construct_obs()
+    #         obs_time = datetime.now()
+    #         if not info['obs_missing_data']:
+    #             break
+    #         else:
+    #             print("info['obs_missing_data']={}".format(info['obs_missing_data']))
+    #     print("Collecting experiences...")
+    #     excitor_i = 0
+    #     while excitor_i < len(excitor_raw_act_trajectory):
+    #         act = excitor_raw_act_trajectory[excitor_i]
+    #
+    #         # 5.1. Start act_confirm_server
+    #         self.comm_manager.start_act_confirm_server()
+    #         # 5.2. Execute action
+    #         self._execute_raw_action(act)
+    #         act_time = datetime.now()
+    #         # 5.3. Collect and construct observation
+    #         new_obs, info = self._collect_and_construct_obs()
+    #         new_obs_time = datetime.now()
+    #         # 5.4. Collect action confirmation after observation to earn enough time for receiving them.
+    #         self.comm_manager.pause_act_confirm_server()
+    #         raw_act_received_flag, raw_act_confirm = self._collect_raw_action_execution_confirmation()
+    #         info["raw_act_received_flag"] = raw_act_received_flag
+    #         info["raw_act_confirm"] = raw_act_confirm
+    #
+    #         # 5.5 Store (action, observation) trajectory if no data missing
+    #         if not info['obs_missing_data'] and info["raw_act_received_flag"]:
+    #             self.local_db.store_experience(behaviour_mode,
+    #                                            list(obs), obs_time, list(act), act_time,
+    #                                            0, list(new_obs), new_obs_time)
+    #             obs = new_obs
+    #             obs_time = new_obs_time
+    #             excitor_i += 1
+    #     # 6. Stop recording video
+    #     self.comm_manager.video_capture_client.send_message("/Video_Capture", "Stop")
+    #     time.sleep(5)  # Add an idle time after stopping video capture to allow video encoding completion.
+    #     return excitor_raw_act_trajectory
+    #
+    # def collect_random_experiences(self, sample_size=30):
+    #     behaviour_mode = "Random"
+    #     act_trajectory = []
+    #     # 1. Disable excitor
+    #     self.comm_manager.excitor_client.send_message("/Excitor/Enable", "false")
+    #
+    #     # 2. Start recording video
+    #     self.comm_manager.video_capture_client.send_message("/Video_Capture", "Start")
+    #
+    #     # 3. Collect (action, observation) trajectories
+    #     #    Get initial observation
+    #     print("Start collecting experiences...")
+    #     while True:
+    #         print("Get initial observation")
+    #         obs, info = self._collect_and_construct_obs()
+    #         obs_time = datetime.now()
+    #         if not info['obs_missing_data']:
+    #             break
+    #         else:
+    #             print("info['obs_missing_data']={}".format(info['obs_missing_data']))
+    #     random_act_i = 0
+    #     while random_act_i < sample_size:
+    #         act = np.random.uniform(-1, 1, self.raw_act_space_dim)
+    #         # 3.1. Start act_confirm_server
+    #         self.comm_manager.start_act_confirm_server()
+    #         # 3.2. Execute action
+    #         self._execute_raw_action(act)
+    #         act_time = datetime.now()
+    #         # 3.3. Collect and construct observation
+    #         new_obs, info = self._collect_and_construct_obs()
+    #         new_obs_time = datetime.now()
+    #         # 3.4. Collect action confirmation after observation to earn enough time for receiving them.
+    #         self.comm_manager.pause_act_confirm_server()
+    #         raw_act_received_flag, raw_act_confirm = self._collect_raw_action_execution_confirmation()
+    #         info["raw_act_received_flag"] = raw_act_received_flag
+    #         info["raw_act_confirm"] = raw_act_confirm
+    #
+    #         # 3.5 Store (action, observation) trajectory if no data missing
+    #         # if not info['obs_missing_data'] and info["raw_act_received_flag"]:
+    #         if not info['obs_missing_data']:
+    #             act_trajectory.append(act)
+    #             # proprio_obs_active = len(np.where(np.array(info['proprio_obs_list']) != 0)[0])
+    #             # act_active = len(np.where(act != -1)[0]) * self.internal_env_config['obs_space']['proprioception'][
+    #             #     'obs_frequency']
+    #             # print("\t act_active:{}".format(act_active))
+    #             # print("\t proprio_obs_active:{}".format(proprio_obs_active))
+    #             # behaviour_mode, obs, obs_time, act, act_time, rew, obs2, obs2_time, create_time
+    #             self.local_db.store_experience(behaviour_mode,
+    #                                            list(obs), obs_time, list(act), act_time,
+    #                                            0, list(new_obs), new_obs_time)
+    #             obs = new_obs
+    #             obs_time = new_obs_time
+    #             random_act_i += 1
+    #         else:
+    #             print("info['obs_missing_data']={}, info['raw_act_received_flag']={}".format(info['obs_missing_data'],
+    #                                                                                          info["raw_act_received_flag"]))
+    #     # 4. Stop recording video
+    #     self.comm_manager.video_capture_client.send_message("/Video_Capture", "Stop")
+    #     time.sleep(5)  # Add an idle time after stopping video capture to allow video encoding completion.
+    #     return np.array(act_trajectory)
+    #
+    # def collect_silence_experiences(self, sample_size=30):
+    #     behaviour_mode = "Silence"
+    #     act_trajectory = []
+    #     # 1. Disable excitor
+    #     self.comm_manager.excitor_client.send_message("/Excitor/Enable", "false")
+    #
+    #     # 2. Start recording video
+    #     self.comm_manager.video_capture_client.send_message("/Video_Capture", "Start")
+    #
+    #     # 3. Collect (action, observation) trajectories
+    #     #    Get initial observation
+    #     print("Start collecting experiences...")
+    #     while True:
+    #         print("Get initial observation")
+    #         obs, info = self._collect_and_construct_obs()
+    #         obs_time = datetime.now()
+    #         if not info['obs_missing_data']:
+    #             break
+    #         else:
+    #             print("info['obs_missing_data']={}".format(info['obs_missing_data']))
+    #     random_act_i = 0
+    #     while random_act_i < sample_size:
+    #         act = np.random.uniform(-1, 0, self.raw_act_space_dim)
+    #         # 3.1. Start act_confirm_server
+    #         self.comm_manager.start_act_confirm_server()
+    #         # 3.2. Execute action
+    #         self._execute_raw_action(act)
+    #         act_time = datetime.now()
+    #         # 3.3. Collect and construct observation
+    #         new_obs, info = self._collect_and_construct_obs()
+    #         new_obs_time = datetime.now()
+    #         # 3.4. Collect action confirmation after observation to earn enough time for receiving them.
+    #         self.comm_manager.pause_act_confirm_server()
+    #         raw_act_received_flag, raw_act_confirm = self._collect_raw_action_execution_confirmation()
+    #         info["raw_act_received_flag"] = raw_act_received_flag
+    #         info["raw_act_confirm"] = raw_act_confirm
+    #
+    #         # 3.5 Store (action, observation) trajectory if no data missing
+    #         # if not info['obs_missing_data'] and info["raw_act_received_flag"]:
+    #         if not info['obs_missing_data']:
+    #             act_trajectory.append(act)
+    #             # proprio_obs_active = len(np.where(np.array(info['proprio_obs_list']) != 0)[0])
+    #             # act_active = len(np.where(act != -1)[0]) * self.internal_env_config['obs_space']['proprioception'][
+    #             #     'obs_frequency']
+    #             # print("\t act_active:{}".format(act_active))
+    #             # print("\t proprio_obs_active:{}".format(proprio_obs_active))
+    #             # behaviour_mode, obs, obs_time, act, act_time, rew, obs2, obs2_time, create_time
+    #             self.local_db.store_experience(behaviour_mode,
+    #                                            list(obs), obs_time, list(act), act_time,
+    #                                            0, list(new_obs), new_obs_time)
+    #             obs = new_obs
+    #             obs_time = new_obs_time
+    #             random_act_i += 1
+    #         else:
+    #             print("info['obs_missing_data']={}, info['raw_act_received_flag']={}".format(info['obs_missing_data'],
+    #                                                                                          info["raw_act_received_flag"]))
+    #     # 4. Stop recording video
+    #     self.comm_manager.video_capture_client.send_message("/Video_Capture", "Stop")
+    #     time.sleep(5)  # Add an idle time after stopping video capture to allow video encoding completion.
+    #     return np.array(act_trajectory)
 
 def main():
     from pl import las_config

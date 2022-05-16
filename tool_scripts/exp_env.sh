@@ -56,8 +56,10 @@ else
   echo "Preparing experiment run code" 
   # Create folders to save data
   mkdir -p $exp_run_code_dir $exp_run_dep_dir $exp_run_data_dir $exp_run_video_dir
-  # Copy 1. Processing-Simulator, 2. Gaslight-OSC-Server, and 3. PL-POMDP in exp_code_base into exp_run_#/exp_code
-  cp -a  /las_sim_tkt/code_base/* $exp_run_code_dir
+  
+
+  # Copy 1. Processing-Simulator, 2. Gaslight-OSC-Server
+  cp -a  /las_sim_tkt/code_base/{Processing-Simulator,Gaslight-OSC-Server} $exp_run_code_dir
   echo "Preparing experiment run code done"
   # Important: make symbolic link within /exp_data/$exp_run_dir/exp_run_code/Gaslight-OSC-Server to target "$exp_run_code/Processing-Simulator/Control_World/data/Meander_AUG15" with linkename behaviour_settings_simulator
   # behaviour_settings_simulator
@@ -77,17 +79,19 @@ fi
 #                     Prepare python environment                            #
 # Note: do not share python env among different experiment runs.            #  
 #############################################################################
-# Prepare python environment (Python environment needs to be installed for each experiment run. Otherwise, pip install -e . for PL-POMDP will change the package to the new code folder in exp_run_#/exp_run_code/PL-POMDP)
+# Copy PL-POMDP in exp_code_base into las_sim_tkt_dep
+cp -a  /las_sim_tkt/code_base/PL-POMDP /las_sim_tkt_dep
+# Prepare python environment (Python environment is shared among experiment runs, so provide a las_intl_env_config file for each run to configurate its LAS internal environment.)
 # Install python packages
 echo "Preparing python environment"
-if [ ! -d $exp_run_dep_dir/pl_env ]
+if [ ! -d /las_sim_tkt_dep/pl_env ]
 then
-    mkdir -p $exp_run_dep_dir/pl_env
-    cd $exp_run_dep_dir
+    mkdir -p /las_sim_tkt_dep/pl_env
+    cd /las_sim_tkt_dep/pl_env
     tar -xzf /las_sim_tkt_pkg/pl_env.tar.gz -C pl_env
 fi
 # Activate the environment, which will add `/las_sim_tkt_dep/pl_env/bin` to your path
 # TODO: consider download packages for offline installation
-source $exp_run_dep_dir/pl_env/bin/activate
-cd $exp_run_code_dir/PL-POMDP 
+source /las_sim_tkt_dep/pl_env/bin/activate
+cd /las_sim_tkt_dep/PL-POMDP
 pip install -e .    # Install pl and its dependencies

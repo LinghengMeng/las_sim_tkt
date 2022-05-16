@@ -229,7 +229,7 @@ class SAC(object):
 
                 # batch = self.replay_buffer.sample_batch(self.batch_size, device=self.ac_device,
                 #                                         mem_len=reward_mem_len)
-                batch = self.mem_manager.sample_exp_batch(self.batch_size, device=self.ac_device, mem_len=reward_mem_len)
+                batch = self.mem_manager.sample_exp_batch(self.batch_size, device=self.ac_device, reward_mem_len=reward_mem_len)
 
                 # First run one gradient descent step for Q1 and Q2
                 self.q_optimizer.zero_grad()

@@ -3,6 +3,7 @@ import os.path as osp
 from collections import deque
 import os
 import sys
+import importlib.util
 import json
 import torch
 import numpy as np
@@ -14,6 +15,7 @@ from pl.envs.gym_intl_env import IntlEnv
 from pl.envs.las_intl_env import LASIntlEnv
 from pl.prefs.pref_collectors import SyntheticPreferenceCollector, HumanPreferenceCollector
 from pl.rews.rew_comp import RewardComponent, MLPRewardComponent, LSTMRewardComponent
+from pl.agents.random_agent.random_agent import RandomAgent
 from pl.agents.ddpg.ddpg import DDPG
 from pl.agents.td3.td3 import TD3
 from pl.agents.td3_bc.td3_bc import TD3BC
@@ -28,7 +30,7 @@ import gc
 import sqlite3
 
 
-def preference_teaching(env_id, env_dp_type, seed, gym_env_obs_tile,
+def preference_teaching(env_id, env_dp_type, seed, gym_env_obs_tile, stochastic_env,
                         rl_reward_type, rl_agent, recompute_reward_in_backup,
                         reward_comp_type, reward_limit, reward_comp_drop_prob,
                         reward_net_input_type,
@@ -165,7 +167,9 @@ def preference_teaching(env_id, env_dp_type, seed, gym_env_obs_tile,
     # Set proper reward component.
     intl_env.set_reward_component(rew_comp)
 
-    if rl_agent == 'DDPG':
+    if rl_agent == 'RandomAgent':
+        agent = RandomAgent(obs_space, act_space, mem_manager=mem_manager, checkpoint_dir=checkpoint_dir)
+    elif rl_agent == 'DDPG':
         agent = DDPG(obs_space, act_space, hidden_sizes,
                      start_steps=start_steps,
                      update_after=update_after,
@@ -201,6 +205,9 @@ def preference_teaching(env_id, env_dp_type, seed, gym_env_obs_tile,
     elif rl_agent =='LSTM-TD3':
         agent_mem_len = 5
         agent = LSTMTD3(obs_space, act_space, hidden_sizes,
+                        start_steps=start_steps,
+                        update_after=update_after,
+                        mem_manager=mem_manager,
                         recompute_reward_in_backup=recompute_reward_in_backup,
                         agent_mem_len=agent_mem_len,
                         checkpoint_dir=checkpoint_dir)
@@ -308,6 +315,11 @@ def preference_teaching(env_id, env_dp_type, seed, gym_env_obs_tile,
     # Start interacting with the environment
     for t in range(past_steps, total_steps):
         # Select action
+        # if t % 10 == 0:
+        #     print(t)
+        if stochastic_env != 0:
+            new_obs += stochastic_env * np.random.randn(obs_dim)
+
         act, logger = agent.interact(t, new_obs, pb_rew, hc_rew, done, info, terminal, rew_comp, logger)
 
         # Interact with the envs
@@ -416,7 +428,80 @@ def preference_teaching(env_id, env_dp_type, seed, gym_env_obs_tile,
         if t > 0 and t % steps_per_epoch == 0:
         # if (t+1) % steps_per_epoch == 0:
             epoch = (t + 1) // steps_per_epoch
-            if rl_agent == 'DDPG':
+            if rl_agent == 'RandomAgent':
+                # Test the performance of the deterministic version of the agent.
+                def test_agent(rew_comp, agent, logger):
+                    # Crucial: pybullet env maintains variables which will not release memory if not close().
+                    # Define env outside the loop, otherwise with the same seed the results will be the same.
+                    if env_id == "LAS-Meander":
+                        test_intl_env = intl_env  # For LAS-Meander, the ip and port are fixed, so only one intl_env can be created.
+                        test_intl_env.set_reward_component(rew_comp)
+                    else:
+                        test_intl_env = IntlEnv(env_id, env_dp_type=env_dp_type, render_width=640, render_height=480,
+                                                seed=seed, obs_tile_num=gym_env_obs_tile_num,
+                                                obs_tile_value=gym_env_obs_tile_value)  # used to interact with the environment
+                        test_intl_env.set_reward_component(rew_comp)
+                    max_ep_len = get_timesteps_per_episode(test_intl_env)
+
+                    for j in range(num_test_episodes):
+                        obs, info = test_intl_env.reset()
+                        done = False
+                        test_ep_log_dict = {}
+                        test_ep_log_dict['TestEpLen'], test_ep_log_dict['TestEpHCRet'], test_ep_log_dict['TestEpPBRet'] = 0, 0, 0
+                        if env_id == 'LAS-Meander':
+                            test_ep_log_dict['TestEpHC_0_1Ret'], test_ep_log_dict['TestEpHC_neg_1_1Ret'] = 0, 0
+                            test_ep_log_dict['TestEpHC_0_2Ret'], test_ep_log_dict['TestEpHC_neg_2_2Ret'] = 0, 0
+
+                        while not (done or (test_ep_log_dict['TestEpLen'] == max_ep_len)):
+                            # Take deterministic actions at test time (noise_scale=0)
+                            act = agent.get_test_action(obs)
+                            obs2, pb_rew, done, info = test_intl_env.step(
+                                act)  # pb_rew: preference-based reward learned from preference
+                            hc_rew = info['extl_rew']  # hc_rew: handcrafted reward predefined in original task
+
+                            test_ep_log_dict['TestEpLen'] += 1
+                            test_ep_log_dict['TestEpHCRet'] += hc_rew
+                            test_ep_log_dict['TestEpPBRet'] += pb_rew
+
+                            if env_id == 'LAS-Meander':
+                                test_ep_log_dict['TestEpHC_0_1Ret'] += info['reward_range_0_pos_1']
+                                test_ep_log_dict['TestEpHC_neg_1_1Ret'] += info['reward_range_neg_1_pos_1']
+                                test_ep_log_dict['TestEpHC_0_2Ret'] += info['reward_range_0_pos_2']
+                                test_ep_log_dict['TestEpHC_neg_2_2Ret'] += info['reward_range_neg_2_pos_2']
+
+                            obs = obs2
+
+                        logger.store(**test_ep_log_dict)
+                    if env_id == "LAS-Meander":
+                        pass
+                    else:
+                        test_intl_env.close()
+                    return logger
+
+                logger = test_agent(rew_comp, agent, logger=logger)
+
+                # Log info about epoch
+                logger.log_tabular('Epoch', epoch)
+                logger.log_tabular('EpHCRet', with_min_and_max=True)
+                logger.log_tabular('TestEpHCRet', with_min_and_max=True)
+                logger.log_tabular('EpPBRet', with_min_and_max=True)
+                logger.log_tabular('TestEpPBRet', with_min_and_max=True)
+                logger.log_tabular('EpLen', average_only=True)
+                logger.log_tabular('TestEpLen', average_only=True)
+                logger.log_tabular('TotalEnvInteracts', t)
+                if env_id == 'LAS-Meander':
+                    logger.log_tabular('EpHC_0_1Ret', with_min_and_max=True)
+                    logger.log_tabular('EpHC_neg_1_1Ret', with_min_and_max=True)
+                    logger.log_tabular('EpHC_0_2Ret', with_min_and_max=True)
+                    logger.log_tabular('EpHC_neg_2_2Ret', with_min_and_max=True)
+
+                    logger.log_tabular('TestEpHC_0_1Ret', with_min_and_max=True)
+                    logger.log_tabular('TestEpHC_neg_1_1Ret', with_min_and_max=True)
+                    logger.log_tabular('TestEpHC_0_2Ret', with_min_and_max=True)
+                    logger.log_tabular('TestEpHC_neg_2_2Ret', with_min_and_max=True)
+                logger.log_tabular('Time', time() - start_time)
+                logger.dump_tabular()
+            elif rl_agent == 'DDPG':
                 # Test the performance of the deterministic version of the agent.
                 def test_agent(rew_comp, agent, logger):
                     # Crucial: pybullet env maintains variables which will not release memory if not close().
@@ -445,6 +530,10 @@ def preference_teaching(env_id, env_dp_type, seed, gym_env_obs_tile,
                             obs2, pb_rew, done, info = test_intl_env.step(
                                 act)  # pb_rew: preference-based reward learned from preference
                             hc_rew = info['extl_rew']  # hc_rew: handcrafted reward predefined in original task
+
+                            test_ep_log_dict['TestEpLen'] += 1
+                            test_ep_log_dict['TestEpHCRet'] += hc_rew
+                            test_ep_log_dict['TestEpPBRet'] += pb_rew
 
                             if env_id == 'LAS-Meander':
                                 test_ep_log_dict['TestEpHC_0_1Ret'] += info['reward_range_0_pos_1']
@@ -660,11 +749,25 @@ def preference_teaching(env_id, env_dp_type, seed, gym_env_obs_tile,
                 def test_agent(rew_comp, agent, logger):
                     # Crucial: pybullet env maintains variables which will not release memory if not close().
                     # Define env outside the loop, otherwise with the same seed the results will be the same.
-                    test_intl_env = IntlEnv(make_gym_task(env_id, dp_type=env_dp_type), seed,
-                                            rew_comp)  # used to interact with the environment
+                    if env_id == "LAS-Meander":
+                        test_intl_env = intl_env  # For LAS-Meander, the ip and port are fixed, so only one intl_env can be created.
+                        test_intl_env.set_reward_component(rew_comp)
+                    else:
+                        test_intl_env = IntlEnv(env_id, env_dp_type=env_dp_type, render_width=640, render_height=480,
+                                                seed=seed, obs_tile_num=gym_env_obs_tile_num,
+                                                obs_tile_value=gym_env_obs_tile_value)  # used to interact with the environment
+                        test_intl_env.set_reward_component(rew_comp)
                     max_ep_len = get_timesteps_per_episode(test_intl_env)
+
                     for j in range(num_test_episodes):
-                        obs, done, ep_hc_ret, ep_pb_ret, ep_len = test_intl_env.reset(), False, 0, 0, 0
+                        obs, info = test_intl_env.reset()
+                        done = False
+                        test_ep_log_dict = {}
+                        test_ep_log_dict['TestEpLen'], test_ep_log_dict['TestEpHCRet'], test_ep_log_dict['TestEpPBRet'] = 0, 0, 0
+                        if env_id == 'LAS-Meander':
+                            test_ep_log_dict['TestEpHC_0_1Ret'], test_ep_log_dict['TestEpHC_neg_1_1Ret'] = 0, 0
+                            test_ep_log_dict['TestEpHC_0_2Ret'], test_ep_log_dict['TestEpHC_neg_2_2Ret'] = 0, 0
+
                         if agent_mem_len > 0:
                             o_buff = np.zeros([agent_mem_len, obs_dim])
                             a_buff = np.zeros([agent_mem_len, act_dim])
@@ -675,16 +778,21 @@ def preference_teaching(env_id, env_dp_type, seed, gym_env_obs_tile,
                             a_buff = np.zeros([1, act_dim])
                             o_buff_len = 0
 
-                        while not (done or (ep_len == max_ep_len)):
+                        while not (done or (test_ep_log_dict['TestEpLen'] == max_ep_len)):
                             # Take deterministic actions at test time (noise_scale=0)
                             act = agent.get_test_action(obs, o_buff, a_buff, o_buff_len)
                             obs2, pb_rew, done, info = test_intl_env.step(
                                 act)  # pb_rew: preference-based reward learned from preference
                             hc_rew = info['extl_rew']  # hc_rew: handcrafted reward predefined in original task
 
-                            ep_hc_ret += hc_rew
-                            ep_pb_ret += pb_rew
-                            ep_len += 1
+                            test_ep_log_dict['TestEpLen'] += 1
+                            test_ep_log_dict['TestEpHCRet'] += hc_rew
+                            test_ep_log_dict['TestEpPBRet'] += pb_rew
+                            if env_id == 'LAS-Meander':
+                                test_ep_log_dict['TestEpHC_0_1Ret'] += info['reward_range_0_pos_1']
+                                test_ep_log_dict['TestEpHC_neg_1_1Ret'] += info['reward_range_neg_1_pos_1']
+                                test_ep_log_dict['TestEpHC_0_2Ret'] += info['reward_range_0_pos_2']
+                                test_ep_log_dict['TestEpHC_neg_2_2Ret'] += info['reward_range_neg_2_pos_2']
 
                             # Add short history
                             if agent_mem_len != 0:
@@ -700,8 +808,11 @@ def preference_teaching(env_id, env_dp_type, seed, gym_env_obs_tile,
 
                             obs = obs2
 
-                        logger.store(TestEpHCRet=ep_hc_ret, TestEpPBRet=ep_pb_ret, TestEpLen=ep_len)
-                    test_intl_env.close()
+                        logger.store(**test_ep_log_dict)
+                    if env_id == "LAS-Meander":
+                        pass
+                    else:
+                        test_intl_env.close()
                     return logger
                 logger = test_agent(rew_comp, agent, logger=logger)
 
@@ -714,6 +825,18 @@ def preference_teaching(env_id, env_dp_type, seed, gym_env_obs_tile,
                 logger.log_tabular('EpLen', average_only=True)
                 logger.log_tabular('TestEpLen', average_only=True)
                 logger.log_tabular('TotalEnvInteracts', t)
+
+                if env_id == 'LAS-Meander':
+                    logger.log_tabular('EpHC_0_1Ret', with_min_and_max=True)
+                    logger.log_tabular('EpHC_neg_1_1Ret', with_min_and_max=True)
+                    logger.log_tabular('EpHC_0_2Ret', with_min_and_max=True)
+                    logger.log_tabular('EpHC_neg_2_2Ret', with_min_and_max=True)
+
+                    logger.log_tabular('TestEpHC_0_1Ret', with_min_and_max=True)
+                    logger.log_tabular('TestEpHC_neg_1_1Ret', with_min_and_max=True)
+                    logger.log_tabular('TestEpHC_0_2Ret', with_min_and_max=True)
+                    logger.log_tabular('TestEpHC_neg_2_2Ret', with_min_and_max=True)
+
                 logger.log_tabular('Q1Vals', with_min_and_max=True)
                 logger.log_tabular('Q2Vals', with_min_and_max=True)
                 logger.log_tabular('LossPi', average_only=True)
@@ -749,6 +872,8 @@ if __name__ == '__main__':
     parser.add_argument('--random_noise_sigma', type=float, default=0.1)
     parser.add_argument('--random_sensor_missing_prob', type=float, default=0.1)
     parser.add_argument('--gym_env_obs_tile', type=int, default=1, help="How many times to tile the observation (Only used in Gym tasks)")
+    parser.add_argument('--stochastic_env', type=float, default=0)
+    parser.add_argument('--las_config', type=str, default='', help="Specify path to LAS config file. If empty, default configuration will be employed.")
 
     # Preference teaching related hyperparams
     parser.add_argument('--total_label_num', type=int, default=14000)
@@ -768,7 +893,7 @@ if __name__ == '__main__':
     parser.add_argument('--rl_reward_type', type=str,
                         choices=['hc_reward', 'pb_reward'],
                         default='pb_reward')
-    parser.add_argument('--rl_agent', type=str, choices=['DDPG', 'TD3', 'SAC', 'PPO', 'LSTM-TD3'], default='TD3')
+    parser.add_argument('--rl_agent', type=str, choices=['RandomAgent', 'DDPG', 'TD3', 'SAC', 'PPO', 'LSTM-TD3'], default='TD3')
     parser.add_argument('--hidden_layer', type=int, default=2)
     parser.add_argument('--hidden_units', type=int, default=256)
     parser.add_argument('--recompute_reward_in_backup', type=str2bool, nargs='?', const=True, default=True)
@@ -778,16 +903,27 @@ if __name__ == '__main__':
     parser.add_argument('--epochs', type=int, default=2000)
     parser.add_argument('--exp_name', type=str, default='td3')
 
-    parser.add_argument("--data_dir", type=str, default='PL-Teaching-Data')
-
+    parser.add_argument("--data_dir", type=str, default='F:/PL-Teaching-Data', help="Provide either absolute or relative path to "
+                                                                                                   "the directory where data is saving to.")
 
     args = parser.parse_args()
 
+    # Load las_intl_env_config if specified.
+    if args.las_config:
+        print("las_intl_env_config is specified to {}".format(args.las_config))
+        las_config_spec = importlib.util.spec_from_file_location(las_config.__name__, args.las_config)
+        las_config = importlib.util.module_from_spec(las_config_spec)
+        las_config_spec.loader.exec_module(las_config)
+    else:
+        print("No las_intl_env_config is specified! The default configuration will be employed!")
+
+    # Format hidden_sizes as a list of hidden_units
     hidden_sizes = [args.hidden_units for _ in range(args.hidden_layer)]
 
     # Set log data saving directory
     if args.resume_exp_dir is None:
-        data_dir = osp.join(os.path.abspath('/exp_run_root/exp_run_data'), args.data_dir)
+        data_dir = os.path.abspath(args.data_dir)
+        print("Saving data to {}".format(data_dir))
         logger_kwargs = setup_logger_kwargs(args.exp_name, args.seed, data_dir, datestamp=True)
     else:
         if os.path.exists(args.resume_exp_dir):
@@ -813,7 +949,7 @@ if __name__ == '__main__':
 
     # Start preference teaching
     preference_teaching(env_id=args.env_id, env_dp_type=args.env_dp_type, seed=args.seed,
-                        gym_env_obs_tile=args.gym_env_obs_tile,
+                        gym_env_obs_tile=args.gym_env_obs_tile, stochastic_env=args.stochastic_env,
                         epochs=args.epochs,
                         rl_reward_type=args.rl_reward_type,
                         rl_agent=args.rl_agent,
