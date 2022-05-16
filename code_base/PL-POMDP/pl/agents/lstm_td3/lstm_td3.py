@@ -344,7 +344,7 @@ class LSTMTD3(object):
                  start_steps=10000,
                  act_noise=0.1, target_noise=0.2, noise_clip=0.5,
                  update_after=1000, update_every=50, batch_size=64,
-                 replay_buff_type='RAM', replay_size=1e6, db_file=':memory:',
+                 mem_manager=None, replay_size=1e6,
                  policy_delay=2, checkpoint_dir=None):
         #
         self.obs_space = obs_space
@@ -382,12 +382,7 @@ class LSTMTD3(object):
             self.agent_mem_buff_len = 0
 
         self.batch_size = batch_size
-        if replay_buff_type == 'RAM':
-            self.replay_buffer = ReplayBuffer(self.obs_dim, self.act_dim, replay_size)
-        elif replay_buff_type == 'DB':
-            self.replay_buffer = ExperienceTableOperator(max_replay_size=replay_size, db_file=db_file)
-        else:
-            raise ValueError('Wrong replay_buff_type: {}'.format(replay_buff_type))
+        self.mem_manager = mem_manager
 
         self.q_lr = q_lr
         self.pi_lr = pi_lr
@@ -446,33 +441,26 @@ class LSTMTD3(object):
         self.pi_optimizer = Adam(self.ac.pi.parameters(), lr=self.pi_lr)
         self.q_optimizer = Adam(self.q_params, lr=self.q_lr)
 
-    def save_checkpoint(self, time_step):
+    def save_checkpoint(self):
         """Save learned reward network to disk."""
-        cp_file = os.path.join(self.cp_dir, 'Step-{}_Checkpoint_Agent.pt'.format(time_step))
-        save_elements = {'replay_buffer': self.replay_buffer,
-                         'ac_state_dict': self.ac.state_dict(),
+        save_elements = {'ac_state_dict': self.ac.state_dict(),
                          'ac_targ_state_dict': self.ac_targ.state_dict(),
                          'pi_optimizer_state_dict': self.pi_optimizer.state_dict(),
                          'q_optimizer_state_dict': self.q_optimizer.state_dict()}
-        torch.save(save_elements, cp_file)
-        # Rename the file to verify the completion of the saving in case of midway cutoff.
-        verified_cp_file = os.path.join(self.cp_dir,
-                                        'Step-{}_Checkpoint_Agent_verified.pt'.format(time_step))
-        os.rename(cp_file, verified_cp_file)
+        return save_elements
 
-    def restore_checkpoint(self, time_step):
-        cp_file = os.path.join(self.cp_dir, 'Step-{}_Checkpoint_Agent_verified.pt'.format(time_step))
-        restore_elements = torch.load(cp_file)
-        self.replay_buffer = restore_elements['replay_buffer']
+    def restore_checkpoint(self, restore_elements, mem_manager):
         self.ac.load_state_dict(restore_elements['ac_state_dict'])
         self.ac_targ.load_state_dict(restore_elements['ac_targ_state_dict'])
         self.pi_optimizer.load_state_dict(restore_elements['pi_optimizer_state_dict'])
         self.q_optimizer.load_state_dict(restore_elements['q_optimizer_state_dict'])
-        print('Successfully restored Reward Component!')
+        print('Successfully restored Agent!')
+        self.mem_manager = mem_manager
 
     def _compute_loss_q(self, data, rew_comp):
         """function for computing TD3 Q-losses"""
         o, a, r, o2, d = data['obs'], data['act'], data['rew'], data['obs2'], data['done']
+        hc_r = data['hc_rew']
         h_o = data['agent_mem_seg_obs']
         h_a = data['agent_mem_seg_act']
         h_o2 = data['agent_mem_seg_obs2']
@@ -499,27 +487,18 @@ class LSTMTD3(object):
 
             # Note: r should be recalculated as it changes as more preferences coming in.
             if self.recompute_reward_in_backup and rew_comp is not None:
-                with torch.no_grad():
-                    rew_comp.reward_net.eval()    # eval() is called because dropout may be used
-                    if rew_comp.reward_net_input_type == "obs_act":
-                        if isinstance(rew_comp, MLPRewardComponent):
-                            pred_r, _ = rew_comp.reward_net(o, a, None)
-                        elif isinstance(rew_comp, LSTMRewardComponent):
-                            pred_r, _, _, _ = rew_comp.reward_net(data['rew_mem_seg_obs'], data['rew_mem_seg_act'], None, data['rew_mem_seg_len'].cpu())
-                            pred_r = torch.squeeze(pred_r, dim=2)[:, -1]
-                    elif rew_comp.reward_net_input_type == "obs2":
-                        if isinstance(rew_comp, MLPRewardComponent):
-                            pred_r, _ = rew_comp.reward_net(None, None, o2)
-                        elif isinstance(rew_comp, LSTMRewardComponent):
-                            pred_r, _, _, _ = rew_comp.reward_net(None, None, data['rew_mem_seg_obs2'], data['rew_mem_seg_len'].cpu())
-                            pred_r = torch.squeeze(pred_r, dim=2)[:, -1]
-                    else:
-                        if isinstance(rew_comp, MLPRewardComponent):
-                            pred_r, _ = rew_comp.reward_net(o, a, o2)
-                        elif isinstance(rew_comp, LSTMRewardComponent):
-                            pred_r, _, _, _ = rew_comp.reward_net(data['rew_mem_seg_obs'], data['rew_mem_seg_act'], data['rew_mem_seg_obs2'], data['rew_mem_seg_len'].cpu())
-                            pred_r = torch.squeeze(pred_r, dim=2)[:, -1]
-                r = torch.squeeze(pred_r, -1)
+                if rew_comp.reward_comp_type == "MLP":
+                    r = rew_comp(data['obs'], data['act'], data['obs2'])
+                elif rew_comp.reward_comp_type == "LSTM":
+                    r = rew_comp(data['mem_seg_obs'], data['mem_seg_act'], data['mem_seg_obs2'], data['mem_seg_len'])
+                else:
+                    raise ValueError('rew_comp.reward_comp_type={}!'.format(rew_comp.reward_comp_type))
+            else:
+                pass  # Use the previously calculated reward
+
+            # if combine hardcoded-reward and preference-based reward
+            if rew_comp is not None and self.combine_hc_and_pb_reward:
+                r = r + hc_r
 
             backup = r + self.gamma * (1 - d) * q_pi_targ
 
@@ -563,15 +542,17 @@ class LSTMTD3(object):
         a = self.ac.act(o, mem_o, mem_a, mem_l).reshape(self.act_dim)
         return a
 
-    def interact(self, time_step, new_obs, rew, done, terminal, rew_comp, logger):
+    def interact(self, time_step, new_obs, rew, hc_rew, done, info, terminal, rew_comp, logger):
         # If not the initial observation, store the latest experience (obs, act, rew, new_obs, done).
         if self.obs is not None:
-            self.replay_buffer.store(self.obs, self.act, new_obs, rew, done)
+            self.mem_manager.store_experience(self.obs, self.act, new_obs, rew, hc_rew, done, 'TD3_agent',
+                                              obs_time=self.obs_timestamp, act_time=info['act_datetime'], obs2_time=info['obs_datetime'])
 
         # If terminal, start from the new episode where no previous (obs, act) exist.
         if terminal:
             self.obs = None
             self.act = None
+            self.obs_timestamp = None
             if self.agent_mem_len > 0:
                 self.agent_mem_obs_buff = np.zeros([self.agent_mem_len, self.obs_dim])
                 self.agent_mem_act_buff = np.zeros([self.agent_mem_len, self.act_dim])
@@ -591,6 +572,7 @@ class LSTMTD3(object):
             else:
                 self.act = self.act_space.sample()
             self.obs = new_obs
+            self.obs_timestamp = info['obs_datetime']
 
             # Add short history
             if self.agent_mem_buff_len == self.agent_mem_len:
@@ -615,14 +597,12 @@ class LSTMTD3(object):
                 # Sample batch from replay buffer and update agent
                 if rew_comp is None:
                     reward_mem_len = None
-                if isinstance(rew_comp, MLPRewardComponent):
-                    reward_mem_len = None
-                elif isinstance(rew_comp, LSTMRewardComponent):
-                    reward_mem_len = rew_comp.short_mem_len
+                else:
+                    reward_mem_len = rew_comp.reward_mem_length
 
-                batch = self.replay_buffer.sample_batch(self.batch_size, device=self.ac_device,
-                                                        agent_mem_len=self.agent_mem_len,
-                                                        reward_mem_len=reward_mem_len)
+                batch = self.mem_manager.sample_exp_batch(self.batch_size, device=self.ac_device,
+                                                          reward_mem_len=reward_mem_len, agent_mem_len=self.agent_mem_len)
+
                 # First run one gradient descent step for Q1 and Q2
                 self.q_optimizer.zero_grad()
                 loss_q, loss_info = self._compute_loss_q(batch, rew_comp)
