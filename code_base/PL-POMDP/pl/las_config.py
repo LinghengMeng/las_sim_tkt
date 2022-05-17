@@ -255,7 +255,7 @@ internal_env_config = {
     },
     # Observation space configuration
     #   obs_construction_method in ["concatenate", "average"]
-    "time_window_for_obs_collection": 5,  # 2 # TODO: need to be tuned (ceil(time_window_for_obs_collection*obs_frequency))
+    "time_window_for_obs_collection": 1,  # 2 # TODO: need to be tuned (ceil(time_window_for_obs_collection*obs_frequency))
     "obs_space": {"proprioception": {
                                      # "device_group": ["NR"],
                                      "device_group": ["NR", "SR", "MG", "TG"],
@@ -297,86 +297,12 @@ internal_env_config = {
 # Database related configuration
 db_config = {
     # Google_Cloud_DB is to configurate Google cloud databased when running the algorithm in real application.
-    "Google_Cloud_DB": {"postgresql": {"drivername": "postgres+pg8000",
-                                        "username": "lingheng",
-                                        "password": "mlhmlh",
-                                        "database": "las-preference-learning",
-                                        "host": "127.0.0.1",
-                                        "port": "54321"},
-                         "tables": {
-                             "interaction_experiences": {
-                                 "columns": ["id", "behaviour_mode", "obs", "obs_time",
-                                             "act", "act_time", "rew", "obs2", "obs2_time", "create_time"]},
-                             "app_teacher_preference_videoclipsandobsactdata": {
-                                 "columns": ["id", "behaviour_mode", "camera_name", "video_clip_url",
-                                             "obs_trajectory", "act_trajectory", "sampled_count",
-                                             "start_time", "end_time", "create_time"]}
-                         }},
+    "Google_Cloud_DB": {"postgresql": {"drivername": "postgresql", "username": "postgres", "password": "mlhmlh",
+                                       "database": "postgres", "host": "127.0.0.1", "port": "54321"}},
     # Local_DB is to configurate local databased used for testing purpose.
-    "Local_DB": {
-                # "postgresql": {"drivername": "postgres+pg8000",
-                #                 "username": "postgres",
-                #                 "password": "mlhmlh",
-                #                 "database": "preference_learning",  # Change to a new database if not want to pollute it
-                #                 "host": "127.0.0.1",
-                #                 "port": "5433"},
-                 "postgresql": {"drivername": "postgresql+pg8000",
-                                "username": "postgres",
-                                "password": "mlhmlh",
-                                "database": "postgres",  # Change to a new database if not want to pollute it
-                                "host": "127.0.0.1",
-                                "port": "54321"},
-                 "tables": {
-                     "interaction_experiences": {
-                            "columns": {"id": {"args": {"type_": db.Integer}, "kwargs": {"primary_key": True}},
-                                        "behaviour_mode": {"args": {"type_": db.String(255)},
-                                                           "kwargs": {"nullable": False}},
-                                        "obs": {"args": {"type_": db.ARRAY(db.Float)}, "kwargs": {}},
-                                        "obs_time": {"args": {"type_": db.DateTime}, "kwargs": {}},
-                                        "act": {"args": {"type_": db.ARRAY(db.Float)}, "kwargs": {}},
-                                        "act_time": {"args": {"type_": db.DateTime}, "kwargs": {}},
-                                        "rew": {"args": {"type_": db.Float}, "kwargs": {}},
-                                        "obs2": {"args": {"type_": db.ARRAY(db.Float)}, "kwargs": {}},
-                                        "obs2_time": {"args": {"type_": db.DateTime}, "kwargs": {}},
-                                        "create_time": {"args": {"type_": db.DateTime},
-                                                        "kwargs": {"default": db.func.now()}}}},
-                     "app_teacher_preference_videoclipsandobsactdata": {
-                            "columns": {"id": {"args": {"type_": db.Integer}, "kwargs": {"primary_key": True}},
-                                        "behaviour_mode": {"args": {"type_": db.String(255)},
-                                                           "kwargs": {"nullable": False}},
-                                        "camera_name": {"args": {"type_": db.String(255)}, "kwargs": {}},
-                                        "video_clip_url": {"args": {"type_": db.String(255)}, "kwargs": {}},
-                                        "obs_trajectory": {"args": {"type_": db.ARRAY(db.Float, dimensions=2)}, "kwargs": {}},
-                                        "act_trajectory": {"args": {"type_": db.ARRAY(db.Float, dimensions=2)}, "kwargs": {}},
-                                        "obs2_trajectory": {"args": {"type_": db.ARRAY(db.Float, dimensions=2)}, "kwargs": {}},
-                                        "sampled_count": {"args": {"type_": db.Integer}, "kwargs": {}},
-                                        "start_time": {"args": {"type_": db.DateTime}, "kwargs": {}},
-                                        "end_time": {"args": {"type_": db.DateTime}, "kwargs": {}},
-                                        "create_time": {"args": {"type_": db.DateTime}, "kwargs": {"default": db.func.now()}}}},
-                     "teacher_preference_label": {
-                         "columns": {"id": {"args": {"type_": db.Integer}, "kwargs": {"primary_key": True}},
-                                     "video_clip_1": {"args": {"foreign_key": db.ForeignKey('app_teacher_preference_videoclipsandobsactdata.id')},
-                                                      "kwargs": {}},
-                                     "video_clip_2": {"args": {"foreign_key": db.ForeignKey('app_teacher_preference_videoclipsandobsactdata.id')},
-                                                      "kwargs": {}},
-                                     "teacher": {"args": {"type_": db.Integer,
-                                                          "foreign_key": db.ForeignKey('teacher_demographic_data.id')},
-                                                 "kwargs": {}},
-                                     "preference_p": {"args": {"type_": db.Float}, "kwargs": {}},
-                                     "create_time": {"args": {"type_": db.DateTime}, "kwargs": {"default": db.func.now()}}},
-                         # "relationship": db.orm.relationship()
-                     },
-                     "teacher_demographic_data": {
-                         "columns": {"id": {"args": {"type_": db.Integer}, "kwargs": {"primary_key": True}},
-                                     "name": {"args": {"type_": db.String(255)}, "kwargs": {}},
-                                     "age": {"args": {"type_": db.Integer}, "kwargs": {}},
-                                     "gender": {"args": {"type_": db.Integer}, "kwargs": {}},
-                                     "background_on_AI": {"args": {"type_": db.String(255)}, "kwargs": {}},
-                                     "how_do_you_know_the_installation": {"args": {"type_": db.String(255)}, "kwargs": {}},
-                                     "have_you_ever_experienced_the_installation": {"args": {"type_": db.String(255)}, "kwargs": {}},
-                                     "create_time": {"args": {"type_": db.DateTime}, "kwargs": {"default": db.func.now()}}
-                                     }}}
-                 }
+    "Local_Disk_DB": {"drivername": "sqlite", "username": None, "password": None,
+                       "database": "Step-0_Checkpoint_DB.sqlite3", "host": None, "port": None},
+    "Local_In_Memory_DB": {"drivername": "sqlite"}
 }
 
 # Configurations related to video clipping

@@ -641,7 +641,6 @@ class LASIntlEnv(object):
         self.las_config = config.las_config
         self.internal_env_config = config.internal_env_config
         self.comm_manager_config = config.comm_manager_config
-        self.db_config = config.db_config
         self.agent_config = config.agent_config
 
         # Initialize device locator
