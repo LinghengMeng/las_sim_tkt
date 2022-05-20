@@ -223,6 +223,7 @@ then
     # singularity shell instance://$online_instance_name
     # For automatic command running: environment_setup_script.sh
     singularity exec instance://$online_instance_name bash /exp_run_root/exp_env.sh
+    singularity instance stop $online_instance_name
 fi
 
 # If only do environment setup, exit. This is applicable to case where hardcoded design choices in exp_runcode are investigated. 
@@ -254,4 +255,5 @@ else
     # singularity shell instance://$offline_instance_name
     # For automatic command running
     singularity exec instance://$offline_instance_name bash /exp_run_root/exp_run.sh $add_nvdriver $exp_run_time $save_processing_simulator_video
+    singularity instance stop $offline_instance_name
 fi
