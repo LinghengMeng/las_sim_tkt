@@ -70,9 +70,9 @@ ulimit -n 50000    # Set ulimit to avoid “Too many open files” error when us
 # Run python script （Note: this is the part need to be changed for different experiment runs.）
 # 
 if [ -d "$exp_run_data_dir/PL-Teaching-Data" ]; then
-  nohup python /las_sim_tkt_dep/PL-POMDP/pl/teach.py --resume_exp_dir $exp_run_data_dir/PL-Teaching-Data/exp_name --las_config $exp_run_data_dir/las_config.py &>$exp_run_data_dir/console_python_$(date '+%Y-%m-%d_%H-%M-%S').out &
+  nohup python /las_sim_tkt_dep/PL-POMDP/pl/teach.py --resume_exp_dir $exp_run_data_dir/PL-Teaching-Data/exp_name --las_config /exp_run_root/las_config.py &>$exp_run_data_dir/console_python_$(date '+%Y-%m-%d_%H-%M-%S').out &
 else
-  nohup python /las_sim_tkt_dep/PL-POMDP/pl/teach.py --env_id LAS-Meander --rl_reward_type hc_reward --las_config $exp_run_data_dir/las_config.py &>$exp_run_data_dir/console_python_$(date '+%Y-%m-%d_%H-%M-%S').out &
+  nohup python /las_sim_tkt_dep/PL-POMDP/pl/teach.py --env_id LAS-Meander --rl_reward_type hc_reward --las_config /exp_run_root/las_config.py &>$exp_run_data_dir/console_python_$(date '+%Y-%m-%d_%H-%M-%S').out &
 fi
 pid_python=$!    # Save PID for later use
 
