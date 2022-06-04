@@ -6,104 +6,9 @@ from torch.optim import Adam
 from copy import deepcopy
 import itertools
 
-
-class ReplayBuffer:
-    """
-    A simple FIFO experience replay buffer for agents.
-    """
-
-    def __init__(self, obs_dim, act_dim, replay_size=1e6):
-        self.obs_dim = obs_dim
-        self.act_dim = act_dim
-        self.replay_size = int(replay_size)
-        self.obs_buf = np.zeros((self.replay_size, obs_dim), dtype=np.float32)
-        self.obs2_buf = np.zeros((self.replay_size, obs_dim), dtype=np.float32)
-        self.act_buf = np.zeros((self.replay_size, act_dim), dtype=np.float32)
-        self.rew_buf = np.zeros(self.replay_size, dtype=np.float32)
-        self.done_buf = np.zeros(self.replay_size, dtype=np.float32)
-        self.ptr, self.size = 0, 0
-
-    def store(self, obs, act, next_obs, rew, done):
-        self.obs_buf[self.ptr] = obs
-        self.obs2_buf[self.ptr] = next_obs
-        self.act_buf[self.ptr] = act
-        self.rew_buf[self.ptr] = rew
-        self.done_buf[self.ptr] = done
-        self.ptr = (self.ptr+1) % self.replay_size
-        self.size = min(self.size+1, self.replay_size)
-
-    # def sample_batch(self, batch_size=32):
-    #     idxs = np.random.randint(0, self.size, size=batch_size)
-    #     batch = dict(obs=self.obs_buf[idxs],
-    #                  obs2=self.obs2_buf[idxs],
-    #                  act=self.act_buf[idxs],
-    #                  rew=self.rew_buf[idxs],
-    #                  done=self.done_buf[idxs])
-    #     return {k: torch.as_tensor(v, dtype=torch.float32) for k, v in batch.items()}
-
-    def sample_batch(self, batch_size=32, device=None, agent_mem_len=None, reward_mem_len=None):
-
-        idxs = np.random.randint(0, self.size, size=batch_size)
-        batch = dict(obs=self.obs_buf[idxs],
-                     obs2=self.obs2_buf[idxs],
-                     act=self.act_buf[idxs],
-                     rew=self.rew_buf[idxs],
-                     done=self.done_buf[idxs])
-        if reward_mem_len is not None:
-            # Extract reward memory
-            batch['rew_mem_seg_len'] = np.zeros(batch_size)
-            batch['rew_mem_seg_obs'] = np.zeros((batch_size, reward_mem_len, self.obs_dim))
-            batch['rew_mem_seg_act'] = np.zeros((batch_size, reward_mem_len, self.act_dim))
-            batch['rew_mem_seg_obs2'] = np.zeros((batch_size, reward_mem_len, self.obs_dim))
-
-        if agent_mem_len is not None:
-            # Extract agent memory
-            batch['agent_mem_seg_len'] = np.zeros(batch_size)
-            batch['agent_mem_seg_obs'] = np.zeros((batch_size, agent_mem_len, self.obs_dim))
-            batch['agent_mem_seg_act'] = np.zeros((batch_size, agent_mem_len, self.act_dim))
-            batch['agent_mem_seg_obs2'] = np.zeros((batch_size, agent_mem_len, self.obs_dim))
-            batch['agent_mem_seg_act2'] = np.zeros((batch_size, agent_mem_len, self.act_dim))
-
-        for i, id in enumerate(idxs):
-            # Extract reward memory
-            if reward_mem_len is not None:
-                reward_mem_start_id = id - reward_mem_len + 1
-                if reward_mem_start_id < 0:
-                    reward_mem_start_id = 0
-                # If exist done before the last experience (not include the done in id), start from the index next to the done.
-                if len(np.where(self.done_buf[reward_mem_start_id:id]==1)[0]) != 0:
-                    reward_mem_start_id = reward_mem_start_id + (np.where(self.done_buf[reward_mem_start_id:id] == 1)[0][-1])+1
-                reward_mem_seg_len = id - reward_mem_start_id + 1
-                batch['rew_mem_seg_len'][i] = reward_mem_seg_len
-                batch['rew_mem_seg_obs'][i, :reward_mem_seg_len, :] = self.obs_buf[reward_mem_start_id:id+1]
-                batch['rew_mem_seg_act'][i, :reward_mem_seg_len, :] = self.act_buf[reward_mem_start_id:id+1]
-                batch['rew_mem_seg_obs2'][i, :reward_mem_seg_len, :] = self.obs2_buf[reward_mem_start_id:id + 1]
-
-            # Extract agent memory
-            # (Note agent memory does not include the current obs and act, but only includes (obs, act) pairs prior to
-            #   the current (obs, act).)
-            if agent_mem_len is not None:
-                agent_mem_start_id = id - agent_mem_len
-                if agent_mem_start_id < 0:
-                    agent_mem_start_id = 0
-                # If exist done before the last experience (not include the done in id), start from the index next to the done.
-                if len(np.where(self.done_buf[agent_mem_start_id:id] == 1)[0]) != 0:
-                    agent_mem_start_id = agent_mem_start_id + (
-                    np.where(self.done_buf[agent_mem_start_id:id] == 1)[0][-1]) + 1
-                agent_mem_seg_len = id - agent_mem_start_id
-                batch['agent_mem_seg_len'][i] = agent_mem_seg_len
-                batch['agent_mem_seg_obs'][i, :agent_mem_seg_len, :] = self.obs_buf[agent_mem_start_id:id]
-                batch['agent_mem_seg_act'][i, :agent_mem_seg_len, :] = self.act_buf[agent_mem_start_id:id]
-                batch['agent_mem_seg_obs2'][i, :agent_mem_seg_len, :] = self.obs2_buf[agent_mem_start_id:id]
-                batch['agent_mem_seg_act2'][i, :agent_mem_seg_len, :] = self.act_buf[agent_mem_start_id+1:id+1]
-        return {k: torch.as_tensor(v, dtype=torch.float32).to(device) for k, v in batch.items()}
-
-
 #######################################################################################
 
 #######################################################################################
-
-
 class MLPCritic(nn.Module):
     def __init__(self, obs_dim, act_dim,
                  mem_pre_lstm_hid_sizes=(128,),
@@ -189,6 +94,8 @@ class MLPCritic(nn.Module):
             x = layer(x)
 
         extracted_memory = hist_out
+        if len(extracted_memory) != len(x):
+            import pdb; pdb.set_trace()
         x = torch.cat([extracted_memory, x], dim=-1)
 
         for layer in self.post_combined_layers:
@@ -335,8 +242,12 @@ class MLPActorCritic(nn.Module):
         return act.cpu().numpy()
 
 
-class LSTMTD3(object):
+class LSTMMTD3(object):
+    """
+    LSTM-Multistep TD3 includes both LSTM-based memory part and the multistep bootstrapping.
+    """
     def __init__(self, obs_space, act_space, hidden_sizes,
+                 multistep_size=5,
                  recompute_reward_in_backup=True, agent_mem_len=5,
                  gamma=0.99, polyak=0.995, pi_lr=1e-3, q_lr=1e-3,
                  start_steps=10000,
@@ -352,6 +263,9 @@ class LSTMTD3(object):
         # Action limit for clamping: critically, assumes all dimensions share the same bound!
         self.act_limit = act_space.high[0]
         self.hidden_sizes = hidden_sizes
+
+        # Multistep size
+        self.multistep_size = multistep_size
 
         self.act_noise = act_noise
         self.start_steps = start_steps
@@ -393,6 +307,10 @@ class LSTMTD3(object):
 
         # Initialize actor-critic
         self._init_actor_critic()
+
+        # Gamma to the power of (step-1)
+        self.gamma_power = torch.as_tensor([self.gamma ** i for i in range(self.multistep_size)], dtype=torch.float32).to(self.ac_device)
+        self.gamma_power_batch = torch.tile(self.gamma_power, (self.batch_size, 1))
 
     def _init_actor_critic(self):
 
@@ -464,6 +382,10 @@ class LSTMTD3(object):
         h_o2 = data['agent_mem_seg_obs2']
         h_a2 = data['agent_mem_seg_act2']
         h_len = data['agent_mem_seg_len']
+        multistep_size = data['multistep_size']
+        multistep_reward_seg = data['multistep_reward_seg']
+        multistep_obs2 = data['multistep_obs2']
+        multistep_done = data['multistep_done']
 
         q1, q1_hist_out, q1_extracted_memory = self.ac.q1(o, a, h_o, h_a, h_len)
         q2, q2_hist_out, q2_extracted_memory = self.ac.q2(o, a, h_o, h_a, h_len)
@@ -498,7 +420,11 @@ class LSTMTD3(object):
             if rew_comp is not None and self.combine_hc_and_pb_reward:
                 r = r + hc_r
 
-            backup = r + self.gamma * (1 - d) * q_pi_targ
+            # Calculate multistep backup
+            if self.gamma_power_batch.shape[0] != multistep_reward_seg.shape[0]:  # Avoid recalculate gamma_power if the bach size doesn't change.
+                self.gamma_power_batch = torch.tile(self.gamma_power, (multistep_reward_seg.shape[0], 1))
+            backup = torch.sum(multistep_reward_seg * self.gamma_power_batch, dim=1) + self.gamma ** multistep_size * (
+                        1 - multistep_done) * q_pi_targ
 
         # MSE loss against Bellman backup
         loss_q1 = ((q1 - backup) ** 2).mean()
@@ -599,7 +525,9 @@ class LSTMTD3(object):
                     reward_mem_len = rew_comp.reward_mem_length
 
                 batch = self.mem_manager.sample_exp_batch(self.batch_size, device=self.ac_device,
-                                                          reward_mem_len=reward_mem_len, agent_mem_len=self.agent_mem_len)
+                                                          reward_mem_len=reward_mem_len,
+                                                          agent_mem_len=self.agent_mem_len,
+                                                          multistep_size=self.multistep_size)
 
                 # First run one gradient descent step for Q1 and Q2
                 self.q_optimizer.zero_grad()

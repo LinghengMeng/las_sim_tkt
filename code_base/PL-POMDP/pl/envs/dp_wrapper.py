@@ -1,3 +1,5 @@
+import collections
+import copy
 import numpy as np
 import gym
 
@@ -70,6 +72,9 @@ class DecisionProcessWrapper(gym.ObservationWrapper):
             self.observation_space = gym.spaces.Box(obs_low, obs_high)
 
     def observation(self, obs):
+        # Keep original
+        orig_obs = copy.deepcopy(obs)
+
         # Single source of POMDP
         if self.dp_type == 'MDP':
             new_obs = obs
@@ -256,13 +261,15 @@ if __name__ == '__main__':
     import gym
 
     env_name = "HalfCheetah-v2"  # "HalfCheetahBulletEnv-v0"
-    dp_type = "MDP"    # 'POMDP-RN'
-    # POMDP-FLK, POMDP-RV, POMDP-RN
-    env = DecisionProcessWrapper(env_name, dp_type)  # Pendulum-v0    AntBulletEnv-v0    HalfCheetahBulletEnv-v0
-    obs = env.reset()
-    env.step(env.action_space.sample())
-    print('action_space dim: {}'.format(env.action_space.shape[0]))
-    print('observation_space dim: {}'.format(env.observation_space.shape[0]))
-    print('action_space: {}'.format(env.action_space))
-    print('observation_space: {}'.format(env.observation_space))
-    print('obs: {}'.format(obs))
+    # dp_type = "MDP"    # 'POMDP-RN'
+    # # POMDP-FLK, POMDP-RV, POMDP-RN
+    # env = DecisionProcessWrapper(env_name, dp_type)  # Pendulum-v0    AntBulletEnv-v0    HalfCheetahBulletEnv-v0
+    # obs = env.reset()
+    # env.step(env.action_space.sample())
+    # print('action_space dim: {}'.format(env.action_space.shape[0]))
+    # print('observation_space dim: {}'.format(env.observation_space.shape[0]))
+    # print('action_space: {}'.format(env.action_space))
+    # print('observation_space: {}'.format(env.observation_space))
+    # print('obs: {}'.format(obs))
+
+

@@ -192,7 +192,7 @@ class ExperienceTableOperator:
             self.end_id += 1
             self.start_id += 1
 
-    def sample_batch(self, batch_size=64, device=None, reward_mem_len=None, agent_mem_len=None):
+    def sample_batch(self, batch_size=64, device=None, reward_mem_len=None, agent_mem_len=None, multistep_size=None):
         """
         Sample a mini-batch of experiences, where:
             reward_mem_len: the length of memory for reward component
@@ -206,7 +206,7 @@ class ExperienceTableOperator:
 
         # It's faster to use randint to generate random sample indices rather than fetching ids from the database.
         # np.arange(start_id, end_id) generate integers from start_id to (end_id-1), so we used (self.end_id+1).
-        batch_idxs = [int(id_) for id_ in random.sample(list(np.arange(self.start_id, self.end_id+1, dtype=int)), min(batch_size, int(self.replay_buffer_size)))]  # Random sample without replacement
+        batch_idxs = [int(id_) for id_ in random.sample(list(np.arange(self.start_id, self.end_id + 1, dtype=int)), min(batch_size, int(self.replay_buffer_size)))]  # Random sample without replacement
 
         # Fetch sampled experiences from database
         batch_df = pd.read_sql(self.db_session.query(ExperienceTable).filter(ExperienceTable.id.in_(batch_idxs)).statement, self.db_session.bind)
@@ -223,81 +223,147 @@ class ExperienceTableOperator:
                      rew=np.stack(batch_df['pb_rew']),
                      hc_rew=np.stack(batch_df['hc_rew']),
                      done=np.stack(batch_df['done']))
+        ####################################################
+        #        Retrieve data for multistep method        #
+        ####################################################
+        if multistep_size is not None:
+            # When multistep_size=1, this is 1-step method which just uses one step experience.
+            if multistep_size < 1:
+                raise ValueError('multistep_size={}, which should be always >=1.'.format(multistep_size))
+            # Retrieve each step into a dataframe, rather than retrieve for each sample and cause larger for loop.
+            # np.minimum(np.asarray(batch_idxs) + step_i, self.end_id): to make sure no id beyond self.end_id
+            # Note: This is a possibility that multiple sample will have the sample id=self.end_id.
+            multistep_df_list = []
+            for step_i in range(multistep_size):
+                # If batch_id+step_id > self.end_id, no data will return from database for that index.
+                tmp_multistep_df = pd.read_sql(
+                    self.db_session.query(ExperienceTable).filter(
+                        ExperienceTable.id.in_(np.minimum((np.asarray(batch_idxs) + step_i), self.end_id).tolist())).statement,
+                    self.db_session.bind)
+                # The only case that no data is retrieved for an index is the index is beyond the self.end_id. Because the db return is ranked by id,
+                # the missed data can be easily appended at the end using the data corresponds to self.end_id. And if we set multistep_size correctly
+                # the appended experiences will not be used at all, but is just for match the data size for concatenation.
+                if len(tmp_multistep_df) != len(batch_idxs):
+                    for _ in range(len(batch_idxs)-len(tmp_multistep_df)):
+                        tmp_multistep_df = tmp_multistep_df.append(multistep_df_list[step_i-1].iloc[-1])
+                    tmp_multistep_df.reset_index(inplace=True, drop=True)    # Drop the pd index
+                multistep_df_list.append(tmp_multistep_df)
+            # Concatenate multisteps
+            multistep_df = pd.concat(multistep_df_list, axis=1)
+
+            # Retrieve rewards within the multistep window
+            batch['multistep_reward_seg'] = multistep_df['pb_rew'].to_numpy()
+            # Take minimum between multistep_size and (self.end_id - np.asarray(batch_idxs) + 1) to take into account of cases where
+            # batch_idxs is less than multistep_size towards self.end_id.
+            batch['multistep_size'] = np.ones(len(batch_idxs)) * np.minimum(multistep_size, self.end_id - np.asarray(batch_idxs) + 1)
+            find_done_x, find_done_y = np.where(multistep_df['done'].to_numpy() == 1)  # Find done within the multistep window
+            if len(find_done_x) != 0:
+                # Index in done_y start from 0, so +1 to make the multistep_size start from 1.
+                # Take the minimum is to consider cases where multiple done within one multistep window and we take the first one, i.e. the minimum one.
+                batch['multistep_size'][find_done_x] = np.minimum(batch['multistep_size'][find_done_x], find_done_y + 1)
+
+                # Set reward after the 1st done within a multistep window to 0.
+                for x in find_done_x:
+                    batch['multistep_reward_seg'][x, (batch['multistep_size'][x].astype(int) - 1):] = 0
+
+            # Concatenate obs2 within multistep window and retrieve the last one within multistep window.
+            multistep_obs2 = np.stack([np.stack(multistep_df['obs2'].values[:, m]) for m in range(multistep_size)], axis=2)
+            batch['multistep_obs2'] = multistep_obs2[np.arange(len(batch['multistep_size'])), :, list(batch['multistep_size'].astype(int) - 1)]
+            # Retrieve the done for the last experience within the multistep window
+            batch['multistep_done'] = multistep_df['done'].to_numpy()[
+                np.arange(len(batch['multistep_size'])), list(batch['multistep_size'].astype(int) - 1)]
+
         # Extract memory if mem_len is not None
         if reward_mem_len is not None or agent_mem_len is not None:
-            obs_dim = len(batch_df['obs'][0])
-            act_dim = len(batch_df['act'][0])
-            if reward_mem_len is not None:
-                batch['reward_mem_seg_len'] = np.zeros(len(batch_idxs))
-                batch['reward_mem_seg_obs'] = np.zeros((len(batch_idxs), reward_mem_len, obs_dim))
-                batch['reward_mem_seg_obs2'] = np.zeros((len(batch_idxs), reward_mem_len, obs_dim))
-                batch['reward_mem_seg_act'] = np.zeros((len(batch_idxs), reward_mem_len, act_dim))
-            if agent_mem_len is not None and agent_mem_len > 0:
-                batch['agent_mem_seg_len'] = np.zeros(len(batch_idxs))
-                batch['agent_mem_seg_obs'] = np.zeros((len(batch_idxs), agent_mem_len, obs_dim))
-                batch['agent_mem_seg_obs2'] = np.zeros((len(batch_idxs), agent_mem_len, obs_dim))
-                batch['agent_mem_seg_act'] = np.zeros((len(batch_idxs), agent_mem_len, act_dim))
-                batch['agent_mem_seg_act2'] = np.zeros((len(batch_idxs), agent_mem_len, act_dim))
-            for sample_i, sample_id in enumerate(batch_idxs):
+            ##############################################################
+            #       Retrieve data for Reward and Agent with Memory       #
+            ##############################################################
+            # Note: for agent memory, memory length indicates the number of experiences before the current experiences, so we need to sample
+            #   agent_mem_len + 1.
+            if reward_mem_len is not None and agent_mem_len is not None:
+                mem_len = max(reward_mem_len, agent_mem_len + 1)    # If both need memory, take the larger one, so only need to do DB request once.
+            else:
                 if reward_mem_len is not None:
-                    # Note: start_id and id correspond to database entry id, so they start from 1 rather than 0.
-                    reward_mem_sample_start_id = max(1, sample_id - reward_mem_len + 1)    # Init start id
-                    # If exist done before the last experience, start from the index next to the done.
-                    reward_mem_seg_df = pd.read_sql(
-                        self.db_session.query(ExperienceTable).filter(ExperienceTable.id.between(reward_mem_sample_start_id, sample_id)).statement,
-                        self.db_session.bind)
+                    mem_len = reward_mem_len
+                else:
+                    mem_len = agent_mem_len + 1
+            # Retrieve experience step into a dataframe, rather than retrieve for each sample and cause larger for loop.
+            # If id is less than self.start_id, np.minimum(np.asarray(batch_idxs) + step_i, self.end_id): to make sure no id beyond self.end_id
+            # Note: This is a possibility that multiple sample will have the sample id=self.end_id.
+            mem_df_list = []
+            for m_i in range(mem_len):
+                tmp_mem_df = pd.read_sql(self.db_session.query(ExperienceTable).filter(ExperienceTable.id.in_(np.maximum((np.asarray(batch_idxs) - m_i), self.start_id).tolist())).statement, self.db_session.bind)
+                # The once case where  len(tmp_multistep_df) != len(batch_idxs) is index before self.start_id is requested. We only need to append
+                # experience corresponds to self.start_id at the beginning of the dataframe.
+                if len(tmp_mem_df) != len(batch_idxs):
+                    for _ in range(len(batch_idxs)-len(tmp_mem_df)):
+                        tmp_mem_df = pd.concat([pd.DataFrame(mem_df_list[m_i-1].iloc[0]).transpose(), tmp_mem_df])
+                    tmp_mem_df.reset_index(inplace=True, drop=True)    # Drop the pd index
+                mem_df_list.append(tmp_mem_df)
 
-                    # Important: If there is done, except the one in the last index, within a fixed memory window, start only after the latest done,
-                    # so there is a '+1'.
-                    if len(np.where(reward_mem_seg_df['done'].values[:-1] == 1)[0]) != 0:
-                        reward_mem_sample_start_id = reward_mem_sample_start_id + (np.where(reward_mem_seg_df['done'].values[:-1] == 1)[0][-1]) + 1
+            # Concatenate memory
+            mem_df_list.reverse()    # Note: reverse order to keep the experience order that older experience in front
+            mem_df = pd.concat(mem_df_list, axis=1)
 
-                    reward_mem_sample_seg_len = sample_id - reward_mem_sample_start_id + 1
-                    batch['reward_mem_seg_len'][sample_i] = reward_mem_sample_seg_len
-                    batch['reward_mem_seg_obs'][sample_i, :reward_mem_sample_seg_len, :] = np.stack(reward_mem_seg_df['obs'].values)[-reward_mem_sample_seg_len:]    # adjust the index to start from 0
-                    batch['reward_mem_seg_obs2'][sample_i, :reward_mem_sample_seg_len, :] = np.stack(reward_mem_seg_df['obs2'].values)[-reward_mem_sample_seg_len:]
-                    batch['reward_mem_seg_act'][sample_i, :reward_mem_sample_seg_len, :] = np.stack(reward_mem_seg_df['act'].values)[-reward_mem_sample_seg_len:]
+            ################################################
+            #                 Reward Memory                #
+            ################################################
+            if reward_mem_len is not None:
+                # Take minimum between reward_mem_len and (np.asarray(batch_idxs) - self.start_id) as initial value to take into account of
+                # cases where batch_idxs is less than reward_mem_len away from self.start_id.
+                batch['reward_mem_seg_len'] = np.ones(len(batch_idxs)) * np.minimum(reward_mem_len, np.asarray(batch_idxs) - self.start_id)
+                # Find done within the memory window excluding the current experience
+                find_done_x, find_done_y = np.where(mem_df['done'].to_numpy()[:, :-1] == 1)
 
-                # Note: for agent memory, the memory corresponds to the agent_mem_len experiences before the current experience, which is different
-                #   from that for reward memory which also includes the current experience.
-                if agent_mem_len is not None and agent_mem_len > 0:
-                    if sample_id == 1:
-                        pass  # For the first experience, there is no memory.
-                    else:
-                        # Note: start_id and id correspond to database entry id, so they start from 1 rather than 0.
-                        agent_mem_sample_end_id = (sample_id-1)
-                        agent_mem_sample_start_id = max(1, sample_id - agent_mem_len)  # Init start id. If agent_mem_len=0, there is no memory.
-                        # If exist done before the last experience, start from the index next to the done.
-                        agent_mem_seg_df = pd.read_sql(
-                            self.db_session.query(ExperienceTable).filter(ExperienceTable.id.between(agent_mem_sample_start_id, agent_mem_sample_end_id)).statement,
-                            self.db_session.bind)
-                        agent_mem_seg_df_2 = pd.read_sql(
-                            self.db_session.query(ExperienceTable).filter(ExperienceTable.id.between(agent_mem_sample_start_id+1, agent_mem_sample_end_id+1)).statement,
-                            self.db_session.bind)
+                if len(find_done_x) != 0:
+                    # Important: If there is done, except the current experience within a fixed memory window, start only after the latest done,
+                    # so there is a '+1'. Take the minimum with np.minimum() is to consider cases where multiple done within one memory window
+                    # and we take the last one, i.e. the one will cause minimum length.
+                    batch['reward_mem_seg_len'][find_done_x] = np.minimum(batch['reward_mem_seg_len'][find_done_x], reward_mem_len - (find_done_y + 1))
 
-                        # Important: If there is done within the fixed memory window, start only after the latest done, so there is a '+1'.
-                        #   If the last experience in memory has done, this means no memory and we should set the memory to zero.
-                        if len(np.where(agent_mem_seg_df['done'] == 1)[0]) != 0:
-                            new_agent_mem_sample_start_id = agent_mem_sample_start_id + (np.where(agent_mem_seg_df['done'] == 1)[0][-1]) + 1
-                        else:
-                            new_agent_mem_sample_start_id = agent_mem_sample_start_id
-                        if new_agent_mem_sample_start_id > agent_mem_sample_start_id:
-                            agent_mem_sample_seg_len = 0
-                        else:
-                            agent_mem_sample_seg_len = sample_id - new_agent_mem_sample_start_id
-                        batch['agent_mem_seg_len'][sample_i] = agent_mem_sample_seg_len
-                        if agent_mem_sample_seg_len == 0:
-                            continue
-                        else:
-                            batch['agent_mem_seg_obs'][sample_i, :agent_mem_sample_seg_len, :] = np.stack(agent_mem_seg_df['obs'].values)[
-                                                                                                   -agent_mem_sample_seg_len:]  # adjust the index to start from 0
-                            batch['agent_mem_seg_act'][sample_i, :agent_mem_sample_seg_len, :] = np.stack(agent_mem_seg_df['act'].values)[
-                                                                                                   -agent_mem_sample_seg_len:]
-                            batch['agent_mem_seg_obs2'][sample_i, :agent_mem_sample_seg_len, :] = np.stack(agent_mem_seg_df['obs2'].values)[
-                                                                                                  -agent_mem_sample_seg_len:]
-                            if agent_mem_sample_seg_len != len(np.stack(agent_mem_seg_df_2['act'].values)[-agent_mem_sample_seg_len:]):
-                                import pdb; pdb.set_trace()
-                            batch['agent_mem_seg_act2'][sample_i, :agent_mem_sample_seg_len, :] = np.stack(agent_mem_seg_df_2['act'].values)[-agent_mem_sample_seg_len:]
+                if reward_mem_len == mem_len:
+                    stack_start_idx = 0
+                    stack_end_idx = reward_mem_len
+                else:
+                    # This means reward_mem_len < mem_len
+                    stack_start_idx = mem_len - 1 - (reward_mem_len - 1)    # For Range(start, stop), the stop will not be included.
+                    stack_end_idx = mem_len                                 # Include the current experience
+                batch['reward_mem_seg_obs'] = np.stack([np.stack(mem_df['obs'].values[:, m]) for m in range(stack_start_idx, stack_end_idx)], axis=1)
+                batch['reward_mem_seg_act'] = np.stack([np.stack(mem_df['act'].values[:, m]) for m in range(stack_start_idx, stack_end_idx)], axis=1)
+                batch['reward_mem_seg_obs2'] = np.stack([np.stack(mem_df['obs2'].values[:, m]) for m in range(stack_start_idx, stack_end_idx)], axis=1)
+            ################################################
+            #                Agent Memory                  #
+            ################################################
+            # Note: for agent memory, the memory corresponds to the agent_mem_len experiences before the current experience, which is different
+            #   from that for reward memory which also includes the current experience.
+            #   For example,
+            if agent_mem_len is not None and agent_mem_len > 0:
+                # Take minimum between agent_mem_len and (np.asarray(batch_idxs) - self.start_id) as initial value to take into account of
+                # cases where batch_idxs is less than agent_mem_len away from self.start_id.
+                # Note: If batch_id == self.start_id, memory length = 0. This is because we do not consider the current experience as memory.
+                batch['agent_mem_seg_len'] = np.ones(len(batch_idxs)) * np.minimum(agent_mem_len, np.asarray(batch_idxs) - self.start_id)
+                find_done_x, find_done_y = np.where(mem_df['done'].to_numpy()[:, :-1] == 1)  # Find done within the memory window, i.e. exclude the current experience
+                if len(find_done_x) != 0:
+                    # Important: If there is done, except the current experience within a fixed memory window, start only after the latest done,
+                    # so there is a '+1' and np.minimum() if there are multiple done within the memory window.
+                    # Take the minimum is to consider cases where multiple done within one memory window and we take the last one, i.e. the one
+                    # will cause minimum length.
+                    batch['agent_mem_seg_len'][find_done_x] = np.minimum(batch['agent_mem_seg_len'][find_done_x], agent_mem_len - (find_done_y + 1))
+
+                # Concatenate experiences before the current experience but still within memory window.
+                # agent_mem_stack_id = np.stack([np.stack(mem_df['id'].values[:, m]) for m in range(agent_mem_len)], axis=1)
+                if (agent_mem_len + 1) == mem_len:
+                    stack_start_idx = 0
+                    stack_end_idx = agent_mem_len
+                else:
+                    # This means (agent_mem_len + 1) < mem_len
+                    stack_start_idx = mem_len - 1 -1 - (agent_mem_len - 1)    # For Range(start, stop), the stop will not be included.
+                    stack_end_idx = mem_len - 1                                # Exclude the current experience
+                batch['agent_mem_seg_obs'] = np.stack([np.stack(mem_df['obs'].values[:, m]) for m in range(stack_start_idx, stack_end_idx)], axis=1)
+                batch['agent_mem_seg_act'] = np.stack([np.stack(mem_df['act'].values[:, m]) for m in range(stack_start_idx, stack_end_idx)], axis=1)
+                batch['agent_mem_seg_obs2'] = np.stack([np.stack(mem_df['obs2'].values[:, m]) for m in range(stack_start_idx, stack_end_idx)], axis=1)
+                batch['agent_mem_seg_act2'] = np.stack([np.stack(mem_df['act'].values[:, m]) for m in range(stack_start_idx+1, stack_end_idx+1)], axis=1)
+
         batch_tensor = {}
         for k, v in batch.items():
             if v is None:
@@ -826,8 +892,8 @@ class DatabaseManager:
     def store_experience(self, obs, act, obs2, pb_rew, hc_rew, done, behavior_mode=None, obs_time=None, act_time=None, obs2_time=None):
         self.local_db_exp_table_op.store(obs, act, obs2, pb_rew, hc_rew, done, behavior_mode, obs_time, act_time, obs2_time)
 
-    def sample_exp_batch(self, batch_size=64, device=None, reward_mem_len=None, agent_mem_len=None):
-        return self.local_db_exp_table_op.sample_batch(batch_size, device, reward_mem_len, agent_mem_len)
+    def sample_exp_batch(self, batch_size=64, device=None, reward_mem_len=None, agent_mem_len=None, multistep_size=None):
+        return self.local_db_exp_table_op.sample_batch(batch_size, device, reward_mem_len, agent_mem_len, multistep_size)
 
     def get_latest_experience_id(self):
         latest_experience_id = self.local_db_exp_table_op.last_experience_id

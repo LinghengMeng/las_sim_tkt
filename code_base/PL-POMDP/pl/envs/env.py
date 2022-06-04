@@ -312,6 +312,7 @@ def make_gym_task(env_id, dp_type='MDP',
     env = DecisionProcessWrapper(env_id, dp_type=dp_type,
                                  flicker_prob=flicker_prob, random_noise_sigma=random_noise_sigma,
                                  random_sensor_missing_prob=random_sensor_missing_prob, obs_tile_num=obs_tile_num, obs_tile_value=obs_tile_value)
+
     # If 'Bullet' in env_id, the task uses bullet engine. Otherwise, the task uses MuJoCO engine.
     if 'Bullet'.lower() in env_id.lower():
         viewer = BulletViewer
@@ -335,23 +336,27 @@ def make_gym_task(env_id, dp_type='MDP',
 
 
 if __name__ == '__main__':
-    # env = make_bullet_task("AntBulletEnv-v0")
-
-    env = gym.make('Ant-v2')
-    env = MjViewer(env)
-
-    obs = env.reset()
-    done = False
-    max_timesteps = get_timesteps_per_episode(env)
-    for _ in range(1000):
-        obs = env.reset()
-        done = False
-        for i in range(max_timesteps):
-            obs, rew, done, info = env.step(env.action_space.sample())
-
-            # env.render()
-            data = env.render_full_obs(info['human_obs'])
-            # import pdb; pdb.set_trace()
-            if done:
-                # import pdb; pdb.set_trace()
-                break
+    env = make_gym_task("Ant-v2")
+    import pdb; pdb.set_trace()
+    env.reset()
+    act = env.action_space.sample()
+    print('act={}'.format(act))
+    env.step(act)
+    # env = gym.make('Ant-v2')
+    # env = MjViewer(env)
+    #
+    # obs = env.reset()
+    # done = False
+    # max_timesteps = get_timesteps_per_episode(env)
+    # for _ in range(1000):
+    #     obs = env.reset()
+    #     done = False
+    #     for i in range(max_timesteps):
+    #         obs, rew, done, info = env.step(env.action_space.sample())
+    #
+    #         # env.render()
+    #         data = env.render_full_obs(info['human_obs'])
+    #         # import pdb; pdb.set_trace()
+    #         if done:
+    #             # import pdb; pdb.set_trace()
+    #             break

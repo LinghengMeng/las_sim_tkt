@@ -872,7 +872,8 @@ class LASIntlEnv(object):
                                     extero_obs_space_dict[device_group][device_node_id][obs_id] = obs_id
                                     extero_obs_space_list.append(obs_id)
                         elif self.internal_env_config['obs_space']['exteroception'][
-                            'obs_construction_method'] == "average":
+                            'obs_construction_method'] == "average" or self.internal_env_config['obs_space']['exteroception'][
+                            'obs_construction_method'] == "summation":
                             # Average observations downsampled to fixed frequency in a given window
                             #  treat each element of the sensory data of a sensor as an entry in observation space
                             for element_i in range(data_size):
@@ -912,7 +913,8 @@ class LASIntlEnv(object):
                                     proprio_obs_space_dict[device_group][device_node_id][obs_id] = obs_id
                                     proprio_obs_space_list.append(obs_id)
                         elif self.internal_env_config['obs_space']['proprioception'][
-                            'obs_construction_method'] == "average":
+                            'obs_construction_method'] == "average" or self.internal_env_config['obs_space']['exteroception'][
+                            'obs_construction_method'] == "summation":
                             # Average observations downsampled to fixed frequency in a given window
                             #  treat each element of the sensory data of a sensor as an entry in observation space
                             for element_i in range(data_size):
@@ -943,7 +945,8 @@ class LASIntlEnv(object):
                                         proprio_obs_space_dict[device_group][device_node_id][obs_id] = obs_id
                                         proprio_obs_space_list.append(obs_id)
                             elif self.internal_env_config['obs_space']['proprioception'][
-                                'obs_construction_method'] == "average":
+                                     'obs_construction_method'] == "average" or self.internal_env_config['obs_space']['exteroception'][
+                                     'obs_construction_method'] == "summation":
                                 # Average observations downsampled to fixed frequency in a given window
                                 #  treat each element of the sensory data of a sensor as an entry in observation space
                                 for element_i in range(data_size):
@@ -1097,6 +1100,9 @@ class LASIntlEnv(object):
                                     'obs_construction_method'] == "average":
                                     tmp_integrated_obs = np.divide(data_point, sample_size)
                                 elif self.internal_env_config['obs_space']['exteroception'][
+                                    'obs_construction_method'] == "summation":
+                                    tmp_integrated_obs = data_point
+                                elif self.internal_env_config['obs_space']['exteroception'][
                                     'obs_construction_method'] == "concatenate":
                                     tmp_integrated_obs = data_point
                                 else:
@@ -1106,6 +1112,9 @@ class LASIntlEnv(object):
                                     'obs_construction_method'] == "average":
                                     avg_data_point = np.divide(data_point, sample_size)
                                     tmp_integrated_obs = np.add(tmp_integrated_obs, avg_data_point).tolist()
+                                if self.internal_env_config['obs_space']['exteroception'][
+                                    'obs_construction_method'] == "summation":
+                                    tmp_integrated_obs = np.add(tmp_integrated_obs, data_point).tolist()
                                 elif self.internal_env_config['obs_space']['exteroception'][
                                     'obs_construction_method'] == "concatenate":
                                     tmp_integrated_obs = np.concatenate((tmp_integrated_obs, data_point)).tolist()
@@ -1131,7 +1140,8 @@ class LASIntlEnv(object):
                 if size < sample_size:
                     obs_missing_data = True
                     data_size = self.internal_env_config['obs_space']['proprioception']['actuator_type'][device]["size"]
-                    if self.internal_env_config['obs_space']['proprioception']['obs_construction_method'] == "average":
+                    if self.internal_env_config['obs_space']['proprioception']['obs_construction_method'] == "average" or \
+                            self.internal_env_config['obs_space']['proprioception']['obs_construction_method'] == "summation":
                         for element_i in range(data_size):
                             tmp_integrated_obs.append('missing data: buff_size={}'.format(size))
                     elif self.internal_env_config['obs_space']['proprioception'][
@@ -1160,6 +1170,9 @@ class LASIntlEnv(object):
                                     'obs_construction_method'] == "average":
                                     tmp_integrated_obs = np.divide(data_point, sample_size)
                                 elif self.internal_env_config['obs_space']['proprioception'][
+                                    'obs_construction_method'] == "summation":
+                                    tmp_integrated_obs = data_point
+                                elif self.internal_env_config['obs_space']['proprioception'][
                                     'obs_construction_method'] == "concatenate":
                                     tmp_integrated_obs = data_point
                                 else:
@@ -1169,6 +1182,9 @@ class LASIntlEnv(object):
                                     'obs_construction_method'] == "average":
                                     avg_data_point = np.divide(data_point, sample_size)
                                     tmp_integrated_obs = np.add(tmp_integrated_obs, avg_data_point).tolist()
+                                elif self.internal_env_config['obs_space']['proprioception'][
+                                    'obs_construction_method'] == "summation":
+                                    tmp_integrated_obs = np.add(tmp_integrated_obs, data_point).tolist()
                                 elif self.internal_env_config['obs_space']['proprioception'][
                                     'obs_construction_method'] == "concatenate":
                                     tmp_integrated_obs = np.concatenate((tmp_integrated_obs, data_point)).tolist()
@@ -1336,6 +1352,7 @@ class LASIntlEnv(object):
         self.obs, self.proprio_and_extero_obs, self.info = new_obs, new_proprio_and_extero_obs, info
         # Store extl_env to info for diagnostic purpose
         info['extl_rew'] = extl_rew
+        info['orig_rew'] = extl_rew    # This is just to make it consistent with gym_intl_env where observation delay is investigated.
         info['act_datetime'] = act_ts
         info['obs_datetime'] = new_obs_ts
 

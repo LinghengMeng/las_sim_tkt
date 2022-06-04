@@ -269,7 +269,7 @@ internal_env_config = {
                                      # "actuator_type": {"MO": {"size": 1, "min": 0, "max": 1},
                                      #                   "RS": {"size": 1, "min": 0, "max": 1}},
                                      "obs_frequency": 1,
-                                     "obs_construction_method": "concatenate",  # "concatenate", "average"
+                                     "obs_construction_method": "concatenate",  # "concatenate", "average", "summation"
                                      "obs_source_server": 'Pro_Sim'         # 'Pro_Sim', 'Uni_Sim'
                                      },
                   "exteroception": {# "device_group": ["NR"],
@@ -279,7 +279,7 @@ internal_env_config = {
                                                     "GE": {"size": 5, "min": 0, "max": 1},
                                                     "SD": {"size": 1, "min": 0, "max": 1}},
                                     "obs_frequency": 1,
-                                    "obs_construction_method": "concatenate",# "concatenate", "average"
+                                    "obs_construction_method": "concatenate", # "concatenate", "average", "summation"
                                     "obs_source_server": 'Pro_Sim'},
                   "add_velocity_to_obs": False,
                   "add_past_obs_to_obs": False,
